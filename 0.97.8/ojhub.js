@@ -2587,9 +2587,11 @@ pushSendToServer = async (sub)=>{
 	let j = sub.toJSON(),
 		data = `endpoint=${encodeURIComponent(j.endpoint)}&`+
 				`p256dh=${encodeURIComponent(j.keys.p256dh)}&`+
-				`auth=${encodeURIComponent(j.keys.auth)}`,
+				`auth=${encodeURIComponent(j.keys.auth)}`;
 		// FIXME: привести к nData/sData нормализации
-		res = await _.http.req('POST', `${sData[2]}sub${php}`, data, urlEncoded);
+	Loading();
+	let res = await _.http.req('POST', `${sData[2]}sub${php}`, data, urlEncoded);
+	Loading(1);
 
 	if (res !== '1') {
 		console.error('push: не удалось сохранить подписку', res);
@@ -3277,7 +3279,7 @@ enterFormData = (form, sendPlace)=>{
 			case `${sData[1]}vacsAdd${php}`:
 				getVacancies(FORMDATA.get('channel'),FORMDATA.get('id'));
 				break;
-			case `${sData[1]}vascEdit${php}`:
+			case `${sData[1]}vacsEdit${php}`:
 				if (_.$.id('profileWindow')) 
 					getVacancies(FORMDATA.get('channel'),FORMDATA.get('gdpsId'));
 				else {
@@ -3460,6 +3462,248 @@ Markdown = (mdText)=>{
 	);
 
 	return mdHTML.trim();
+},
+MarkdownGen2 = (mdText, depth = 0, counter = { n: 0 }) => {
+	const ATTR_RE = /\s*\{([.\#][^\{\}]*)\}\s*$/;
+	const parseBlockAttrs = (text) => {
+		const m = text.match(ATTR_RE);
+		if (!m) return { text, cls: '', id: '' };
+		const clean = text.slice(0, m.index);
+		let cls = [], id = '';
+		m[1].trim().split(/\s+/).forEach(tok => {
+			if (tok[0] === '.' && /^\.[a-zA-Z0-9_-]+$/.test(tok)) {
+				cls.push(tok.slice(1));
+			}
+			else if (tok[0] === '#' && /^#[a-zA-Z0-9_-]+$/.test(tok)) {
+				id = tok.slice(1);
+			}
+		});
+		return {
+			text: clean,
+			cls: cls.length ? ` class="wiki-usr ${cls.join(' ')}"` : '',
+			id: id ? ` id="usr-${id}"` : ''
+		};
+	};
+
+	// ===== ФАЗА 1: LEXER — режем текст на блочные токены =====
+	const mdLex = (mdText) => {
+		mdText = mdText.replaceAll(/\r\n/g, '\n').replaceAll(/\r<br>/g, '\n');
+		const lines = mdText.split('\n');
+		const tokens = [];
+		let i = 0;
+		while (i < lines.length) {
+			const line = lines[i];
+			const fence = line.match(/^(~~~|```)\s*(.*)$/);
+			if (fence) {
+				const closer = fence[1];
+				const title = fence[2];
+				const body = [];
+				i++;
+				while (i < lines.length && !lines[i].startsWith(closer)) {
+					body.push(lines[i]);
+					i++;
+				}
+				i++;
+				tokens.push({
+					type: 'code',
+					title: title,
+					text: body.join('\n')
+				});
+				continue;
+			}
+			const h = line.match(/^(#{1,5})\s+(.*?)\s*#*$/);
+			if (h) {
+				tokens.push({
+					type: 'h',
+					depth: h[1].length,
+					text: h[2]
+				});
+				i++;
+				continue;
+			}
+			if (/^-{3,}$|^_{3,}$|^\*{3,}$/.test(line)) {
+				tokens.push({ type: 'hr' });
+				i++;
+				continue;
+			}
+			const bq = line.match(/^(\>{1,2})\s?(.*)$/);
+			if (bq) {
+				tokens.push({
+					type: 'quote',
+					depth: bq[1].length,
+					text: bq[2]
+				});
+				i++;
+				continue;
+			}
+			const li = line.match(/^([*+\-]|\d+)\.\s+(.*)$/);
+			if (li) {
+				tokens.push({
+					type: 'li',
+					ordered: /^\d+$/.test(li[1]),
+					text: li[2]
+				});
+				i++;
+				continue;
+			}
+			if (line.trim() === '') {
+				tokens.push({ type: 'space' });
+				i++;
+				continue;
+			}
+			const buf = [line];
+			i++;
+			while (
+				i < lines.length &&
+				lines[i].trim() !== '' &&
+				! /^(#{1,5})\s|^(~~~|```)|^-{3,}$|^\>|^([*+\-]|\d+)\.\s/.test(lines[i])
+			) {
+				buf.push(lines[i]);
+				i++;
+			}
+			tokens.push({
+				type: 'p',
+				text: buf.join('\n')
+			});
+		}
+		return tokens;
+	};
+
+	// ===== инлайн-разметка внутри текста одного токена =====
+	const mdInline = (text) => {
+		text = text
+			.replaceAll(/!\[(.*?)\]\((.*?) "(.*?)"\)/g, '<img style=max-width:100% alt="$1" src="$2" $3 />')
+			.replaceAll(/!\[(.*?)\]\((.*?)\)/g, '<img style=max-width:100% alt="$1" src="$2" />')
+			.replaceAll(/\[(.*?)\]\((.*?) "(.*?)"\)/g, '<a href="$2" title="$3">$1</a>')
+			.replaceAll(/\<http(.*)\>/g, '<a href="http$1">http$1</a>')
+			.replaceAll(/\[(.*?)\]\(\)/g, '<a href="$1">$1</a>')
+			.replaceAll(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+			.replaceAll(/\[(.*?)\]\{(.*?)\}/g, '<a onclick="getCurrentGuideByTag(\'$2\')">$1</a>')
+			.replaceAll(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+			.replaceAll(/\*(.*?)\*/g, '<em>$1</em>')
+			.replaceAll(/\_\_(.*?)\_\_/g, '<u>$1</u>')
+			.replaceAll(/\_(.*?)\_/g, '<em>$1</em>')
+			.replaceAll(/~~(.*?)~~/g, '<del>$1</del>')
+			.replaceAll(/\^\^(.*?)\^\^/g, '<ins>$1</ins>')
+			.replaceAll(/``(.*?)``/g, '<code>$1</code>')
+			.replaceAll(/`(.*?)`/g, '<code>$1</code>');
+		return text;
+	};
+
+	// ===== ФАЗА 2: RENDER — токены в html =====
+	const mdRender = (tokens) => {
+		let html = '';
+		let listBuf = null;
+		const flushList = () => {
+			if (!listBuf) return;
+			const tag = listBuf.ordered ? 'ol' : 'ul';
+			html += '<' + tag + '>';
+			for (let j = 0; j < listBuf.items.length; j++) {
+				const a = parseBlockAttrs(listBuf.items[j]);
+				html += '<li' + a.cls + a.id + '>' +
+					mdInline(a.text) +
+					'</li>';
+			}
+			html += '</' + tag + '>';
+			listBuf = null;
+		};
+		for (let i = 0; i < tokens.length; i++) {
+			const t = tokens[i];
+			if (t.type !== 'li') flushList();
+			if (t.type == 'code') {
+				html += '<pre><code title="' + t.title + '">' +
+					t.text +
+					'</code></pre>';
+			}
+			else if (t.type == 'h') {
+				const a = parseBlockAttrs(t.text);
+				html += '<h' + t.depth + a.cls + a.id + '>' +
+					mdInline(a.text) +
+					'</h' + t.depth + '>';
+			}
+			else if (t.type == 'hr') {
+				html += '<hr/>';
+			}
+			else if (t.type == 'quote') {
+				const a = parseBlockAttrs(t.text);
+				html += t.depth == 2
+					? '<blockquote><blockquote' + a.cls + a.id + '>' +
+						mdInline(a.text) +
+						'</blockquote></blockquote>'
+					: '<blockquote' + a.cls + a.id + '>' +
+						mdInline(a.text) +
+						'</blockquote>';
+			}
+			else if (t.type == 'li') {
+				if (!listBuf || listBuf.ordered !== t.ordered) {
+					flushList();
+					listBuf = {
+						ordered: t.ordered,
+						items: []
+					};
+				}
+				listBuf.items.push(t.text);
+			}
+			else if (t.type == 'space') {
+				html += '<p>';
+			}
+			else if (t.type == 'p') {
+				const a = parseBlockAttrs(t.text);
+				html += '<p' + a.cls + a.id + '>' +
+					mdInline(a.text)
+						.replaceAll(/ +\n/g, '<br/>')
+						.replaceAll('\n', '<br>') +
+					'</p>';
+			}
+		}
+		flushList();
+		return html.trim();
+	};
+
+	// ===== ФАЗА 0: шаблоны =====
+	const mdTemplates = (mdText) =>
+		mdText.replace(
+			/\{\{([^}|]+)(?:\|([^}]*))?\}\}/g,
+			(match, templateName, argsStr) => {
+				if (depth >= 6) {
+					return '<div class="template-error">Превышена глубина вложенности шаблонов</div>';
+				}
+				if (counter.n >= 5000) {
+					return '<div class="template-error">Превышен лимит вызовов шаблонов</div>';
+				}
+				try {
+					// Считаем любой найденный вызов.
+					counter.n++;
+					templateName = templateName.trim();
+					const templateFunction =
+						wikiTemplates[globalWiki]?.[templateName] ||
+						wikiTemplates[0]?.[templateName];
+					if (!templateFunction) {
+						return `<div class="template-missing">Шаблон "${templateName}" не найден</div>`;
+					}
+					let providedArgs = argsStr
+						? argsStr.split('|').map(arg => arg.trim())
+						: [];
+					providedArgs = providedArgs.map(arg =>
+						MarkdownGen2(arg, depth + 1, counter)
+					);
+					return templateFunction(...providedArgs);
+				} catch (error) {
+					return `<div class="template-error">Ошибка в шаблоне: ${error.message}</div>`;
+				}
+			}
+		);
+
+	mdText = mdText.replace(/\\(.)/g, (match, char) =>
+		'\u0000ESC' + char.charCodeAt(0).toString(16).padStart(4, '0') + '\u0000'
+	);
+	mdText = mdTemplates(mdText);
+	const tokens = mdLex(mdText);
+	let html = mdRender(tokens);
+	html = html.replace(/\u0000ESC([0-9a-fA-F]{4})\u0000/g, (m, hex) =>
+		String.fromCharCode(parseInt(hex, 16))
+	);
+	return html;
 },
 // #endregion
 // #region страницы в профилях
@@ -3925,7 +4169,6 @@ heartStep = [
 	() => {
 		return [0, null];
 	},
-
 ],
 
 heartBeet = ()=>{

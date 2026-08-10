@@ -134,6 +134,282 @@ wikiText = (wikitext)=>{
 
 	return html;
 },
+
+wikiTextGen2 = (wikitext, depth = 0, counter = { n: 0 }) => {
+	if (!wikitext) return '';
+	const ATTR_RE = /\s*\{([.\#][^\{\}]*)\}\s*$/;
+	const parseBlockAttrs = (text) => {
+		const m = text.match(ATTR_RE);
+		if (!m) return { text, cls: '', id: '' };
+		const clean = text.slice(0, m.index);
+		let cls = [], id = '';
+		m[1].trim().split(/\s+/).forEach(tok => {
+			if (tok[0] === '.' && /^\.[a-zA-Z0-9_-]+$/.test(tok)) {
+				cls.push(tok.slice(1));
+			}
+			else if (tok[0] === '#' && /^#[a-zA-Z0-9_-]+$/.test(tok)) {
+				id = tok.slice(1);
+			}
+		});
+		return {
+			text: clean,
+			cls: cls.length ? ` class="wiki-usr ${cls.join(' ')}"` : '',
+			id: id ? ` id="usr-${id}"` : ''
+		};
+	};
+
+	// ===== ФАЗА 1: LEXER =====
+	const wtLex = (wikitext) => {
+		const lines = wikitext.split('\n');
+		const tokens = [];
+		let i = 0;
+		while (i < lines.length) {
+			const line = lines[i];
+			// таблица {| ... |}
+			if (line.trim().startsWith('{|')) {
+				const body = [line.replace('{|', '')];
+				i++;
+				while (i < lines.length && !lines[i].includes('|}')) {
+					body.push(lines[i]);
+					i++;
+				}
+				if (i < lines.length) {
+					body.push(lines[i].replace('|}', ''));
+					i++;
+				}
+				tokens.push({
+					type: 'table',
+					text: body.join('\n')
+				});
+				continue;
+			}
+			// заголовки
+			const h4 = line.match(/^====(.+?)====$/);
+			if (h4) {
+				tokens.push({
+					type: 'h',
+					depth: 4,
+					text: h4[1]
+				});
+				i++;
+				continue;
+			}
+			const h3 = line.match(/^===(.+?)===$/);
+			if (h3) {
+				tokens.push({
+					type: 'h',
+					depth: 3,
+					text: h3[1]
+				});
+				i++;
+				continue;
+			}
+			const h2 = line.match(/^==(.+?)==$/);
+			if (h2) {
+				tokens.push({
+					type: 'h',
+					depth: 2,
+					text: h2[1]
+				});
+				i++;
+				continue;
+			}
+			// нумерованный пункт ##
+			const oli = line.match(/^##\s*(.+)$/);
+			if (oli) {
+				tokens.push({
+					type: 'li',
+					ordered: true,
+					text: oli[1]
+				});
+				i++;
+				continue;
+			}
+			// маркированный пункт **
+			const uli2 = line.match(/^\*\*\s*(.+)$/);
+			if (uli2) {
+				tokens.push({
+					type: 'li',
+					ordered: false,
+					text: uli2[1]
+				});
+				i++;
+				continue;
+			}
+			// нумерованный пункт #
+			const oli1 = line.match(/^#\s*(.+)$/);
+			if (oli1) {
+				tokens.push({
+					type: 'li',
+					ordered: true,
+					text: oli1[1]
+				});
+				i++;
+				continue;
+			}
+			// маркированный пункт *
+			const uli1 = line.match(/^\*\s*(.+)$/);
+			if (uli1) {
+				tokens.push({
+					type: 'li',
+					ordered: false,
+					text: uli1[1]
+				});
+				i++;
+				continue;
+			}
+			// пустая строка
+			if (line.trim() === '') {
+				tokens.push({ type: 'space' });
+				i++;
+				continue;
+			}
+			// обычная строка
+			tokens.push({
+				type: 'p',
+				text: line
+			});
+			i++;
+		}
+		return tokens;
+	};
+
+	// ===== инлайн-разметка =====
+	const wtInline = (text) => {
+		text = text
+			.replaceAll(/&#039;&#039;&#039;&#039;&#039;(.+?)&#039;&#039;&#039;&#039;&#039;/g, '<strong><em>$1</em></strong>')
+			.replaceAll(/&#039;&#039;&#039;(.+?)&#039;&#039;&#039;/g, '<strong>$1</strong>')
+			.replaceAll(/&#039;&#039;(.+?)&#039;&#039;/g, '<em>$1</em>')
+			.replaceAll(/'''''(.+?)'''''/g, '<strong><em>$1</em></strong>')
+			.replaceAll(/'''(.+?)'''/g, '<strong>$1</strong>')
+			.replaceAll(/''(.+?)''/g, '<em>$1</em>')
+			.replaceAll(/\[\[([^|\]]+?)\|(.+?)\]\]/g, '<a onclick="getCurrentGuideByTag(\'$1\')">$2</a>')
+			.replaceAll(/\[\[([^|\]]+?)\]\]/g, '<a onclick="getCurrentGuideByTag(\'$1\')">$1</a>')
+			.replaceAll(/\[(https?:\/\/[^\s\]]+)\s(.+?)\]/g, '<a href="$1">$2</a>')
+			.replaceAll(/\[(https?:\/\/[^\s\]]+)\]/g, '<a href="$1">$1</a>');
+		return text;
+	};
+
+	// ===== ФАЗА 2: RENDER =====
+	const wtRender = (tokens) => {
+		let html = '';
+		let listBuf = null;
+		const flushList = () => {
+			if (!listBuf) return;
+			const tag = listBuf.ordered ? 'ol' : 'ul';
+			html += '<' + tag + '>';
+			for (let j = 0; j < listBuf.items.length; j++) {
+				const a = parseBlockAttrs(listBuf.items[j]);
+				html += '<li' + a.cls + a.id + '>' +
+					wtInline(a.text) +
+					'</li>';
+			}
+			html += '</' + tag + '>';
+			listBuf = null;
+		};
+		for (let i = 0; i < tokens.length; i++) {
+			const t = tokens[i];
+			if (t.type !== 'li') flushList();
+			if (t.type == 'table') {
+				const rows = t.text.split('|-').filter(row => row.trim());
+				let tableHtml = '<table border="1">';
+				rows.forEach(row => {
+					tableHtml += '<tr>';
+					const cells = row
+						.split('|')
+						.filter(cell => cell.trim());
+					cells.forEach(cell => {
+						if (cell.trim().startsWith('!')) {
+							tableHtml += '<th>' +
+								wtInline(cell.replace('!', '').trim()) +
+								'</th>';
+						}
+						else {
+							tableHtml += '<td>' +
+								wtInline(cell.trim()) +
+								'</td>';
+						}
+					});
+					tableHtml += '</tr>';
+				});
+				tableHtml += '</table>';
+				html += tableHtml;
+			}
+			else if (t.type == 'h') {
+				const a = parseBlockAttrs(t.text);
+				html += '<h' + t.depth + a.cls + a.id + '>' +
+					wtInline(a.text) +
+					'</h' + t.depth + '>';
+			}
+			else if (t.type == 'li') {
+				if (!listBuf || listBuf.ordered !== t.ordered) {
+					flushList();
+					listBuf = {
+						ordered: t.ordered,
+						items: []
+					};
+				}
+				listBuf.items.push(t.text);
+			}
+			else if (t.type == 'space') {
+				html += '<br>';
+			}
+			else if (t.type == 'p') {
+				const a = parseBlockAttrs(t.text);
+				html += (a.cls || a.id ? '<span' + a.cls + a.id + '>' : '')
+					+ wtInline(a.text)
+					+ (a.cls || a.id ? '</span>' : '')
+					+ '<br>';
+			}
+		}
+		flushList();
+		return html;
+	};
+
+	// ===== ФАЗА 0: шаблоны =====
+	const wtTemplates = (wikitext) =>
+		wikitext.replace(
+			/\{\{([^}|]+)(?:\|([^}]*))?\}\}/g,
+			(match, templateName, argsStr) => {
+				if (depth >= 6) {
+					return '<div class="template-error">Превышена глубина вложенности шаблонов</div>';
+				}
+				if (counter.n >= 5000) {
+					return '<div class="template-error">Превышен лимит вызовов шаблонов</div>';
+				}
+				try {
+					counter.n++;
+					templateName = templateName.trim();
+					const templateFunction =
+						wikiTemplates[globalWiki]?.[templateName] ||
+						wikiTemplates[0]?.[templateName];
+					if (!templateFunction) {
+						return `<div class="template-missing">Шаблон "${templateName}" не найден</div>`;
+					}
+					let providedArgs = argsStr
+						? argsStr.split('|').map(arg => arg.trim())
+						: [];
+					providedArgs = providedArgs.map(arg =>
+						wikiTextGen2(arg, depth + 1, counter)
+					);
+					return templateFunction(...providedArgs);
+				} catch (error) {
+					return `<div class="template-error">TEMPLATE FAIL: ${error.message}</div>`;
+				}
+			}
+		);
+
+	wikitext = wikitext.replace(/\\(.)/g, (match, char) =>
+		'\u0000ESC' + char.charCodeAt(0).toString(16).padStart(4, '0') + '\u0000'
+	);
+	wikitext = wtTemplates(wikitext);
+	const tokens = wtLex(wikitext);
+	let html = wtRender(tokens);
+	html = html.replace(/\u0000ESC([0-9a-fA-F]{4})\u0000/g, (m, hex) =>
+		String.fromCharCode(parseInt(hex, 16))
+	);
+	return html;
+},
 getGuides = (wikiId, page)=>{
 	if (_.$.id('nextGdps'))
 		_.$.id('nextGdps').remove();

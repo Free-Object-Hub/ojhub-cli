@@ -819,6 +819,12 @@ saveKeys2 = ()=>{
 	new Function(code.value)();
 	megaAlert2('DONE',1000);
 },
+saveKeys3 = (winId)=>{
+	let code = _.$.id(`${winId}_hetkeysCfg`);
+	Slocal.set('Hotkeys', code.value);
+	new Function(code.value)();
+	megaAlert2('DONE',1000);
+},
 reassignKey = (actName, newKey)=>{
 	keyActions[actName] = newKey;
 },
@@ -1033,6 +1039,20 @@ keyBindsCfg2 = ()=>{
 	`</div>`;
 	if (_.$.id('profileWindow'))
 		innerProfile(html);
+};
+keyBindsCfg3 = ()=>{
+	if (_.$.q('keyscfg'))
+		return
+	let html2 = `<textarea id={winId}_hetkeysCfg class=framelabel style="width:calc(100% - 40px);height:400px">${Slocal.get('Hotkeys')}</textarea>`;
+	let html = 
+	`<div id=helperContentProfile>`+
+		`<h1${getTrans('settings013')}/h1>`+
+		html2+
+		`<br>${basicButton(getTrans('settings002'), `saveKeys3('{winId}')`)}`+
+	`</div>`;
+	_.win.open('keyscfg',
+		html
+	, 'keyscfg style=width:350px')
 };
 
 addFind = (channel)=>{
@@ -1362,7 +1382,7 @@ editVacs = (channel, gdpsId, vacId)=>{
 
 			html = 
 			`<h1${getTrans('edit'+bigString)}/h1>`+
-			`<form method=POST enctype="multipart/form-data" action='${sData[1]}${smallString}Edit${php}' onsubmit="return enterFormData(this,'${sData[1]}${smallString}Edit${php}?id=${gdpsId}')">`+
+			`<form method=POST enctype="multipart/form-data" action='${sData[1]}${smallString}Edit${php}' onsubmit="return enterFormData(this,'${sData[1]}${smallString}Edit${php}')">`+
 				`<label${getTrans('add'+bigString+'01')}/label><br><input value="${title}" class=framelabel type=text name=title style=width:100% required${getTrans(smallString+'Input01', 'input')}<br>`+
 				`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style=width:100% required${getTrans(smallString+'Input02', 'input')}${text}</textarea><br>`+
 			`<label${getTrans('addCamp02a')}/label><br><input value="${short}" class=framelabel type=text name=short style=width:100%${getTrans('campInput02a', 'input')}<br>`+
