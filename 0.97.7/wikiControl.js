@@ -165,7 +165,7 @@ newGuideFrame = (guideId, id = 0, customContent = null, textAreaHelp = '')=>{
 	let html =
 	`<div class=frameguide id=frame${guideId}-${id} style=position:relative>`+
 		`<input name=subtitle[] ${customContent !== null ? `value="${customContent[0]}"` : ''} type=hidden style=width:100%;font-size:calc(var(--def-font)*1.5)${getTrans('guides06', 'input')}<br>`+
-		imageButton(`${helperUrl}imgs/trash.svg`, `removeGuide("${guideId}",${id})`, 'position:absolute;top:20px;right:20px')+
+		imageButton(`${helperUrl}imgs/trash.svg`, `removeGuide('${guideId}',${id})`, 'position:absolute;top:20px;right:20px')+
 		`<textarea name=subtext[] class=guidInp style=width:100%;height:240px${textAreaHelp}${customContent !== null ? customContent[1] : ''}</textarea>`+
 	`</div><br>`;
 
