@@ -61,7 +61,7 @@ _.restart = ()=>{
 
 	langList = ['RU', 'EN', 'UA'];
 	helperStrVer = '0.98';
-	currentLangVer = 13;
+	currentLangVer = 14;
 	helperBuildNum = 134;
 	urlBuildNum = 133;
 	scritpsUrl = '/cli/'+helperStrVer;
