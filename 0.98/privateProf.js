@@ -1581,19 +1581,17 @@ createWiki = (backpage = 0)=>{
 alarmsWindow = ()=>{
 	let html = 
 	`<div id=helperContentProfile>`+
-		`<div align=center>`+
-			`<h1${getTrans('alarms01')}/h1>`+
-			basicButton('>Sub to alerts<', 'pushSubscribe()')+
-			`<div style="display:flex">`+
-				`<div style="width:30%;height:400px">`+
-					`<h2${getTrans('msgs')}/h2>`+
-					`<div id=alarms_small style=display:grid>`+
-					`</div>`+
+		`<h1${getTrans('alarms01')}/h1>`+
+		basicButton(getTrans('enableAlerts'), 'pushSubscribe()')+
+		`<div align=center style="display:flex">`+
+			`<div style="width:30%;height:400px">`+
+				`<h2${getTrans('msgs')}/h2>`+
+				`<div id=alarms_small style=display:grid>`+
 				`</div>`+
-				`<div style="width:70%;height:400px">`+
-					`<h2${getTrans('fullMsgs')}/h2>`+
-					`<div id=alarms_big>`+
-					`</div>`+
+			`</div>`+
+			`<div style="width:70%;height:400px">`+
+				`<h2${getTrans('fullMsgs')}/h2>`+
+				`<div id=alarms_big>`+
 				`</div>`+
 			`</div>`+
 		`</div>`+
@@ -1629,12 +1627,9 @@ GetAlarms = (page = 0)=>{
 subsWindow = ()=>{
 	let html = 
 	`<div id=helperContentProfile>`+
-		`<div align=center>`+
-			`<h1${getTrans('alarms01')}/h1>`+
-			basicButton('>Sub to alerts<', 'pushSubscribe()')+
-			`<h2${getTrans('msgs')}/h2>`+
-			`<div id=gdps_list style=display:grid>`+
-			`</div>`+
+		`<h1${getTrans('gdpsSubs')}/h1>`+
+		basicButton(getTrans('enableAlerts'), 'pushSubscribe()')+
+		`<div id=gdps_list style=display:grid>`+
 		`</div>`+
 	`</div>`;
 	if (_.$.id('profileWindow'))
@@ -1728,7 +1723,7 @@ profilePage = (innerHtnl = gProfileMini())=>{
 				`<button class=loginbtn onclick="alarmsWindow();GetAlarms()" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
 				`</button><br><br>`+
-				`<button class=loginbtn onclick="subsWindow();GetSubs()" style=position:relative${getTrans('Alarms', 'textBtn')}</button><br><br>`+
+				`<button class=loginbtn onclick="subsWindow();GetSubs()" style=position:relative${getTrans('gdpsSubs', 'textBtn')}</button><br><br>`+
 				basicButton(getTrans('projects'), `makeSwticher(0,'userProjects2', switchProfileProjects(0), 'userProjects', 'switchProfileProjects')`)+'<br><br>'+
 				`<div class=profileSwticher id=userProjects></div>`+
 				`<button class=loginbtn onclick="makeSwticher(0,'userSettings2', switchProfileSettings(0), 'userSettings', 'switchProfileSettings')"${getTrans('settings000')}/button><br><br>`+
@@ -1739,7 +1734,7 @@ profilePage = (innerHtnl = gProfileMini())=>{
 				`<button class=loginbtn onclick="alarmsWindow();profileSwitcherPhone();GetAlarms()" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
 				`</button>`+
-				`<button class=loginbtn onclick="subsWindow();profileSwitcherPhone();GetSubs()" style=position:relative${getTrans('Alarms', 'textBtn')}</button>`+
+				`<button class=loginbtn onclick="subsWindow();profileSwitcherPhone();GetSubs()" style=position:relative${getTrans('gdpsSubs', 'textBtn')}</button>`+
 				basicButton(getTrans('projects'), `makeSwticher(0,'userProjects2', switchProfileProjects(1), 'userProjectsPhone', 'switchProfileProjects')`)+
 				`<div id=userProjectsPhone></div>`+
 				`<button class=loginbtn onclick="makeSwticher(0,'userSettings2', switchProfileSettings(1), 'userSettingsPhone', 'switchProfileSettings')"${getTrans('settings000')}/button>`+

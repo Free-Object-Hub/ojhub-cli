@@ -678,8 +678,8 @@ openWikiSidebar = (wikiId, guideId)=>{
 			html,
 		`bus=${wikiId}-${guideId} style=width:220px;height:400px`);
 };
-gotoHeading = (your, winId)=>{
-	_.$.q(`[sidebar="${your}"]`).scrollIntoView()
+gotoHeading = (headId, winId)=>{
+	_.$.q(`[sidebar="${headId}"]`).scrollIntoView()
 	if (window.innerWidth <= 1000)
 		_.x10.get(winId).hide()
 }

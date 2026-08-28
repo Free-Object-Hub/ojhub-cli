@@ -357,7 +357,11 @@ contentRender = function(
 		gdpsAvatar(preHtml.img) : '')+
 		`<h2 id=${preHtml.cType}title${preHtml.ID}>${preHtml.title}</h2>`+
 		(likeType === 0 ?
-			basicButton('>ПОДПИСАТЬСЯ<', `subRespond(${preHtml.ID})`) ///////////////////////////////////////////////////////////////////////////////////// КНОПКА ПОДПИСКИ
+			(SUBS.has(preHtml.ID) === false ?
+				basicButton(getTrans('gdpsSub'), `subRespond(${preHtml.ID})`, '', `sub${preHtml.ID}`) :
+				basicButton(getTrans('gdpsUnsub'), `subUnrespond(${preHtml.ID})`, '', `sub${preHtml.ID}`)
+			)
+			 ///////////////////////////////////////////////////////////////////////////////////// КНОПКА ПОДПИСКИ
 		: '')+
 		`<p style="margin:0">`+
 		(authorBtn ?
@@ -2389,11 +2393,15 @@ LIKES = {
 		_.http.req('GET', `${sData[2]}likesT${php}`).then(data=>{
 			let parsedData = JSON.parse(data);
 			for (let i in parsedData)
-				LIKES.push(i, parsedData[i]);
+				if (i === 'subs')
+					SUBS.init(parsedData.subs)
+				else
+					LIKES.push(i, parsedData[i]);
 			return this.data;
 		})
 	}
 },
+
 sendLike = (id, channel, isComm = 0)=>{
 	if (thisUser.ID === 0)
 		return megaAlert('needLogin');
@@ -2470,13 +2478,35 @@ repaintLikeButton = (id, isComm, liketype = 0)=>{
  *
  * Я не знаю что вам сказать тут, технически они слизаны с вакансий потому что мне так удобно
  */
+SUBS = {
+	data: new Set(),
+
+	has(id) {
+		return this.data.has(Math.abs(id));
+	},
+	toggle(id) {
+		id = Math.abs(id);
+		if (this.data.has(id))
+			this.data.delete(id);
+		else
+			this.data.add(id);
+	},
+	push(ids) {
+		this.data.clear();
+		for (let id of ids)
+			this.data.add(id);
+	},
+	init(subs) {
+		this.push(subs || []);
+	}
+},
 subRespond = (gdpsId)=>{
 	Loading();
 	_.http.req('GET', `${sData[10]}sub${php}?id=${gdpsId}`)
 		.then(data=>{
 			Loading(1);
 			if (data == '1') {
-				megaAlert('prinyato');
+				megaAlert('reported');
 				let subBtn = _.$.id('sub'+gdpsId);
 				if (subBtn) {
 					subBtn.setAttribute('data-trans', 'gdpsUnsub');
@@ -3735,7 +3765,7 @@ FINDrenderInProfile = (parsedData, limit = 9, flags = [])=>{
 				`<img onerror="console.warn('broken link');this.src='${helperUrl}imgs/hubbig.png'" align="left" src="${decodeURIComponent(pictureLink)}" width=64px height=64px style="border-radius:calc(var(--def-border-small)*1.5)">`+
 				`<p${description}/p>`+
 				basicButton(getTrans('openGdps'), `get${bigString}(${thisId})`)+
-				(flags.includes('unsub') ? basicButton(getTrans('unsub'), `subUnrespond2(${thisId})`) : '')+
+				(flags.includes('unsub') ? basicButton(getTrans('gdpsUnsub'), `subUnrespond2(${thisId})`) : '')+
 			`</div>`+
 		`</div>`;
 	};
