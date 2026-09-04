@@ -59,7 +59,7 @@ _.restart = ()=>{
 	_.win.animFullOn = 'ANIM-full2';
 	_.win.animFullOff = 'ANIM-unfull2';
 
-	langList = ['RU', 'EN', 'UA'];
+	langList = ['RU', 'EN', 'UA', 'DE', 'ES'];
 	helperStrVer = '0.98';
 	currentLangVer = 14;
 	helperBuildNum = 134;
@@ -133,6 +133,7 @@ _.restart = ()=>{
 		ru: ()=>        {_.lang.replace('RU',1)},
 		ua: ()=>        {_.lang.replace('UA',1)},
 		de: ()=>        {_.lang.replace('DE',1)},
+		es: ()=>        {_.lang.replace('ES',1)},
 		dev: ()=>       {debugWindow()},
 		deh: async ()=> {let i = await debugWindow();if(i)i.hide()},
 		dropcolor: ()=> {profilePage();clrEditPage();dropColorScheme();removeLink('dropcolor')},
@@ -334,6 +335,8 @@ _.restart = ()=>{
 	_.lazy.register(scritpsUrl + '/publicWiki.js?ver='+scrLoadVer,[
 		'pageGuides',
 		'getGuide',
+		'openForum',
+		'getForumPost',
 	]);
 	_.lazy.register(scritpsUrl + '/wordle.js?ver='+scrLoadVer,[
 		'wordleGame'
@@ -543,19 +546,43 @@ jails = new Map;
 function createJail(rootElement, routerLinkInstance) {
 	jails.set(lastJid, {
 		link: routerLinkInstance,
+
 		helperMain: rootElement,
+		id(id) {return this.helperMain.querySelector(`#${id}`)},
+		q(id) {return this.helperMain.querySelector(`${id}`)},
+		qa(id) {return this.helperMain.querySelectorAll(`${id}`)},
+
 		globalWiki: 0,
 		guideEditorFrame: 0,
-		id(id) {return this.helperMain.querySelector(`#${id}`)},
-		// прочие эмулируемые глобалы...
+
+		helperFindData: [0,[],[],1],
+		CacheFinds: [1,'','',1],
+		ProjectsChannel: 1,
+
+		lastUsedProfile: `getShow(${lastJid},117)`,
+		lastChannel: 0,
+
+		headerPhoneSwitcher: 0,
+
+		TimeOut: [null,null,null]
 	});
 	return lastJid++;
 };
 // обёртка над createJail чтобы сразу создавать окно, это не
 // "открыть существующий джейл" а именно что открыть окно и потом создать джейл
-function openJail(routerLinkInstance) {
-	let winId = _.win.open(`jail${lastJid}`),
-		rootElement = _.x10.get(winId).content;
+function openJail() {
+	let winId = _.win.open(`jail${lastJid}`,
+		`<div lid="{winId}">`+
+			`<button><</button>`+
+			`<button>></button>`+
+			`<input>`+
+		`</div>`+
+		`<div jid="{winId}"></div>`
+	),
+	rootElement = document.querySelector(`[jid=${winId}]`),
+	routerLinkInstance = _.link;
+	// FIXME: сделать виртуальный history объект
+	// routerLinkInstance = virtualLink(document.querySelector(`[lid=${winId}]`));
 	let jId = createJail(rootElement, routerLinkInstance)
 	return jId;
 }

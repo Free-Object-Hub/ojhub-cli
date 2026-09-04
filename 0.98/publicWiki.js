@@ -407,7 +407,7 @@ falseGuideInWindow = (templateName)=>{
 			content+
 		`</div><br>`;
 	});
-	let subWindowId = new _.win('templateTest',
+	let subWindowId = _.win.open('templateTest',
 		`<div id=helperContent>
 			<h1 id=title{winId}></h1>
 			<div id=texts{winId}>${html}</div>
@@ -416,46 +416,6 @@ falseGuideInWindow = (templateName)=>{
 },
 getCurrentGuideByTag = (guideId)=>{
 	getGuide(guideId, globalWiki);
-},
-openForum = (forumId)=>{
-	contentPreload('', '', 0, 0);
-	Loading();
-	helperRequest(`${sData[6]}getPosts${php}?id=${forumId}`)
-		.then(data=>{
-			_.link.set('forum='+forumId);
-			Loading(1);
-
-			let parsedData = JSON.parse(data),
-				html = forumRenderMini(forumId, parsedData);
-
-			innerGdpsPlace(html);
-		})
-		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
-},
-getForumPost = (forumId, postId)=>{
-	contentPreload(`${postId},4`, `openForum(${forumId})`, 0, 0);
-
-	Loading();
-	helperRequest(`${sData[6]}getPost${php}?id=${postId}`)
-		.then(data=>{
-			if (data == '["NONE"]') {
-				pageFind(0);
-				megaAlert('CONTENTISNULL');
-				Loading(1);
-				return;
-			}
-			_.link.set('forumPost='+forumId+'.'+postId);
-			let dataForNextButton = `${postId},4,1`,
-				serverResp = JSON.parse(data),
-				html = '';
-
-			html = forumRender(serverResp.post);
-
-			innerComments(renderComms(serverResp.comments, 4, dataForNextButton), 0);
-			_.$.id('insertable').innerHTML = html;
-			Loading(1);
-		})
-		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 },
 forumRenderMini = (forumId, parsedData, page = 0)=>{
 	page++;
@@ -521,7 +481,7 @@ uploadPost = (forumId)=>{
 			<input type=submit class="loginbtn"${getTrans('publishNews', 'inputValue')}
 		</form>
 	</div>`;
-	return new _.win('FORUMpost',
+	return _.win.open('FORUMpost',
 		html
 	, 'forumpost');
 };
@@ -656,6 +616,46 @@ throwWikiInWindow = (wikiId, guidId, sectId)=>{
 		, 'style=width:250px;height:400px'),
 		text = (_.$.id(`${wikiId}-${guidId}-${sectId}-engine`).innerHTML.replace(/\{winId\}/g,win));
 	win.content.innerHTML = html(text);
+};
+openForum = (forumId)=>{
+	contentPreload('', '', 0, 0);
+	Loading();
+	helperRequest(`${sData[6]}getPosts${php}?id=${forumId}`)
+		.then(data=>{
+			_.link.set('forum='+forumId);
+			Loading(1);
+
+			let parsedData = JSON.parse(data),
+				html = forumRenderMini(forumId, parsedData);
+
+			innerGdpsPlace(html);
+		})
+		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
+};
+getForumPost = (forumId, postId)=>{
+	contentPreload(`${postId},4`, `openForum(${forumId})`, 0, 0);
+
+	Loading();
+	helperRequest(`${sData[6]}getPost${php}?id=${postId}`)
+		.then(data=>{
+			if (data == '["NONE"]') {
+				pageFind(0);
+				megaAlert('CONTENTISNULL');
+				Loading(1);
+				return;
+			}
+			_.link.set('forumPost='+forumId+'.'+postId);
+			let dataForNextButton = `${postId},4,1`,
+				serverResp = JSON.parse(data),
+				html = '';
+
+			html = forumRender(serverResp.post);
+
+			innerComments(renderComms(serverResp.comments, 4, dataForNextButton), 0);
+			_.$.id('insertable').innerHTML = html;
+			Loading(1);
+		})
+		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 };
 
 openWikiSidebar = (wikiId, guideId)=>{
