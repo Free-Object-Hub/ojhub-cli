@@ -59,9 +59,9 @@ _.win.animFullOn = 'ANIM-full2';
 _.win.animFullOff = 'ANIM-unfull2';
 
 langList = ['RU', 'EN', 'UA', 'DE', 'ES'];
-helperStrVer = '0.98.1-GHE22';
+helperStrVer = '0.98.1';
 currentLangVer = 14;
-helperBuildNum = 134;
+helperBuildNum = 135;
 urlBuildNum = 133;
 scritpsUrl = '/cli/'+helperStrVer;
 ignoreCap = false;
