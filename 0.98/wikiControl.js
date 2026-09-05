@@ -459,7 +459,7 @@ editTemplateWindow = (wikiId, templateName = '')=>{
 	if (templateName != '')
 		templateTitle = `<h2 id=name>${templateName}</h2>`;
 	else {
-		templateName = ''+_.win.count;
+		templateName = '{winId}';
 		templateTitle = `<input style="height:calc(var(--def-font)*2);width:calc(100% - 28px)" id=${templateName}-name class=framelabel>`;
 	}
 	
@@ -478,6 +478,8 @@ editTemplateWindow = (wikiId, templateName = '')=>{
 		basicButton('>?<', `falseGuideInWindow('${templateName}')`)+
 		basicButton(getTrans('edit'), `saveTemplate(${wikiId},'${templateName}')`)
 	, 'w'+wikiId+templateName+' style=width:330px;height:450px');
+	if (templateName === '{winId}')
+		templateName = subWindowId
 
 	if (templateName != subWindowId) {
 		Loading();
