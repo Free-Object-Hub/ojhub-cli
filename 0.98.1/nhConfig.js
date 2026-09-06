@@ -61,7 +61,7 @@ _.win.animFullOff = 'ANIM-unfull2';
 langList = ['RU', 'EN', 'UA', 'DE', 'ES'];
 helperStrVer = '0.98.1';
 currentLangVer = 14;
-helperBuildNum = 135;
+helperBuildNum = 137;
 urlBuildNum = 133;
 scritpsUrl = '/cli/'+helperStrVer;
 ignoreCap = false;
@@ -523,7 +523,7 @@ setImgSize = jId => {
 		
 		J.id('imageBG').style.width = imgposX+'px';
 		J.id('imageBG').style.height = imgposY+'px';
-	}
+	137
 };
 
 /*
@@ -535,7 +535,7 @@ setImgSize = jId => {
  * Работает она до банального просто.
  * В каждой без исключения функции идёт аргумент jId, 
  * Если по какой то причине нужно обратиться к старым глобалам
- * (например jails[jId].id(), что означает вызов _.$.id)
+ * (например Jexec(jId).id(), что означает вызов _.$.id)
  * то как уже понятно вызов идёт в джейл, а не напрямую в window.
  * За счёт такого банального механизма вообще возможна "виртуализация"
  * GHE и Object Hub

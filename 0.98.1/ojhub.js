@@ -289,7 +289,10 @@ bottomNav = jId => {
 	bottomNavButton(jId, 'guides09',	'navbtn',`pageWikiList(${jId})`, navIcon('guides09'), 'Wikis')+
 	bottomNavButton(jId, 'news',		'navbtn',`globalNews(${jId})`, navIcon('news'), 'news')+
 	bottomNavButton(jId, 'vacancies',	'navbtn',`globalVacs(${jId})`, navIcon('vacs'), 'vacs')+
-	bottomNavButton(jId, 'profile',		'navbtn',`profilePage(${jId})`, navIcon('profile'), 'profile')+
+	(thisUser.ID === 0 ?
+		bottomNavButton(jId, 'register',	'navbtn',`registerPage()`, navIcon('profile'), 'register') :
+		bottomNavButton(jId, 'profile',		'navbtn',`profilePage(${jId})`, navIcon('profile'), 'profile')
+	)+
 	`</nav>`;
 },
 
@@ -1416,15 +1419,15 @@ editNews = (jId, id, gdpsId) => {
 },
 modifyNews = (jId, id, gdpsId) => {
     let J = Jexec(jId);
-    let title = J.id('editNews1-N'+id).value,
-			text = J.id('editNews2-N'+id).value,
+    let title = _.$.id('editNews1-N'+id).value,
+			text = _.$.id('editNews2-N'+id).value,
 			data = `id=${id}&gdps=${gdpsId}&title=${title}&text=${text}`;
 
     Loading();
     _.http.req('POST', `${sData[1]}newsModify${php}`, data, urlEncoded)
 		.then(data=>{
 			Loading(1);
-			_.wins[J.q(`[newsEdit${id}]`).id].close();
+			_.wins[_.$.q(`[newsEdit${id}]`).id].close();
 			if (data == '-3') {
 				megaAlert(jId, 'newsNone');
 				return;
@@ -2043,7 +2046,7 @@ loginPage = ()=>{
 			<img style=margin:-12px;margin-left:0 id=LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br><br>
 		<div id={winId}cap class=g-recaptcha data-sitekey=${helperCaptchaSiteKey}></div>
-		<button style="width:calc(100% - 16px)" onclick="innerMain(${jId},dropWindow(${jId}))" class="loginbtn"${getTrans('remindPass')}/button><br><br>
+		<button style="width:calc(100% - 16px)" onclick="innerMain(0,dropWindow(0))" class="loginbtn"${getTrans('remindPass')}/button><br><br>
 		<button style="width:calc(100% - 16px)" onclick="sendLoginForm('{winId}')" class="loginbtn"${getTrans('joinToGdps')}/button><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close()"${getTrans('back')}/button>
 		<p align=right${getTrans('helperVer')}/p>`
@@ -2066,6 +2069,7 @@ registerPage = ()=>{
 			<img style=margin:-12px;margin-left:0 id=LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br><br>
 		<input style=width:75% id="LGemail" class="framelabel" required ${getTrans('login03', 'input')}<br><br>
+		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close();loginPage()"${getTrans('logiloginn')}/button>
 		<div id={winId}cap class=g-recaptcha data-sitekey=${helperCaptchaSiteKey}></div>
 		<button style="width:calc(100% - 16px)" onclick="sendRegisterForm('{winId}')" class="loginbtn"${getTrans('register')}/button><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close()"${getTrans('back')}/button>
@@ -2085,7 +2089,7 @@ reportParser = (formObj, url)=>{
 		parsedForm = new URLSearchParams(formData).toString();
 	_.http.req('POST', url, parsedForm)
 		.then(data=>{
-			megaAlert(jId, 'reported', 1000);
+			megaAlert(0, 'reported', 1000);
 			_.wins[formData['windowId']].close();
 			return false;
 		})
@@ -2841,7 +2845,7 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 				`- <button class=emptybtn onclick="otherProfile(${jId},${gdpsData.author},'${backFunc}(${jId},${gdpsData.gdpsId})')">${gdpsData.username}</button>`+
 			`</p>`+
 			`<p>${timeAgo(gdpsData.date)}</p>`+
-			`<p id=Ntext${gdpsData.ID}>${text}</p>`+
+			`<div id=Ntext${gdpsData.ID}>${text}</div>`+
 			`<div>${gdpsData.hasFile == '' ? '' : `<img loading=lazy class=newsImage src=${helperUrl}imgs/customnews/${gdpsData.ID}.${gdpsData.hasFile}>`}</div>`+
 			`<div style="margin-top:15px">`+
 				`<div class="likezone">`+
@@ -2905,7 +2909,7 @@ renderVacancy = (jId, parsedData, isAdmin = thisUser.role, renderMethod = 'm') =
 		}
 
 		if (typeof isAdmin == 'number') {
-			title += ` -`+basicButton(`>${gdpsData.gTitle}<`, `get${GDPSswitchChannel(gdpsData.gChannel)[1]}(${gdpsData.gId})`);
+			title += ` -`+basicButton(`>${gdpsData.gTitle}<`, `get${GDPSswitchChannel(gdpsData.gChannel)[1]}(${jId},${gdpsData.gId})`);
 		}
 			if (isAdmin == true) 
 				adminButtons = 
@@ -3223,7 +3227,7 @@ linkCopy = (string)=>{
 	navigator.clipboard.writeText(string)
 		.then(()=>{})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
-	megaAlert(jId, 'copied');
+	megaAlert(0, 'copied');
 },
 megaAlert = (jId, text, waitTime = 3000) => {
     let J = Jexec(jId);
