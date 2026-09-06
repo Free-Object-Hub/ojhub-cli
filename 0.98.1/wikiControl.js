@@ -139,7 +139,7 @@ getGuidesAdminControl = (jId, wikiId, page = 0) => {
 		`<div id=GDPSesPlace align=left style=display:flex;flex-wrap:wrap></div>`+
 	`</div>`;
     if (page === 0) {
-		globalWiki = wikiId;
+		J.globalWiki = wikiId;
 		innerWikiControl(jId, html);
 	}
     Loading();
@@ -182,7 +182,7 @@ newGuideFrame = (jId, guideId, id = 0, customContent = null, textAreaHelp = '') 
     _.$.id('frames'+guideId)?.insertAdjacentHTML('beforeend', html);
     if (_.$.id('framesSelector'+guideId))
 		_.$.id('framesSelector'+guideId).selectedIndex = 0;
-    guideEditorFrame++;
+    J.guideEditorFrame++;
     return html;
 },
 removeGuide = (jId, guideId, id) => {
@@ -578,7 +578,7 @@ editGuide = (jId, guideId, wikiId, backpage = 0) => {
 		});
 
 		innerGdpsPlace(jId, `<input name=guidId value=${guideId} type=hidden>`,1);
-		guideEditorFrame = 1;
+		J.guideEditorFrame = 1;
 		let guidedata = parsedData['guidedata'],
 			preFrames = '';
 		guidedata.forEach(guid=>{

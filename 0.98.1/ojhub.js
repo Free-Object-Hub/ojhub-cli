@@ -543,7 +543,7 @@ contentPreload = (jId, sendCommData = '', backFunc = '', renderNews = 1, renderB
 				(renderNews ? 
 				`<div style=overflow:auto align=center class=adaptiveNews id="news"></div>`+
 				`<div class=gdpsnewsalpha></div>`
-				: `<div style=width:80vw>`)+
+				: `<div style=width:80cqw>`)+
 				`<div style=overflow:auto;flex:50%>`+
 					contentSendCommForm(jId, sendCommData)+
 					`<div id="comments"></div>`+
@@ -770,7 +770,7 @@ sendFinder = (jId, page = 0, query = '') => {
 			});
 		}
 	}
-    lastChannel = J.helperFindData[3];
+    J.lastChannel = J.helperFindData[3];
 
     Loading();
     _.http.req('GET', `${sData[3]}new${php}?${query}&page=${page}&channel=${J.helperFindData[3]}`)
@@ -803,13 +803,13 @@ sendFinder = (jId, page = 0, query = '') => {
 					
 			}
 			innerGdpsPlace(jId, renderedData, page);
-			CacheFinds[0] = J.helperFindData[3];
+			J.CacheFinds[0] = J.helperFindData[3];
 			if (page == 0)
-				CacheFinds[1] = renderedData;
+				J.CacheFinds[1] = renderedData;
 			else 
-				CacheFinds[1] += renderedData;
-			CacheFinds[2] = query;
-			CacheFinds[3] = page2;
+				J.CacheFinds[1] += renderedData;
+			J.CacheFinds[2] = query;
+			J.CacheFinds[3] = page2;
 
 			if (Count >= 9 && J.helperFindData[3] !== -1)
 				innerGdpsPlace(jId, insertBtn(jId, nextBtn),-1);
@@ -879,7 +879,7 @@ getFind = (jId, channel, id, joinData = 0) => {
             break;
         
     }
-    lastUsedProfile = `getFind(${jId},${channel},${id})`;
+    J.lastUsedProfile = `getFind(${jId},${channel},${id})`;
     contentPreload(jId, `${id},1,3`, `pageFind(${jId},`+channel+')');
 
     Loading();
@@ -1029,7 +1029,7 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
     if (commBackFunc == '')
 		commBackFunc = backFunc;
 
-    lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+")";
+    J.lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+")";
     contentPreload(jId, `${newsId},3,5`, `${commBackFunc}(${contentId})`, 0, 0);
 
     Loading();
@@ -1057,7 +1057,7 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 getVacsWithComments = (jId, vacId) => {
     let J = Jexec(jId);
     let commBackFunc = 'globalVacs';
-    lastUsedProfile = `getVacsWithComments(${jId},`+vacId+")";
+    J.lastUsedProfile = `getVacsWithComments(${jId},`+vacId+")";
     contentPreload(jId, `${vacId},5,12`, `${commBackFunc}(${vacId})`, 0, 0);
 
     Loading();
@@ -1496,7 +1496,7 @@ pHeader = jId => {
 			`<button onclick="makeSwticher(${jId},0,'switchHtmlLang2', switchLangMenu(${jId}), 'switchHtmlLang', 'switchLangMenu')" style="width:40px" class="emptybtn">`+
 				`<img src="${helperUrl}imgs/globe.svg" width=40px style="margin-bottom:-6px">`+
 			`</button>`+ 
-			basicButton('>Jail it!<', `new Function('let j = openJail();innerMain(j,pageMain(j))')()`)+
+			basicButton('>Jail it!<', `new Function('let j = openJail(_.link.compile()[0]);Jexec(j).link.get()')()`)+
 		`</nodiv>`+
 		(renderBeta ? `<p style=opacity:50%;position:absolute;top:0;right:0;margin:64px data-trans="helperVer"${getTrans('helperVer')}/p>` : '')+
 		`<div class=contentAdaptiveBig>`+
@@ -1553,14 +1553,14 @@ pageMain = (jId, localIgnore = false) => {
 		`<div style="background-color:var(--color-profile)">`+
 			`<div class=contentAdaptiveFlexSmall style=position:relative;align-items:center;justify-content:center;overflow:hidden>`+
 				basicButton(getTrans('finder-name'), `pageFind(${jId},Jexec(${jId}).helperFindData[3])`, `position:absolute;top:295px;left:calc(15% + 80px);z-index:3;font-size:calc(var(--def-font)*2);font-family:'Unbounded',system-ui;filter:drop-shadow(2px 2px 6px #000)`)+
-				`<div class=textFly style=position:relative;width:35vw;height:370px;z-index:2;align-content:center>`+
+				`<div class=textFly style=position:relative;width:35cqw;height:370px;z-index:2;align-content:center>`+
 					`<h3 style="width:650px;margin:8px;filter:drop-shadow(2px 2px 6px #000);font-size:calc(var(--def-font)*2.5);color:#5E4877"${getTrans('T2-hi')}/h3>`+
 					`<h1 style="width:650px;margin:8px;filter:drop-shadow(2px 2px 6px #000);font-size:calc(var(--def-font)*4);font-weight:bold">`+
 						`<span style=font-size:calc(var(--def-font)*4)${getTrans('ojhubname')}/span>`+
 					`!</h1>`+
 					`<h2 style="width:650px;margin:8px;filter:drop-shadow(2px 2px 6px #000);font-size:calc(var(--def-font)*1.5)"${getTrans('hubMaster')}/h2>`+
 				`</div>`+
-				`<div style=position:relative;width:35vw;height:370px;z-index:1>`+
+				`<div style=position:relative;width:35cqw;height:370px;z-index:1>`+
 					`<img src="${helperUrl}imgs/grad.webp"  height=1000px style="position:absolute;right:-220px;top:-100px;transform:rotate(-3deg)">`+
 
 					`<img src="${helperUrl}imgs/gem.webp"   loading=lazy height=322px style="filter:drop-shadow(2px 2px 8px #000);position:absolute;right:420px;top:100px">`+
@@ -1634,7 +1634,7 @@ pageFind = (jId, channel = 1) => {
 		J.helperFindData[3] = J.ProjectsChannel;
 		channel = J.ProjectsChannel;
 	}
-    ProjectsChannel = channel;
+    J.ProjectsChannel = channel;
     let tagsDiv = '',
 		TagsStr = '',
 		OsStr = '',
@@ -1717,7 +1717,7 @@ pageFind = (jId, channel = 1) => {
 					`<label onclick=setMethod(${jId},2) id=method2 class=tagPre${getTrans('mostDisl')}/label>`+
 				`</div>`+
 				`<div class="gdps-list-place " id=GDPSesPlace style="margin-top:16px">`+
-					CacheFinds[1]+
+					J.CacheFinds[1]+
 					insertBtn(jId, `sendFinder(${jId},${J.CacheFinds[3]},'${J.CacheFinds[2]}')`)+
 				`</div>`+
 			`</div>`+
@@ -1915,30 +1915,6 @@ helperNews = (jId, gdpsId, renderOwnButton = 0) => {
 			};
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
-},
-setImgSize = jId => {
-    let J = Jexec(jId);
-    let offset = 0;
-    if (window.innerWidth >= 700) { // large screen
-		if (J.id('imageBG')) {
-			J.id('imageBG').style = '';
-			let alphaY = J.id('imageBG').getBoundingClientRect().height - 2;
-			J.id('gdpsalpha').style = `z-index:-5;position:absolute;top:${alphaY}px`;
-			return;
-		}
-	} else if(J.id('gdpsalpha')) { // small screen
-		J.id('gdpsalpha').style = `z-index:-5`;
-		offset = -6;
-	}
-    if (J.id('gdpsalpha') && J.id('imageBG')) {
-		let darkElement = J.id('gdpsalpha').getBoundingClientRect(),
-		imgposY = darkElement.y + offset,
-		imgposX = imgposY * 2.4;
-
-		
-		J.id('imageBG').style.width = imgposX+'px';
-		J.id('imageBG').style.height = imgposY+'px';
-	}
 },
 BETA_fixImg = (url)=>{
 	if (!renderBeta)
@@ -2191,7 +2167,7 @@ makeSwticher = (
 	else
 		J.id(switcherElemId).remove();
     if (false)
-		if (!J.id(switcherElemId)) // location.search.replace('?','').split('&').includes('switcher='+innerElementId)
+		if (!J.id(switcherElemId)) // J.link.compile().includes('switcher='+innerElementId)
 			return swtichRemove(jId, innerElementId);
 		else 
 			switchAdd(jId, innerElementId);
@@ -3363,7 +3339,7 @@ enterFormData = (jId, form, sendPlace) => {
 			case `${sData[1]}vacsAdd${php}`:
 				getVacancies(jId, FORMDATA.get('channel'),FORMDATA.get('id'));
 				break;
-			case `${sData[1]}vascEdit${php}`:
+			case `${sData[1]}vacsEdit${php}`:
 				if (J.id('profileWindow')) 
 					getVacancies(jId, FORMDATA.get('channel'),FORMDATA.get('gdpsId'));
 				else {
@@ -3698,7 +3674,7 @@ dropWindow = jId => {
     J.link.set('drop');
     let html = pHeader(jId)+
 	`<div id=helperContent>`+
-		`<div class="frameprofile" style="width:10vw%">`+
+		`<div class="frameprofile" style="width:10cqw%">`+
 			`<h1${getTrans('passReset')}/h1>`+
 			`<input id="LGemail" class="framelabel" required ${getTrans('login05', 'input')}<br><br>`+
 			`<button class=loginbtn onclick="sendDrop()"${getTrans('submit')}/button><br><br>`+
@@ -3715,7 +3691,7 @@ verifyWindow = jId => {
     J.link.set('verify');
     let html = pHeader(jId)+
 	`<div id=helperContent>`+
-		`<div class="frameprofile" style="width:10vw%">`+
+		`<div class="frameprofile" style="width:10cqw%">`+
 			`<h1${getTrans('enterCode2')}/h1>`+
 			`<input id="LGcode" class="framelabel" required ${getTrans('enterCode3', 'input')}<br><br>`+
 			`<button class=loginbtn onclick="sendVerify()"${getTrans('submit')}/button><br><br>`+
@@ -3854,7 +3830,7 @@ FINDrenderInProfile = (jId, parsedData, limit = 9, flags = []) => {
 		isWeeklyData = ['',''];
 
 		html += 
-		`<div class="framegdpsOld" style="${isWeeklyData[0]}width:calc(100% - 40px);" id="${thisId}">`+
+		`<div class="framegdpsOld" style="${isWeeklyData[0]}width:calc(100% - 40px);" id="g${thisId}">`+
 			`${isWeeklyData[1]}`+
 			`<h2 style="display:inline;margin-right:4px">${title}</h2>`+
 			`<p style="display:inline;margin:0">`+
@@ -3864,7 +3840,7 @@ FINDrenderInProfile = (jId, parsedData, limit = 9, flags = []) => {
 			`<div style="min-height:64px">`+
 				`<img onerror="console.warn('broken link');this.src='${helperUrl}imgs/hubbig.png'" align="left" src="${decodeURIComponent(pictureLink)}" width=64px height=64px style="border-radius:calc(var(--def-border-small)*1.5)">`+
 				`<p${description}/p>`+
-				basicButton(getTrans('openGdps'), `get${bigString}(${thisId})`)+
+				basicButton(getTrans('openGdps'), `get${bigString}(${jId},${thisId})`)+
 				(flags.includes('unsub') ? basicButton(getTrans('gdpsUnsub'), `subUnrespond2(${jId},${thisId})`) : '')+
 			`</div>`+
 		`</div>`;

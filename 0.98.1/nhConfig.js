@@ -501,6 +501,30 @@ reportError = (jId, errorId) => {
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
+setImgSize = jId => {
+    let J = Jexec(jId);
+    let offset = 0;
+    if (window.innerWidth >= 700) { // large screen
+		if (J.id('imageBG')) {
+			J.id('imageBG').style = '';
+			let alphaY = J.id('imageBG').getBoundingClientRect().height - 2;
+			J.id('gdpsalpha').style = `z-index:-5;position:absolute;top:${alphaY}px`;
+			return;
+		}
+	} else if(J.id('gdpsalpha')) { // small screen
+		J.id('gdpsalpha').style = `z-index:-5`;
+		offset = -6;
+	}
+    if (J.id('gdpsalpha') && J.id('imageBG')) {
+		let darkElement = J.id('gdpsalpha').getBoundingClientRect(),
+		imgposY = darkElement.y + offset,
+		imgposX = imgposY * 2.4;
+
+		
+		J.id('imageBG').style.width = imgposX+'px';
+		J.id('imageBG').style.height = imgposY+'px';
+	}
+};
 
 /*
  * GDPS Helper Engine Jails - полноценная мульти-инстансность внутри текущего SPA
@@ -534,8 +558,7 @@ reportError = (jId, errorId) => {
  * в вебе
  *
  * TODO:
- * 1. создать механизм очистки джейлов
- * 2. интегрировать систему джейлов в newHelper win сериализацию
+ * 1. интегрировать систему джейлов в newHelper win сериализацию
  *
  * Что джейлы виртуализируют?
  * На самом деле исключительно состояния страницы, никаких thisUser
@@ -573,31 +596,11 @@ function createJail(rootElement, routerLinkInstance) {
 	
 		headerPhoneSwitcher: 0,
 	
-		TimeOut: [null,null,null]
+		TimeOut: [null,null,null],
+		ro: null
 	});
-	return lastJid++;
-};
-// обёртка над createJail чтобы сразу создавать окно, это не
-// "открыть существующий джейл" а именно что открыть окно и потом создать джейл
-function openJail(contentIfNeeded = '') {
-	let winId = _.win.open(`jail${lastJid}`,
-		`<div lid="{winId}">`+
-			`<button class=loginbtnMini><</button>`+
-			`<button class=loginbtnMini>></button>`+
-			`<input class=tag>`+
-			`<button class=loginbtnMini>!</button>`+
-		`</div>`+
-		`<div class=windowing jid="{winId}">`+
-			contentIfNeeded+
-		`</div>`
-	, `style=width:350px;height:400px`),
-	rootElement = document.querySelector(`[jid="${winId.id}"]`),
-	routerLinkInstance = createVirtualLink(document.querySelector(`[lid="${winId.id}"]`));
-	winId.content.style = `overflow:auto;width:100%;height:100%;display:flex;flex-direction:column;transform:translateZ(0)`;
-	let jId = createJail(rootElement, routerLinkInstance);
 	// да, я знаю что это замыкания, но мне проще было сделать так
-	rootElement.addEventListener('resize', ()=>setImgSize(jId));
-	window.addEventListener('input', e=>{
+	rootElement.addEventListener('input', e=>{
 		if (e.target.type !== 'text')
 			return;
 		let J = Jexec(jId);
@@ -605,12 +608,48 @@ function openJail(contentIfNeeded = '') {
 		if (!addr.startsWith('find') && !addr.startsWith('Wikis') && !addr.startsWith('vacs'))
 			return;
 		clearTimeout(J.TimeOut[0]);
-		TimeOut[0] = setTimeout(()=>{
+		J.TimeOut[0] = setTimeout(()=>{
 			sendFinder(jId);
 		}, 300);
 	});
+	let ro = new ResizeObserver(() => requestAnimationFrame(() => setImgSize(jId)));
+	ro.observe(rootElement);
+	Jexec(jId).ro = ro;
+	return lastJid++; // обратите внимание на это место
+};
+function destroyJail(jId) {
+	let J = Jexec(jId);
+	if (!J) return;
+	J.ro.disconnect();
+	clearTimeout(J.TimeOut[0]);
+	clearTimeout(J.TimeOut[1]);
+	clearTimeout(J.TimeOut[2]);
+	J.link._destroy();
+	jails.delete(jId);
+};
+document.addEventListener('xws:destroyed', e => {
+	if (e.detail.jId === undefined) return;
+	destroyJail(e.detail.jId);
+});
+// обёртка над createJail чтобы сразу создавать окно, это не
+// "открыть существующий джейл" а именно что открыть окно и потом создать джейл
+function openJail(address = '') {
+	let win = _.win.open(`jail${lastJid}`,
+		`<div lid="{winId}">`+
+			`<button class=loginbtnMini><</button>`+
+			`<button class=loginbtnMini>></button>`+
+			`<input class=tag>`+
+			`<button class=loginbtnMini>!</button>`+
+		`</div>`+
+		`<div class=windowing clign=left jid="{winId}"></div>`
+	, `style=width:350px;height:400px`),
+	rootElement = document.querySelector(`[jid="${win.id}"]`),
+	routerLinkInstance = createVirtualLink(document.querySelector(`[lid="${win.id}"]`));
+	win.content.style = `overflow:auto;width:100%;height:100%;display:flex;flex-direction:column;transform:translateZ(0)`;
+	let jId = createJail(rootElement, routerLinkInstance);
+	win.jId = jId;
 	JITlink(`Jexec(${jId})`, jId);
-	routerLinkInstance._init();
+	routerLinkInstance._init(address);
 	return jId;
 }
 
@@ -714,19 +753,14 @@ function createVirtualLink(root) {
 			self.get();
 		},
 
-		_init() {
+		_init(addr) {
 			if (self._inited) return;
 			self._inited = true;
+			self._stack[0] = addr;
 
-			backBtn.addEventListener('click', () => {
-				if (self._pos > 0) self._goto(self._pos - 1);
-			});
-			forwardBtn.addEventListener('click', () => {
-				if (self._pos < self._stack.length - 1) self._goto(self._pos + 1);
-			});
-			goBtn.addEventListener('click', () => {
-				// пользователь вручную вбил адрес и нажал "перейти" —
-				// это НОВАЯ запись истории, аналог ручного ввода URL в адресную строку браузера
+			self._onBack = () => { if (self._pos > 0) self._goto(self._pos - 1); };
+			self._onForward = () => { if (self._pos < self._stack.length - 1) self._goto(self._pos + 1); };
+			self._onGo = () => {
 				let newAddr = addressBar.value.startsWith('?') ? addressBar.value : '?' + addressBar.value;
 				self._stack = self._stack.slice(0, self._pos + 1);
 				self._stack.push(newAddr);
@@ -734,9 +768,27 @@ function createVirtualLink(root) {
 				self._i = true;
 				self._render();
 				self.get();
-			});
+			};
+
+			backBtn.addEventListener('click', self._onBack);
+			forwardBtn.addEventListener('click', self._onForward);
+			goBtn.addEventListener('click', self._onGo);
 
 			self._render();
+		},
+
+		_destroy() {
+			// снимаем то, что сами повесили в _init
+			// (обёртки нужно хранить, чтобы removeEventListener сработал —
+			//  анонимные стрелочные функции нельзя снять, не сохранив ссылку на них)
+			backBtn.removeEventListener('click', self._onBack);
+			forwardBtn.removeEventListener('click', self._onForward);
+			goBtn.removeEventListener('click', self._onGo);
+
+			self.actions = {};
+			self.commands = {};
+			self.basePage = () => {};
+			self._stack = [];
 		},
 
 		get() {

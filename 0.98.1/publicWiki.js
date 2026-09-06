@@ -598,8 +598,8 @@ getGuide = (jId, id, wikiId = 0) => {
 				}
 				html +=
 				`<div class=frameguide>`+
-					basicButton('>.)<', `throwWikiInWindow(${wikiId},${id},${section})`, `position:absolute;right:12px`)+
-					`<div style=margin:20px id="${wikiId}-${id}-${section}-engine">`+
+					basicButton('>.)<', `throwWikiInWindow(${jId},${wikiId},${id},${section})`, `position:absolute;right:12px`)+
+					`<div style=margin:20px id="w${wikiId}-${id}-${section}-engine">`+
 						content+
 					`</div>`+
 				`</div><br>`;
@@ -618,12 +618,14 @@ getGuide = (jId, id, wikiId = 0) => {
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 };
-throwWikiInWindow = (wikiId, guidId, sectId)=>{
+
+throwWikiInWindow = (jId, wikiId, guidId, sectId)=>{
+	let J = Jexec(jId);
 	let html = e=>`<div align=left>${e}</div>`,
 		win = _.win.open('wikiread',
 			''
 		, 'style=width:250px;height:400px'),
-		text = (J.id(`${wikiId}-${guidId}-${sectId}-engine`).innerHTML.replace(/\{winId\}/g,win));
+		text = (J.id(`w${wikiId}-${guidId}-${sectId}-engine`).innerHTML.replace(/\{winId\}/g,win));
 	win.content.innerHTML = html(text);
 };
 openForum = (jId, forumId) => {

@@ -271,27 +271,12 @@ a:hover {
 
 .gdps-list-list{
 	display: flex;
-	width: 80vw;
+	width: 80cqw;
 	max-width: 1420px;
 	min-width: 330px;
 	overflow-x: auto;
 	overflow-y: hidden;
 	white-space: nowrap;
-}
-
-.mainMoving {
-  animation: mainMoving 3s linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-@keyframes mainMoving {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100vw);
-  }
 }
 
 .textFly {
@@ -416,7 +401,7 @@ transform: translateY(2px);
 }
 
 .framegdps {
-	width:80vw;
+	width:80cqw;
 	text-align: left;
 	text-decoration: none;
 	padding: 8px;
@@ -447,7 +432,7 @@ transform: translateY(2px);
 }
 
 .framegdpsOld {
-	width:80vw;
+	width:80cqw;
 	text-align: left;
 	text-decoration: none;
 	padding: 8px;
@@ -640,7 +625,7 @@ input:checked + .tagUns {
 }
 
 .gdpsnewsalpha, .gdpsnewsalpha2 {
-	width: 100vw;
+	width: 100cqw;
 	height: 60px;
 	margin-top: -72px;
 	z-index: 1;
@@ -659,7 +644,7 @@ input:checked + .tagUns {
 	left: 50%;
 	transform: translate(-50%, 0);
 	z-index:-100;
-	width: 100vw;
+	width: 100cqw;
 	overflow: hidden;
 }
 
@@ -836,6 +821,7 @@ input:checked + .tagUns {
 }
 
 .windowing {
+	text-align: left;
 	background-color: var(--color-bg);
 	width: 100%;
 	flex: 1 1 auto;
@@ -953,8 +939,8 @@ input:checked + .tagUns {
 	}
 
 	.imageBG2 {
-		width: 100vw;
-		height: 41.6vw;
+		width: 100cqw;
+		height: 41.6cqw;
 	}
 	
 	.guidePageLimiter {

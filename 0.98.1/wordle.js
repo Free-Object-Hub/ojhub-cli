@@ -22,7 +22,7 @@ wordleTexts = {
 };
 wordleGame = (jId, lang = 'RU') => {
     let J = Jexec(jId);
-    _.link.set('wordle='+lang);
+    J.link.set('wordle='+lang);
     wordleLang = lang;
     let html = pHeader(jId)+
 	`<div id=helperContent>`+
@@ -143,7 +143,7 @@ initGame = jId => {
 				html2 = '<div class=wordleBtns>';
 				for (let c = 0; c < kbChars[l].length; c++) {
 					let char = kbChars[l][c];
-					html2 += basicButton(`>${char}<`, `putAWord(${jId}, '${char}')`, 'border:solid var(--color-profile) 2px;background:var(--color-profile)', char, 'wordleBtn');
+					html2 += basicButton(`>${char}<`, `putAWord(${jId},'${char}')`, 'border:solid var(--color-profile) 2px;background:var(--color-profile)', char, 'wordleBtn');
 				}
 				if (l == 2)
 					html2 += basicButton('><=<', `clearWord(${jId})`, 'background:var(--color-profile);padding:calc(var(--def-btn-size)*0.8) calc(var(--def-btn-size)*0.5)', '', 'wordleBtn');

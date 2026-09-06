@@ -225,13 +225,14 @@ GUIDrenderInProfileFull = (jId, parsedData, page = 0) => {
 			`<div style="position: absolute;top: 0;left: 0;width: 316px;height: 60px;margin-top: 72px;background: linear-gradient(rgba(0,0,0,0), var(--color-profile-alpha), var(--color-profile));"></div>`+
 			`<div style="bottom:12px;left:20px" class="absolute btnszone">`+
 				basicButton(getTrans('edit'), `editGuide(${jId},${id},${J.globalWiki},1)`, 'margin-top:8px')+
-				basicButton(getTrans('settings000'), `guideSettings(${id})`, 'margin-top:8px')+
+				basicButton(getTrans('settings000'), `guideSettings(${jId},${id})`, 'margin-top:8px')+
 			`</div>`+
 		`</div>`;
 	}
     return html;
 },
-guideSettings = (guideId)=>{
+guideSettings = (jId, guideId)=>{
+	let J = Jexec(jId);
 	if (_.$.id('guidTag'+guideId))
 		return;
 	let windowName = 'guidSettings',
@@ -240,7 +241,7 @@ guideSettings = (guideId)=>{
 		`<div style=display:flex>`+
 			`<span style=margin-top:calc(var(--def-btn-size)*0.75)${getTrans('tagSetup01')}/span>`+
 			basicInput('tagSetup01', `guidTag${guideId}`, 'calc(100% - 14px)')+'<br>'+
-			basicButton(getTrans('tagSetup02'), `setWikiTag(${guideId})`)+
+			basicButton(getTrans('tagSetup02'), `setWikiTag(${jId},${guideId})`)+
 		`</div>`+
 		basicButton(getTrans('WINDOW-close'), `_.wins['{winId}'].close()`)+'<br>'
 	);
@@ -255,7 +256,8 @@ guideSettings = (guideId)=>{
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 },
-setWikiTag = (guideId)=>{
+setWikiTag = (jId, guideId)=>{
+	let J = Jexec(jId);
 	let tagName = _.$.id('guidTag'+guideId).value;
 	Loading();
 	helperRequest(`${sData[7]}setWikiTag${php}?id=${guideId}&wiki=${J.globalWiki}&tag=${tagName}`)
@@ -446,7 +448,8 @@ ownersAdd = (id, contentType)=>{
 						`<button class=loginbtn onclick="deleteOwner(${id},${contentType},${parsedData[1]})"${getTrans('delete')}/button>`+
 					`</td>`+
 				`</tr>`;
-			innerComments(jId, html, 1);
+			document.querySelector(`[coowners_${contentType}_${id}]`)
+			.querySelector('#comments').insertAdjacentHTML('beforeend', html);
 			Loading(1);
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
@@ -579,7 +582,7 @@ removeVacPre = (jId, id, gdpsId) => {
 		return;
     _.win.open('vacRemove',
 		`<p${getTrans('removeSure')}/p>
-		${basicButton(getTrans('delete'), `removeVac(jId, ${id},${gdpsId},'{winId}')`)}
+		${basicButton(getTrans('delete'), `removeVac(${jId}, ${id},${gdpsId},'{winId}')`)}
 		${basicButton(getTrans('otmena'), `_.wins['{winId}'].close()`)}`
 	, 'vacremove'+id);
 },
@@ -1243,7 +1246,7 @@ addFind = (jId, channel) => {
 				Slocal.set(channel+'gdpsAdd', JSON.stringify(f));
 			}
 			clearTimeout(J.TimeOut[2]);
-			TimeOut[2] = setTimeout(save, 300);
+			J.TimeOut[2] = setTimeout(save, 300);
 		});
 	}else return html;
 };
@@ -1711,7 +1714,7 @@ subUnrespond2 = (jId, gdpsId) => {
 		.then(data=>{
 			Loading(1);
 			if (data == '1') {
-				J.id(gdpsId).remove();
+				J.id('g'+gdpsId).remove();
 			} else if (data == '-1') {
 				megaAlert(jId, 'notSubscribed');
 			} else {
@@ -1723,7 +1726,7 @@ subUnrespond2 = (jId, gdpsId) => {
 
 findsWindow = (jId, channel) => {
     let J = Jexec(jId);
-    ProjectsChannel = channel;
+    J.ProjectsChannel = channel;
     let [smallString, bigString, tinyStr, cacheArr] = GDPSswitchChannel(channel);
     J.link.set('added'+bigString+'s');
     let gdpses = "";
