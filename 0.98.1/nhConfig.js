@@ -523,7 +523,7 @@ setImgSize = jId => {
 		
 		J.id('imageBG').style.width = imgposX+'px';
 		J.id('imageBG').style.height = imgposY+'px';
-	137
+	}
 };
 
 /*
@@ -835,4 +835,4 @@ function createVirtualLink(root) {
 	};
 
 	return self;
-}
+	}
