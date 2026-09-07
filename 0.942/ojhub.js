@@ -1492,7 +1492,7 @@ EBARBTN = function() {
 
   let doneString = 
   `<div style=display:flex;flex-direction:column;align-items:center;position:absolute;right:30px;top:70px>`+
-    `<img src=eba.png width=150px>`+
+    `<img src=/imgs/eba.png width=150px>`+
     `<button class=loginbtn onclick=innerMain(EBARPAGE())>`+
       `<span>`+
         renderText(EBARDATE[0],'ДН')+
