@@ -1076,7 +1076,7 @@ keyBindsCfg2 = jId => {
 	`<div id=helperContentProfile>`+
 		`<h1${getTrans('settings013')}/h1>`+
 		html2+
-		`<br>${basicButton(getTrans('settings002'), `saveKeys2(jId)`)}`+
+		`<br>${basicButton(getTrans('settings002'), `saveKeys2(${jId})`)}`+
 	`</div>`;
     if (J.id('profileWindow'))
 		innerProfile(jId, html);

@@ -335,43 +335,6 @@ getGuides = (jId, wikiId, page) => {
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
-renderGuideMini = (jId, parsedData, page = 0) => {
-    let J = Jexec(jId);
-    page++;
-    let html = '',
-		Count = 0,
-		preHtml = [],
-
-		gdpsData = null;
-
-    for (let Id in parsedData) {
-		let guid = parsedData[Id];
-		if (!Array.isArray(guid)) {
-			if (guid.ID != 0)
-				innerGdpsPlace(jId, insertBtn(jId, `openForum(${jId},`+guid.ID+')', 'forumHas', 0),512);
-			J.id('wikiName').innerHTML = guid.title;
-			continue;
-		}
-		Count++;
-		if (Count == 9) {
-			innerGdpsPlace(jId, insertBtn(jId, `getGuides(${jId},${J.globalWiki},${page})`),-1);
-			return html;
-		}
-
-		gdpsData = {
-			ID: guid[0],
-			title: guid[1],
-			language: guid[2],
-			likes: guid[4],
-			ban: guid[5],
-			isLiked: guid[7]
-		};
-
-		preHtml = [J.globalWiki, '', '', 'width:300px;height:300px', -2, 7];
-		html += contentRenderMinu(jId, gdpsData, preHtml, 0, 0, 0, 0);
-	}
-    return html;
-},
 falseGuideInWindow = (templateName)=>{
 	let args = _.$.qa('[argument]'),
 			argsList = [],
@@ -491,6 +454,44 @@ uploadPost = (jId, forumId) => {
     return _.win.open('FORUMpost',
 		html
 	, 'forumpost');
+};
+
+renderGuideMini = (jId, parsedData, page = 0) => {
+    let J = Jexec(jId);
+    page++;
+    let html = '',
+		Count = 0,
+		preHtml = [],
+
+		gdpsData = null;
+
+    for (let Id in parsedData) {
+		let guid = parsedData[Id];
+		if (!Array.isArray(guid)) {
+			if (guid.ID != 0)
+				innerGdpsPlace(jId, insertBtn(jId, `openForum(${jId},`+guid.ID+')', 'forumHas', 0),512);
+			J.id('wikiName').innerHTML = guid.title;
+			continue;
+		}
+		Count++;
+		if (Count == 9) {
+			innerGdpsPlace(jId, insertBtn(jId, `getGuides(${jId},${J.globalWiki},${page})`),-1);
+			return html;
+		}
+
+		gdpsData = {
+			ID: guid[0],
+			title: guid[1],
+			language: guid[2],
+			likes: guid[4],
+			ban: guid[5],
+			isLiked: guid[7]
+		};
+
+		preHtml = [J.globalWiki, '', '', 'width:300px;height:300px', -2, 7];
+		html += contentRenderMinu(jId, gdpsData, preHtml, 0, 0, 0, 0);
+	}
+    return html;
 };
 
 pageGuides = (jId, wiki, backButton = '') => {

@@ -341,12 +341,13 @@ _.lazy.register(scritpsUrl + '/publicWiki.js?ver='+scrLoadVer,[
 	'getGuide',
 	'openForum',
 	'getForumPost',
+	'renderGuideMini',
 ]);
 _.lazy.register(scritpsUrl + '/wordle.js?ver='+scrLoadVer,[
 	'wordleGame'
 ]);
-_.lazy.register(scritpsUrl + '/wordle2.js?ver='+scrLoadVer,[
-	'wordle.trolleybus.games.init'
+_.lazy.register(scritpsUrl + '/admin.js?ver='+scrLoadVer,[
+	'adminPanel'
 ]);
 
 /*
@@ -421,6 +422,8 @@ _.lazy.register(scritpsUrl + '/wordle2.js?ver='+scrLoadVer,[
  * - появился модуль newHelper lazy, за счёт которого приложение на GHE стало реально разбить на ленивые чанки
  * - в newHelper link появились вложенные и динамичные маршруты
  * в GHE 2.2 планируется ввести джейлы, но пока обновление отложено
+ * ????, ?? ???:		GHE 2.2 - релиз Object Hub 0.98.1
+ * - интеграция системы GHE Jails
  */
 
 let
@@ -835,4 +838,4 @@ function createVirtualLink(root) {
 	};
 
 	return self;
-	}
+}
