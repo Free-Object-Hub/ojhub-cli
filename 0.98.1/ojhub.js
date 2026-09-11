@@ -159,22 +159,6 @@ mainPageCache = {
 
 baseApp = location.origin + location.pathname,
 baseWay = baseApp+'server/'+urlBuildNum,
-nodeServer = baseApp + 'api/v1',
-nData = [
-	nodeServer+'/content/',
-	nodeServer+'/send/',
-	nodeServer+'/',
-	nodeServer+'/search/',
-	nodeServer+'/delete/',
-	nodeServer+'/user/',
-	nodeServer+'/forum/',
-	nodeServer+'/wiki/',
-	nodeServer+'/vacans/',
-	nodeServer+'/comms/',
-	nodeServer+'/gdps/',
-	nodeServer+'/news/',
-	nodeServer+'/profile/',
-],
 
 sData = [
 	baseWay+'/content/',
@@ -2792,7 +2776,9 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 				gdpsTitle: gData[6],
 				date: gData[7],
 				likes: gData[8],
-				isLiked: gData[9]
+				isLiked: gData[9],
+				hasFile: gData[10],
+				gdpsImg: gData[11]
 			};
 		else 
 			gdpsData = gData;
@@ -4010,16 +3996,16 @@ _.hotkeys
 .on(
 	mainHotkey + ' + KeyQ',
 	()=>{
-		if (!!_.$.id('profileWindow')) profilePage(${jId},'');
-		innerProfile(${jId},gProfileMini(${jId}));
+		if (!!_.$.id('profileWindow')) profilePage(0,'');
+		innerProfile(0,gProfileMini(0));
 	}
 )
 // my camps
 .on(
 	mainHotkey + ' + KeyC',
 	()=>{
-		if (!!_.$.id('profileWindow')) profilePage(${jId},'');
-		findsWindow(${jId},0);
+		if (!!_.$.id('profileWindow')) profilePage(0,'');
+		findsWindow(0,0);
 	}
 )
 
@@ -4027,31 +4013,31 @@ _.hotkeys
 .on(
 	mainHotkey + ' + KeyS',
 	()=>{
-		if (!!_.$.id('profileWindow')) profilePage(${jId},'');
-		findsWindow(${jId},1);
+		if (!!_.$.id('profileWindow')) profilePage(0,'');
+		findsWindow(0,1);
 	}
 )
 // my dubs
 .on(
 	mainHotkey + ' + KeyD',
 	()=>{
-		if (!!_.$.id('profileWindow')) profilePage(${jId},'');
-		findsWindow(${jId},2);
+		if (!!_.$.id('profileWindow')) profilePage(0,'');
+		findsWindow(0,2);
 	}
 )
 // new post
 .on(
 	mainHotkey + ' + KeyN',
 	()=>{
-		innerProfile(${jId},newsWindow(${jId}))
+		innerProfile(0,newsWindow(0))
 	}
 )
 // my wikis
 .on(
 	mainHotkey + ' + KeyW',
 	()=>{
-		if (!!_.$.id('profileWindow')) profilePage(${jId},'');
-		wikisWindow(${jId});
+		if (!!_.$.id('profileWindow')) profilePage(0,'');
+		wikisWindow(0);
 	}
 )`)
 new Function(Slocal.get('Hotkeys'))();
@@ -4112,22 +4098,22 @@ nextStep = 0,
 heartStep = [
 	/* ФОРМАТ ОШИБОК:
 	 *
-	 * [0,null] = всё впорядке
-	 * [1,"err"] = вывести второй индекс массива (то есть текст ошибки)
+	 * null = всё впорядке
+	 * "err" = вывести текст ошибки
 	 *
 	 * я вдохновился golang когда придумывал формат ошибок
 	 */
 
 	() => {
 		if (typeof thisUser !== "object" || thisUser === null)
-			return [1, "thisUser isnt object"]
+			return "thisUser isnt object"
 		if (Object.keys(thisUser).length < 9)
-			return [1, "thisUser lost keys"]
-		return [0, null];
+			return "thisUser lost keys"
+		return null;
 	},
 
 	() => {
-		return [0, null];
+		return null;
 	},
 
 ],
@@ -4139,8 +4125,8 @@ heartBeet = ()=>{
 	let step = heartStep[nextStep];
 	try {
 		const resp = step();
-		if (resp[0] !== 0)
-			_.err.log(resp[1])
+		if (resp !== 0)
+			_.err.log(resp)
 	} catch (e) {
 		_.err.log(`heartBeet error on step ${nextStep}, error:`, e)
 	}

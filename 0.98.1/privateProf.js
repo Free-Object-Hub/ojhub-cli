@@ -1613,7 +1613,7 @@ createWiki = (jId, backpage = 0) => {
     let html = 
 	`<div id=helperContentProfile>`+
 		`<h1${getTrans('guides01')}/h1>`+
-		`<button type=button class=loginbtn onclick="${backpage === 1 ? `profilePage(jId);wikisWindow(jId)` : `pageWikiList(jId)`}"${getTrans('otmena')}/button><br>`+
+		`<button type=button class=loginbtn onclick="${backpage === 1 ? `profilePage(${jId});wikisWindow(${jId})` : `pageWikiList(${jId})`}"${getTrans('otmena')}/button><br>`+
 		`<form id=GDPSesPlace style=padding:8px method=post onsubmit="return enterFormData(${jId},this,'${sData[1]}newWiki${php}')">`+
 			`<input name=title class=framelabel id=title style="width:calc(100% - 4px);font-size:calc(var(--def-font)*2)"${getTrans('guides02', 'input')}<br>`+
 			`<label${getTrans('gdpsLang00')}/label> `+

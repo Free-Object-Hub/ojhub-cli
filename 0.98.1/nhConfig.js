@@ -359,12 +359,12 @@ _.lazy.register(scritpsUrl + '/admin.js?ver='+scrLoadVer,[
  * Самое главное что вам нужно понять:
  * 1. Любите mount-функции (как пример - innerMain)
  * 2. Пусть страницы дёргают mount или возвращают html код
- * 3. Не забывайте писать _.link.set в страницах если вы используете роутер newHelper link
- * 4. Никакого _.link.get без необходимости! эта функция очень лагучая (см. модуль link)
+ * 3. Не забывайте писать J.link.set в страницах если вы используете роутер newHelper link
+ * 4. Никакого J.link.get без необходимости! эта функция очень лагучая (см. модуль link)
  * 5. Ну и помните - GHE это просто набор грамотно склеенных утилит newHelper.js,
  *    вам ничто не мешает вышыварнуть мой l10n или мои иксы и использовать
- *    i18next или winbox.js, но помните зачем вы это делаете,
- *    GHE весит где то 6kb min+gzip на всё про всё, а один winbox,js занимает
+ *    i18next или winbox.js, но сначала подумайте зачем вы это делаете,
+ *    GHE весит где то 7kb min+gzip на всё про всё, а один winbox,js занимает
  *    уже 5kb min+gzip, а i18-next так вообще 15kb min+gzip
  *   (нет, я ничего против них не имею, они классные, просто они в сравнении с GHE излишне тяжёлые)
  * 6. ОПТИМИЗАЦИЯ!!!! GHE работает с DOM напрямую, вы опять должны писать document.someMethod
@@ -387,7 +387,7 @@ _.lazy.register(scritpsUrl + '/admin.js?ver='+scrLoadVer,[
  *
  * почему я люблю ghe?
  * потому что он топорный! тут писать минимум абстракций - каноничное решение!
- * Ну и ещё потому что кодовая база ядра GHE исчисляется формально всего в 2100 строк,
+ * Ну и ещё потому что кодовая база ядра GHE исчисляется формально всего в 3000 строк,
  * где 1/3 строк это сверх плотные комментарии объясняющие тут вообще всё.
  * И ещё я знаю каждую функцию и каждый метод GHE API, и даже помню их ещё из версий 1.7-1.9
  *
@@ -421,8 +421,7 @@ _.lazy.register(scritpsUrl + '/admin.js?ver='+scrLoadVer,[
  * - newHelper.js начал распространяться как отдельная от GHE базовая библиотека
  * - появился модуль newHelper lazy, за счёт которого приложение на GHE стало реально разбить на ленивые чанки
  * - в newHelper link появились вложенные и динамичные маршруты
- * в GHE 2.2 планируется ввести джейлы, но пока обновление отложено
- * ????, ?? ???:		GHE 2.2 - релиз Object Hub 0.98.1
+ * 2026, 5 сентября:	GHE 2.2 - релиз Object Hub 0.98.1
  * - интеграция системы GHE Jails
  */
 
@@ -534,6 +533,7 @@ setImgSize = jId => {
  *
  * GHE Jails это не изоляция уровня FreeBSD Jails!
  * Это всего лишь более банальная виртуализация root && link инстансов!
+ * или проще говоря - iframe без оверхеда iframe
  *
  * Работает она до банального просто.
  * В каждой без исключения функции идёт аргумент jId, 
@@ -636,7 +636,7 @@ document.addEventListener('xws:destroyed', e => {
 });
 // обёртка над createJail чтобы сразу создавать окно, это не
 // "открыть существующий джейл" а именно что открыть окно и потом создать джейл
-function openJail(address = '') {
+function openJail(jailUrlAddress = '') {
 	let win = _.win.open(`jail${lastJid}`,
 		`<div lid="{winId}">`+
 			`<button class=loginbtnMini><</button>`+
@@ -652,11 +652,12 @@ function openJail(address = '') {
 	let jId = createJail(rootElement, routerLinkInstance);
 	win.jId = jId;
 	JITlink(`Jexec(${jId})`, jId);
-	routerLinkInstance._init(address);
+	routerLinkInstance._init(jailUrlAddress);
 	return jId;
 }
 
 // создаём "корневой jail" с jId = 0
+// потому что весь код GHE уже завязан на джейлы
 createJail(document.getElementById('1st'), _.link);
 
 function createVirtualLink(root) {
