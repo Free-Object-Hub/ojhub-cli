@@ -94,6 +94,33 @@ _.lang.vars = {
 GdpsesShortLangs = _.langs('gdpss', 'RU');
 GdpsesFullLangs = _.langs('gdpsf', 'RU');
 
+// возвращаю парсер ошибок из GDPS Helper 1.9, потому что он был лучше
+_.err.handleGlobal = event => {
+    let {message, filename, lineno, colno, error} = event,
+        file = filename.split('?')[0].split('/').pop();
+    console.error(message, filename+':'+lineno+':'+colno, error);
+    _.err.log(message + `\n IN ${file} ON LINE ${lineno} IN COLUMN ${colno}`);
+};
+_.err.handleRejection = e => {
+    const err = e.reason || e;
+    console.error(err);
+    let errorStack = err.stack || '',
+        firstLine = errorStack.split('\n')[0],
+        file = firstLine.split('?ver=')[0].split('@').pop().split('(').pop().split('/').pop(),
+        errorPos = firstLine
+          .split('?ver=')[1]
+          .split(':'),
+        line = errorPos[errorPos.length - 2],
+        col  = errorPos[errorPos.length - 1];
+	console.info(errorStack, errorPos)
+
+    _.err.log(
+        `PROMISE ERROR\n`+
+        `${err.message || err}`+
+        `\nIN ${file} ON LINE ${line} IN COLUMN ${col}`
+    );
+};
+
 windowBtns = [
 	['COPY ERROR',   `navigator.clipboard.writeText(_.$.id('errText{errID}').innerText)`],
 	['FULL RESTART', `location.reload()`],
@@ -473,8 +500,6 @@ reStart = (jId, drop = 0, errId = 0)=>{
 	innerMain(jId, '');
 	
 	// если ваш инит асинхронный то никакого await тут не будет, не нужен он тут
-	helperInit(jId, drop);
-	
 	if (parseInt(Slocal.get('LangVer')) !== currentLangVer) {
 		let lang = 'EN';
 		if (navigator.languages.includes('ru')) // HARDCODE
