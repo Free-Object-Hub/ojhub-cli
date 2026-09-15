@@ -2030,7 +2030,8 @@ loginPage = ()=>{
 		<input style=width:75%;margin-left:20px id="{winId}-LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
 		<button class=emptybtn onclick=seePassword()>
 			<img style=margin:-12px;margin-left:0 id={winId}-LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
-		</button><br><br>
+		</button><br>
+		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.x10.get('{winId}').close();registerPage()"${getTrans('jumpToRegister')}/button><br>
 		<altcha-widget id={winId}cap challenge="${sData[2]}challenge.php"></altcha-widget>
 		<button style="width:calc(100% - 16px)" onclick="innerMain(0,dropWindow(0))" class="loginbtn"${getTrans('remindPass')}/button><br><br>
 		<button style="width:calc(100% - 16px)" onclick="sendLoginForm('{winId}')" class="loginbtn"${getTrans('joinToGdps')}/button><br>
@@ -2053,8 +2054,8 @@ registerPage = ()=>{
 		<button class=emptybtn onclick=seePassword()>
 			<img style=margin:-12px;margin-left:0 id={winId}-LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br><br>
-		<input style=width:75% id="{winId}-LGemail" class="framelabel" required ${getTrans('login03', 'input')}<br><br>
-		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close();loginPage()"${getTrans('logiloginn')}/button>
+		<input style=width:75% id="{winId}-LGemail" class="framelabel" required ${getTrans('login03', 'input')}<br>
+		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.x10.get('{winId}').close();loginPage()"${getTrans('jumpToLogin')}/button><br>
 		<altcha-widget id={winId}cap challenge="${sData[2]}challenge.php"></altcha-widget>
 		<button style="width:calc(100% - 16px)" onclick="sendRegisterForm('{winId}')" class="loginbtn"${getTrans('register')}/button><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close()"${getTrans('back')}/button>

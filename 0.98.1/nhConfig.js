@@ -60,7 +60,7 @@ _.win.animFullOff = 'ANIM-unfull2';
 
 langList = ['RU', 'EN', 'UA', 'DE', 'ES'];
 helperStrVer = '0.98.1';
-currentLangVer = 14;
+currentLangVer = 15;
 helperBuildNum = 137;
 urlBuildNum = 133;
 scritpsUrl = '/cli/'+helperStrVer;

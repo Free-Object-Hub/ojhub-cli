@@ -9,6 +9,8 @@
   "yourProf":"Tu perfil",
   "register":"Registrarse",
   "login":"Iniciar sesión",
+  "jumpToRegister":"¿Sin cuenta?",
+  "jumpToLogin":"¿Tienes cuenta?",
   "logout":"Cerrar sesión",
   "logout2":"Cerrar sesión de tu cuenta",
   "dropPass":"Restablecer contraseña",
@@ -66,6 +68,7 @@
 
   "Picture01":"(imagen recomendada 256x256)",
   "Picture02":"(imagen recomendada 720x300)",
+  "linkRequired":"¡No has añadido una descripción!",
   "linkRequired":"¡No has seleccionado ningún enlace!",
   "tagsRequired":"¡No has seleccionado todas las etiquetas!",
 

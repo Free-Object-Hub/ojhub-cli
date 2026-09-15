@@ -19,6 +19,8 @@
   "yourProf":"Your profile",
   "register":"Register",
   "login":"Login",
+  "jumpToRegister":"Don't have an account?",
+  "jumpToLogin":"Have an account?",
   "logout":"Logout",
   "logout2":"Logout of your account",
   "dropPass": "Reset password",
@@ -75,6 +77,7 @@
   "finder-channel":"What will you search for?",
 "Picture01":"(recommended picture 256x256)",
   "Picture02":"(recommended picture 720x300)",
+  "descRequired":"You have not added descriptions!",
   "linkRequired":"You have not selected any links!",
   "tagsRequired":"You have not selected all tags!",
 

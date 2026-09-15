@@ -544,15 +544,20 @@ addVacsPre = jId => {
 	, 'vacsaddmodal');
 },
 tryAddShow = ()=>{
-	let links = document.getElementsByName('links[]').length,
-			tags = _.$.qa('[name="tags[]"]:checked').length,
-			os = _.$.qa('[name="os[]"]:checked').length;
-	if (links === 0) {
-		megaAlert(jId, 'linkRequired');
+	let descrs = document.querySelectorAll('[data-lang]').length,
+		links = document.getElementsByName('links[]').length,
+		tags = _.$.qa('[name="tags[]"]:checked').length,
+		os = _.$.qa('[name="os[]"]:checked').length;
+	if (descrs === 0) {
+		megaAlert(0, 'descRequired');
 		return false;
 	}
-	if (tags === 0 || os === 0) {
-		megaAlert(jId, 'tagsRequired');
+	if (links === 0) {
+		megaAlert(0, 'linkRequired');
+		return false;
+	}
+	if (tags === 0 && os === 0) {
+		megaAlert(0, 'tagsRequired');
 		return false;
 	}
 	return true;
