@@ -136,6 +136,12 @@ a:hover {
 	background-color: var(--color-main);
 }
 
+altcha-widget {
+	display: block;
+	width: 304px;
+	height: 78px;
+}
+
 .g-recaptcha {
 	width: 304px;
 	height: 78px;

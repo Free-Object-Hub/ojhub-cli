@@ -518,8 +518,7 @@ reStart = (jId, drop = 0, errId = 0)=>{
 	}
 },
 
-reportError = (jId, errorId) => {
-    let J = Jexec(jId);
+reportError = (errorId) => {
     let text = encodeURIComponent(_.$.id('debugMega'+errorId).innerHTML);
     Loading();
     _.http.req('POST', `${sData[2]}reportGdps${php}`, 'error='+text+'\\n\\n'+navigator.userAgent)

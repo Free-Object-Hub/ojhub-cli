@@ -1146,115 +1146,117 @@ innerGuides = (jId, textContent, insertType = 0) => {
 // #region разные формы
 sendRegisterForm = async (wId)=>{
 	await Fingerprint.generate(fp === ''); // если токена нет то он пойдёт генерироваться
-	let username = _.$.id('LGusername').value,
-		password = _.$.id('LGpassword').value,
-		email	= _.$.id('LGemail'	 ).value,
-		reCAPdatas = document.getElementsByClassName('g-recaptcha-response'),
-		reCAP = '';
-	if (reCAPdatas.length)
-		reCAP = reCAPdatas[reCAPdatas.length-1].value;
-	if (!ignoreCap && !reCAP) {
-		megaAlert(jId, 'captchaDed');
+	let username = _.$.id(wId+'-LGusername').value,
+		password = _.$.id(wId+'-LGpassword').value,
+		email	= _.$.id(wId+'-LGemail'	 ).value,
+		altchaDatas = document.querySelectorAll('altcha-widget input[name="altcha"]'),
+		altchaPayload = '';
+	if (altchaDatas.length)
+		altchaPayload = altchaDatas[altchaDatas.length-1].value;
+	if (!ignoreCap && !altchaPayload) {
+		megaAlert(0, 'captchaDed');
 		return;
 	};
-		Loading();
-		_.http.req('POST', `${sData[5]}register${php}`,
-			`username=${username}&password=${password}&email=${email}&g-recaptcha-response=${reCAP}`+fp.urlDone, urlEncoded)
-			.then(data=>{
-				switch (data) {
-					case '-1':
-						megaAlert(jId, 'loginClaimed');
-						break;
-					case '-2':
-						megaAlert(jId, 'captchaDed');
-						break;
-					case '-4':
-						megaAlert(jId, 'somethingWentWrong');
-						break;
-					default:
-						let serverResp = helperInitData(jId, data);
-						token = thisUser.token;
-						_.http.defaultHeaders['user-token'] = token;
-						Slocal.set('User', token);
-						thisUser.token = '';
+	Loading();
+	_.http.req('POST', `${sData[5]}register${php}`,
+		`username=${username}&password=${password}&email=${email}&altcha=${altchaPayload}`+fp.urlDone, urlEncoded)
+		.then(data=>{
+			Loading(1);
+			switch (data) {
+				case '-1':
+					megaAlert(0, 'loginClaimed');
+					break;
+				case '-2':
+					megaAlert(0, 'captchaDed');
+					break;
+				case '-4':
+					megaAlert(0, 'somethingWentWrong');
+					break;
+				default:
+					let serverResp = helperInitData(0, data);
+					token = thisUser.token;
+					_.http.defaultHeaders['user-token'] = token;
+					Slocal.set('User', token);
+					thisUser.token = '';
 
-						_.$.id('regBtn').remove();
-						_.$.id('btnLogin').innerHTML = `<span style="position:absolute;right:0;top:-8px">${thisUser.username}</span>`;
+					_.$.id('regBtn').remove();
+					_.$.id('btnLogin').innerHTML = `<span style="position:absolute;right:0;top:-8px">${thisUser.username}</span>`;
 
-						if (_.$.id('regBtn2')) {
-							_.$.id('regBtn2').innerHTML = getTrans('logout', 0);
-							_.$.id('regBtn2').setAttribute('data-trans', 'logout');
-							_.$.id('regBtn2').setAttribute('onclick', 'gLogout()');
-						}
-						if (_.$.id('btnLogin2')) {
-							_.$.id('btnLogin2').innerHTML = thisUser.username;
-							_.$.id('btnLogin2').removeAttribute('data-trans');
-							_.$.id('btnLogin2').setAttribute('onclick', `profilePage(${jId})`);
-						}
-						profilePage(jId);
-						_.$.qa('[isloginwindow]').forEach(el=>{
-							_.wins[el.id].close();
-						});
-				}
-				Loading(1);
-			})
-			.catch(e=>{console.error(e);_.err.handleRejection(e)});;
+					if (_.$.id('regBtn2')) {
+						_.$.id('regBtn2').innerHTML = getTrans('logout', 0);
+						_.$.id('regBtn2').setAttribute('data-trans', 'logout');
+						_.$.id('regBtn2').setAttribute('onclick', 'gLogout()');
+					}
+					if (_.$.id('btnLogin2')) {
+						_.$.id('btnLogin2').innerHTML = thisUser.username;
+						_.$.id('btnLogin2').removeAttribute('data-trans');
+						_.$.id('btnLogin2').setAttribute('onclick', `profilePage(0)`);
+					}
+					profilePage(0);
+					_.$.qa('[isloginwindow]').forEach(el=>{
+						_.wins[el.id].close();
+					});
+			}
+			Loading(1);
+		})
+		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 },
 sendLoginForm = async (wId)=>{
 	await Fingerprint.generate(fp === ''); // если токена нет то он пойдёт генерироваться
-	let username = _.$.id('LGusername').value,
-		password = _.$.id('LGpassword').value,
-		reCAPdatas = document.getElementsByClassName('g-recaptcha-response'),
-		reCAP = '';
-	if (reCAPdatas.length)
-		reCAP = reCAPdatas[reCAPdatas.length-1].value;
-	if (!ignoreCap && !reCAP) {
-		megaAlert(jId, 'captchaDed');
+	let username = _.$.id(wId+'-LGusername').value,
+		password = _.$.id(wId+'-LGpassword').value,
+		altchaDatas = document.querySelectorAll('altcha-widget input[name="altcha"]'),
+		altchaPayload = '';
+	if (altchaDatas.length)
+		altchaPayload = altchaDatas[altchaDatas.length-1].value;
+	console.log(altchaPayload, !ignoreCap, !ignoreCap && !altchaPayload);
+	if (!ignoreCap && !altchaPayload) {
+		megaAlert(0, 'captchaDed');
 		return;
 	};
-		Loading();
-		_.http.req('POST', `${sData[5]}login${php}`,
-			`username=${username}&password=${password}&g-recaptcha-response=${reCAP}`+fp.urlDone, urlEncoded)
-			.then(data=>{
-				Loading(1);
-				switch (data) {
-					case '-1':
-						megaAlert(jId, 'wrongPass');
-						break;
-					case '-2':
-						megaAlert(jId, 'accountEmpty');
-						break;
-					case '-3':
-						megaAlert(jId, 'captchaDed');
-						break;
-					default:
-						let serverResp = helperInitData(jId, data);
-						token = thisUser.token;
-						_.http.defaultHeaders['user-token'] = token;
-						Slocal.set('User', token);
-						thisUser.token = '';
+	Loading();
+	_.http.req('POST', `${sData[5]}login${php}`,
+		`username=${username}&password=${password}&altcha=${altchaPayload}`+fp.urlDone, urlEncoded)
+		.then(data=>{
+			Loading(1);
+			switch (data) {
+				case '-1':
+					megaAlert(0, 'wrongPass');
+					break;
+				case '-2':
+					megaAlert(0, 'accountEmpty');
+					break;
+				case '-3':
+					megaAlert(0, 'captchaDed');
+					break;
+				default:
+					let serverResp = helperInitData(0, data);
+					token = thisUser.token;
+					_.http.defaultHeaders['user-token'] = token;
+					Slocal.set('User', token);
+					thisUser.token = '';
 
-						_.$.id('regBtn').remove();
-						_.$.id('btnLogin').innerHTML = `<span style="position:absolute;right:0;top:-8px">${thisUser.username}</span>`;
+					_.$.id('regBtn').remove();
+					_.$.id('btnLogin').innerHTML = `<span style="position:absolute;right:0;top:-8px">${thisUser.username}</span>`;
 
-						if (_.$.id('regBtn2')) {
-							_.$.id('regBtn2').innerHTML = getTrans('logout', 0);
-							_.$.id('regBtn2').setAttribute('data-trans', 'logout');
-							_.$.id('regBtn2').setAttribute('onclick', 'gLogout()');
-						}
-						if (_.$.id('btnLogin2')) {
-							_.$.id('btnLogin2').innerHTML = thisUser.username;
-							_.$.id('btnLogin2').removeAttribute('data-trans');
-							_.$.id('btnLogin2').setAttribute('onclick', `profilePage(${jId})`);
-						}
-						profilePage(jId);
-						_.$.qa('[isloginwindow]').forEach(el=>{
-							console.warn(el);
-							_.wins[el.id].close();
-						});
-				}
-			})
-			.catch(e=>{console.error(e);_.err.handleRejection(e)});;
+					if (_.$.id('regBtn2')) {
+						_.$.id('regBtn2').innerHTML = getTrans('logout', 0);
+						_.$.id('regBtn2').setAttribute('data-trans', 'logout');
+						_.$.id('regBtn2').setAttribute('onclick', 'gLogout()');
+					}
+					if (_.$.id('btnLogin2')) {
+						_.$.id('btnLogin2').innerHTML = thisUser.username;
+						_.$.id('btnLogin2').removeAttribute('data-trans');
+						_.$.id('btnLogin2').setAttribute('onclick', `profilePage(0)`);
+					}
+					profilePage(0);
+					_.$.qa('[isloginwindow]').forEach(el=>{
+						console.warn(el);
+						_.wins[el.id].close();
+					});
+			}
+		})
+		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 },
 sendDrop = ()=>{
 	let email	= _.$.id('LGemail').value;
@@ -1266,11 +1268,11 @@ sendDrop = ()=>{
 		.then(()=>{
 			Loading(1);
 			if (thisUser.ID !== 0) {
-				profilePage(jId);
+				profilePage(0);
 			} else {
-				innerMain(jId, pageMain(jId));
+				innerMain(0, pageMain(0));
 			}
-			megaAlert(jId, 'needEmailVerify');
+			megaAlert(0, 'needEmailVerify');
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 },
@@ -1285,9 +1287,9 @@ sendVerify = ()=>{
 			Loading(1);
 			if (thisUser.ID == data) {
 				thisUser.isActive = 1;
-				profilePage(jId);
+				profilePage(0);
 			} else {
-				innerMain(jId, pageMain(jId));
+				innerMain(0, pageMain(0));
 			}
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
@@ -1309,7 +1311,7 @@ gLogout = ()=>{
 			Slocal.remove('StaticUserData');
 			delete _.http.defaultHeaders['user-token'];
 			token = undefined;
-			innerMain(jId, pageMain(jId));
+			innerMain(0, pageMain(0));
 		});
 },
 
@@ -2024,48 +2026,46 @@ ADwrite = (jId, userId = '') => {
 loginPage = ()=>{
 	let id = _.win.open('logonWindow',
 		`<h1${getTrans('login')}/h1>
-		<input style=width:75%	id="LGusername" class="framelabel" maxlength="32" minlength="3" type="text"${getTrans('login01', 'input')}<br><br>
-		<input style=width:75%;margin-left:20px id="LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
+		<input style=width:75%	id="{winId}-LGusername" class="framelabel" maxlength="32" minlength="3" type="text"${getTrans('login01', 'input')}<br><br>
+		<input style=width:75%;margin-left:20px id="{winId}-LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
 		<button class=emptybtn onclick=seePassword()>
-			<img style=margin:-12px;margin-left:0 id=LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
+			<img style=margin:-12px;margin-left:0 id={winId}-LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br><br>
-		<div id={winId}cap class=g-recaptcha data-sitekey=${helperCaptchaSiteKey}></div>
+		<altcha-widget id={winId}cap challenge="${sData[2]}challenge.php"></altcha-widget>
 		<button style="width:calc(100% - 16px)" onclick="innerMain(0,dropWindow(0))" class="loginbtn"${getTrans('remindPass')}/button><br><br>
 		<button style="width:calc(100% - 16px)" onclick="sendLoginForm('{winId}')" class="loginbtn"${getTrans('joinToGdps')}/button><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close()"${getTrans('back')}/button>
 		<p align=right${getTrans('helperVer')}/p>`
 	, 'isloginwindow');
 	if (!ignoreCap) {
-		_.lazy.load('https://www.google.com/recaptcha/api.js')
+		_.lazy.loadEsm('https://cdn.jsdelivr.net/npm/altcha@3.2.2/dist/main/altcha.min.js')
 			.then(()=>{
-				let elemId = id.id+'cap';
-				captchaLoad ? grecaptcha.render(elemId) : captchaLoad = true;
+				captchaLoad ? null : captchaLoad = true;
 			})
-			.catch(e=>{console.error(e);_.err.handleRejection(e)});;
+			.catch(e=>{console.error(e);_.err.handleRejection(e)});
 	}
 },
 registerPage = ()=>{
 	let id = _.win.open('logon2Window',
 		`<h1${getTrans('register')}/h1>
-		<input style=width:75% id="LGusername" class="framelabel" maxlength="32" minlength="3" type="text"${getTrans('login06', 'input')}<br><br>
-		<input style=width:75%;margin-left:20px id="LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
+		<input style=width:75% id="{winId}-LGusername" class="framelabel" maxlength="32" minlength="3" type="text"${getTrans('login06', 'input')}<br><br>
+		<input style=width:75%;margin-left:20px id="{winId}-LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
 		<button class=emptybtn onclick=seePassword()>
-			<img style=margin:-12px;margin-left:0 id=LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
+			<img style=margin:-12px;margin-left:0 id={winId}-LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br><br>
-		<input style=width:75% id="LGemail" class="framelabel" required ${getTrans('login03', 'input')}<br><br>
+		<input style=width:75% id="{winId}-LGemail" class="framelabel" required ${getTrans('login03', 'input')}<br><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close();loginPage()"${getTrans('logiloginn')}/button>
-		<div id={winId}cap class=g-recaptcha data-sitekey=${helperCaptchaSiteKey}></div>
+		<altcha-widget id={winId}cap challenge="${sData[2]}challenge.php"></altcha-widget>
 		<button style="width:calc(100% - 16px)" onclick="sendRegisterForm('{winId}')" class="loginbtn"${getTrans('register')}/button><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.wins['{winId}'].close()"${getTrans('back')}/button>
 		<p align=right${getTrans('helperVer')}/p>`
 	, 'isloginwindow');
 	if (!ignoreCap) {
-		_.lazy.load('https://www.google.com/recaptcha/api.js')
+		_.lazy.loadEsm('https://cdn.jsdelivr.net/npm/altcha@3.2.2/dist/main/altcha.min.js')
 			.then(()=>{
-				let elemId = id.id+'cap';
-				captchaLoad ? grecaptcha.render(elemId) : captchaLoad = true;
+				captchaLoad ? null : captchaLoad = true;
 			})
-			.catch(e=>{console.error(e);_.err.handleRejection(e)});;
+			.catch(e=>{console.error(e);_.err.handleRejection(e)});
 	}
 },
 reportParser = (formObj, url)=>{
@@ -3160,13 +3160,13 @@ checkWikiOwn = (id)=>{
 	return false;
 },
 
-seePassword = ()=>{
-	if (_.$.id('LGpassword').type == 'password') {
-		_.$.id('LGpassword').type = 'text';
-		_.$.id('LGbtn').src = helperUrl+'imgs/PSsee.svg';
+seePassword = (winId)=>{
+	if (_.$.id(winId+'-LGpassword').type == 'password') {
+		_.$.id(winId+'-LGpassword').type = 'text';
+		_.$.id(winId+'-LGbtn').src = helperUrl+'imgs/PSsee.svg';
 	} else {
-		_.$.id('LGpassword').type = 'password';
-		_.$.id('LGbtn').src = helperUrl+'imgs/PShide.svg';
+		_.$.id(winId+'-LGpassword').type = 'password';
+		_.$.id(winId+'-LGbtn').src = helperUrl+'imgs/PShide.svg';
 	}
 },
 

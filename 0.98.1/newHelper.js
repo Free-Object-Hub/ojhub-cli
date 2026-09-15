@@ -344,6 +344,7 @@ Intl.newHelper=function(_='_') {
 			let promise = new Promise((resolve,reject)=>{
 				let scr = document.createElement('script');
 				scr.src = url;
+				scr.crossOrigin = 'anonymous'; 
 				scr.onload = ()=>{
 					state[key] = true;
 					resolve(args);
@@ -351,6 +352,37 @@ Intl.newHelper=function(_='_') {
 				scr.onerror = ()=>{
 					delete state[key];
 					reject(new Error('Failed to load '+url));
+				};
+				document.head.append(scr);
+			});
+			state[key] = promise;
+			return promise;
+		},
+		loadEsm(url, ...args) {
+			/*
+			 * Отдельно от load(), т.к. ES-модули не текут в глобальный scope —
+			 * значит script.onload/onerror работают, а вот state[key] === true
+			 * кэш всё равно нужен, чтобы не импортировать модуль повторно
+			 */
+			let key = url.split('?')[0],
+				state = window[_].lazy.loaded;
+			if (state[key] === true)
+				return Promise.resolve(args);
+			if (state[key] instanceof Promise)
+				return state[key].then(()=>args);
+
+			let promise = new Promise((resolve,reject)=>{
+				let scr = document.createElement('script');
+				scr.type = 'module';
+				scr.src = url;
+				scr.crossOrigin = 'anonymous';
+				scr.onload = ()=>{
+					state[key] = true;
+					resolve(args);
+				};
+				scr.onerror = ()=>{
+					delete state[key];
+					reject(new Error('Failed to load module '+url));
 				};
 				document.head.append(scr);
 			});
