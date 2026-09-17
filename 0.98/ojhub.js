@@ -1139,7 +1139,7 @@ sendRegisterForm = async (wId)=>{
 	};
 	Loading();
 	_.http.req('POST', `${sData[5]}register${php}`,
-		`username=${username}&password=${password}&email=${email}&altcha=${altchaPayload}`+fp.urlDone, urlEncoded)
+		`username=${username}&password=${password}&email=${email}&altcha=${encodeURIComponent(altchaPayload)}`+fp.urlDone, urlEncoded)
 		.then(data=>{
 			Loading(1);
 			switch (data) {
@@ -1196,7 +1196,7 @@ sendLoginForm = async (wId)=>{
 	};
 	Loading();
 	_.http.req('POST', `${sData[5]}login${php}`,
-		`username=${username}&password=${password}&altcha=${altchaPayload}`+fp.urlDone, urlEncoded)
+		`username=${username}&password=${password}&altcha=${encodeURIComponent(altchaPayload)}`+fp.urlDone, urlEncoded)
 		.then(data=>{
 			Loading(1);
 			switch (data) {
