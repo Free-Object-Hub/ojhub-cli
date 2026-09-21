@@ -290,8 +290,8 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 					counter.n++;
 					templateName = templateName.trim();
 					const templateFunction =
-						wikiTemplates[J.globalWiki]?.[templateName] ||
-						wikiTemplates[0]?.[templateName];
+						(wikiTemplates[J.globalWiki] && wikiTemplates[J.globalWiki][templateName]) ||
+						(wikiTemplates[0] && wikiTemplates[0][templateName]);
 					if (!templateFunction) {
 						return `<div class="template-missing">Шаблон "${templateName}" не найден</div>`;
 					}

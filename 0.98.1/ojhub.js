@@ -103,7 +103,7 @@ helperInitData = (jId, data)=>{
 		lastNews = initData[3],
 		htmlGdpses = '',
 		htmlNews = '';
-	if (Object.keys(lastNews).length > 0)
+	if (Object.keys(lastGdpses).length > 0)
 		for (let g in lastGdpses) {
 			let gdps = lastGdpses[g];
 			htmlGdpses += FINDrenderMini(jId, gdps.channel, [gdps]);
@@ -112,7 +112,7 @@ helperInitData = (jId, data)=>{
 		`<h1${getTrans('T2-wantmore')}/h1>`+
 		basicButton(getTrans('projects'), `pageFind(${jId},Jexec(${jId}).helperFindData[3])`)+
 	`</div>`;
-	mainPageCache.gdpses = htmlGdpses;
+	mainPageCache.gdpses = lastGdpses;
 	if (Object.keys(lastNews).length > 0)
 		for (let n in lastNews) {
 			let news = lastNews[n];
@@ -122,7 +122,7 @@ helperInitData = (jId, data)=>{
 		`<h1${getTrans('T2-wantmore')}/h1>`+
 		basicButton(getTrans('news'), `globalNews(${jId})`)+
 	`</div>`;
-	mainPageCache.news = htmlNews;
+	mainPageCache.news = lastNews;
 	if (locationMain == '' || locationMain == '?') {
 		innerGdpsPlace(jId, htmlGdpses);
 		innerComments(jId, htmlNews);
@@ -151,8 +151,8 @@ helperInit = (jId, drop)=>{
 };
 
 mainPageCache = {
-	gdpses: '',
-	news: ''
+	gdpses: {},
+	news: []
 },
 
 
@@ -1537,6 +1537,21 @@ pageMain = (jId, localIgnore = false) => {
     }
     if (!localIgnore)
 		J.link.set('');
+	let gdpses = '',
+		news = '';
+	for (let g in mainPageCache.gdpses) {
+		let gdps = mainPageCache.gdpses[g];
+		gdpses += FINDrenderMini(jId, gdps.channel, [gdps]);
+	}
+	if (Object.keys(mainPageCache.news).length > 0)
+		for (let n in mainPageCache.news) {
+			let news = mainPageCache.news[n];
+			news += RenderNews(jId, [news],3);
+		}
+	news += `<div class=framegdps style=display:block;width:300px;height:350px;align-content:center;text-align:center>`+
+		`<h1${getTrans('T2-wantmore')}/h1>`+
+		basicButton(getTrans('news'), `globalNews(${jId})`)+
+	`</div>`;
     let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div style="background-color:var(--color-profile)">`+
@@ -1608,9 +1623,9 @@ pageMain = (jId, localIgnore = false) => {
 				`</div>`+
 				`<div style=width:100%>`+
 					`<h1${getTrans('projects')}/h1>`+
-					`<div id=GDPSesPlace class=gdps-list-list>${mainPageCache.gdpses}</div>`+
+					`<div id=GDPSesPlace class=gdps-list-list>${gdpses}</div>`+
 					`<h1${getTrans('news')}/h1>`+
-					`<div id=comments class=gdps-list-list>${mainPageCache.news}</div>`+
+					`<div id=comments class=gdps-list-list>${news}</div>`+
 				`</div>`+
 			`</div>`+
 		`</div>`+
@@ -2289,7 +2304,7 @@ class Fingerprint {
 			
 			const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
 			return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 'unknown';
-		} catch {
+		} catch (e) {
 			return 'error';
 		}
 	}
@@ -2653,7 +2668,7 @@ FINDrenderMini = (jId, channel, parsedData, joinData = '') => {
 		let gText = gdpsData.text;
 		try {
 			gText = JSON.parse(gdpsData.text)
-		} catch {}
+		} catch (e) {}
 		GdpsesShortLangs.mount(""+gdpsData.ID, gText)
 
 		if (JSON.parse(gdpsData.tags) != null && JSON.parse(gdpsData.os) != null) {
@@ -2721,7 +2736,7 @@ FINDrender = (jId, channel, parsedData, joinData = '') => {
     let gText = gdpsData.text;
     try {
 		gText = JSON.parse(gdpsData.text)
-	} catch {}
+	} catch (e) {}
     GdpsesFullLangs.mount(""+gdpsData.ID, gText)
 
     tagsOs += '<div class="flex-row">';
@@ -2817,11 +2832,11 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 		text = '';
 		if (isComm == 3)
 			if (gdpsData.text.length > 150)
-				text = Markdown(jId, gdpsData.text.slice(0,150).trimEnd())+'...'
+				text = Markdown(jId, gdpsData.text.slice(0,150).replace(/\s+$/, ''))+'...'
 			else 
-				text = Markdown(jId, gdpsData.text.trimEnd())
+				text = Markdown(jId, gdpsData.text.replace(/\s+$/, ''))
 		else 
-			text = Markdown(jId, gdpsData.text.trimEnd())
+			text = Markdown(jId, gdpsData.text.replace(/\s+$/, ''))
 
 		html += `<div style=display:flex id=news${gdpsData.ID}>`+
 		(isComm == 0 ? gdpsAvatar(gdpsData.gdpsImg,64,64,1) : '')+
@@ -3334,7 +3349,9 @@ enterFormData = (jId, form, sendPlace) => {
 				if (J.id('profileWindow')) 
 					getVacancies(jId, FORMDATA.get('channel'),FORMDATA.get('gdpsId'));
 				else {
-					_.wins[_.$.q('[vaceditadm]')?.id].close();
+					let el = _.$.q('[vaceditadm]')
+					if (el)
+						_.wins[el.id].close();
 					globalVacs(jId);
 				}
 				break;
@@ -3618,8 +3635,8 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 					counter.n++;
 					templateName = templateName.trim();
 					const templateFunction =
-						wikiTemplates[J.globalWiki]?.[templateName] ||
-						wikiTemplates[0]?.[templateName];
+						(wikiTemplates[J.globalWiki] && wikiTemplates[J.globalWiki][templateName]) ||
+						(wikiTemplates[0] && wikiTemplates[0][templateName]);
 					if (!templateFunction) {
 						return `<div class="template-missing">Шаблон "${templateName}" не найден</div>`;
 					}
@@ -3808,7 +3825,7 @@ FINDrenderInProfile = (jId, parsedData, limit = 9, flags = []) => {
 		let text = '';
 		try {
 			text = JSON.parse(gdpsData.text);
-		} catch {}
+		} catch (e) {}
 		GdpsesShortLangs.mount(""+thisId, text);
 
 		title = gdpsData.title;
@@ -3928,11 +3945,11 @@ renderSwitch = (value, set = 0)=>{
 		case value.startsWith('Text;Tags:'):
 			moreRadios[0] = value;
 			if (value.slice(-1) == 0) {
-				setColor('--rr-tags', '100%');
+				setColor('--rr-tags', '1');
 				setColor('--rr-text', '0%');
 			} else {
 				setColor('--rr-tags', '0%');
-				setColor('--rr-text', '100%');
+				setColor('--rr-text', '1');
 			}
 			break;
 		case value.startsWith('guidFull;guidWindow:'):

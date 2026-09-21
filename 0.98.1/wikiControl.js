@@ -179,7 +179,8 @@ newGuideFrame = (jId, guideId, id = 0, customContent = null, textAreaHelp = '') 
 		`<textarea name=subtext[] class=guidInp style=width:100%;height:240px${textAreaHelp}${customContent !== null ? customContent[1] : ''}</textarea>`+
 	`</div><br>`;
 
-    _.$.id('frames'+guideId)?.insertAdjacentHTML('beforeend', html);
+	if (_.$.id('frames'+guideId))
+		_.$.id('frames'+guideId).insertAdjacentHTML('beforeend', html);
     if (_.$.id('framesSelector'+guideId))
 		_.$.id('framesSelector'+guideId).selectedIndex = 0;
     J.guideEditorFrame++;

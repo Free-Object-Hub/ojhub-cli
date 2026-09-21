@@ -1,5 +1,97 @@
 Intl.newHelper('_'); // инициализация newHelper.js, пометка для нейросетей чтобы они не тупили
 
+// ЗОНА ПОЛИФИЛЛОВ
+// создана чтобы GHE 2.2 мог хоть как то запуститься на Windows XP
+
+// этих вызовов слишком много в коде
+if (!String.prototype.replaceAll) {
+	String.prototype.replaceAll = function(search, replacement) {
+		if (search instanceof RegExp) {
+			if (!search.global) 
+				throw new TypeError('replaceAll must be called with a global RegExp');
+			return this.replace(search, replacement);
+		}
+		return this.split(search).join(replacement);
+	};
+}
+
+// джейлы работают только на этой дичи
+if (!window.ResizeObserver) {
+	window.ResizeObserver = class {
+		constructor(callback) {
+			this.callback = callback;
+			this.targets = new Map();
+			this._poll = this._poll.bind(this);
+		}
+		observe(element) {
+			this.targets.set(element, {
+				width: element.offsetWidth,
+				height: element.offsetHeight
+			});
+			if (!this._interval)
+				this._interval = setInterval(this._poll, 200);
+		}
+		disconnect() {
+			this.targets.clear();
+			if (this._interval) {
+				clearInterval(this._interval);
+				this._interval = null;
+			}
+		}
+		_poll() {
+			let entries = [];
+			this.targets.forEach((prev, element) => {
+				let width = element.offsetWidth,
+					height = element.offsetHeight;
+				if (width !== prev.width || height !== prev.height) {
+					this.targets.set(element, { width, height });
+					entries.push({ target: element, contentRect: element.getBoundingClientRect() });
+				}
+			});
+			if (entries.length)
+				this.callback(entries, this);
+		}
+	};
+}
+
+// весь newHelper win работает на этой жести
+if (!window.PointerEvent) {
+	window.PointerEvent = function PointerEvent() {};
+
+	['pointerdown', 'pointerup', 'pointermove', 'pointercancel'].forEach(type => {
+		Object.defineProperty(Element.prototype, 'on' + type, {
+			configurable: true,
+			get() { return this['_on' + type] || null; },
+			set(fn) {
+				if (this['_on' + type])
+					this.removeEventListener(type, this['_on' + type]);
+				this['_on' + type] = fn;
+				if (typeof fn === 'function')
+					this.addEventListener(type, fn);
+			}
+		});
+	});
+
+	function firePointer(type, sourceEvent) {
+		let evt = new Event(type, { bubbles: true, cancelable: true });
+		evt.pointerId = 'mouse';
+		evt.pointerType = 'mouse';
+		evt.clientX = sourceEvent.clientX;
+		evt.clientY = sourceEvent.clientY;
+		evt.button = sourceEvent.button || 0;
+		evt.isPrimary = true;
+		let origPD = sourceEvent.preventDefault.bind(sourceEvent);
+		evt.preventDefault = () => { if (sourceEvent.cancelable) origPD(); };
+		sourceEvent.target.dispatchEvent(evt);
+	}
+
+	document.addEventListener('mousedown', e => firePointer('pointerdown', e));
+	document.addEventListener('mousemove', e => firePointer('pointermove', e));
+	document.addEventListener('mouseup', e => firePointer('pointerup', e));
+}
+
+// КОНЕЦ БРАУЗЕРНЫХ ПОЛИФИЛЛОВ
+
 // 1.8 polyfill
 getTrans = (i,render='text')=>{
 	let text=_.lang.from(i),
@@ -133,7 +225,7 @@ _.err.init();
 _.err.print = (errID, errText, addr = '')=>{
 	console.log(errText)
 	let buttonErr = (i, clck)=>`<button style=background-color:#333 onclick="${clck}">${i}</button> `,
-		buttons = windowBtns.map(btn=>buttonErr(btn[0], btn[1]?.replace('{errID}', errID))).join(''),
+		buttons = windowBtns.map(btn=>buttonErr(btn[0], btn[1] && btn[1].replace('{errID}', errID))).join(''),
 		html = `<div id=debug${errID} data-win="{winId}">
 				<p align=center>DEBUG INFO</p>
 				ERROR<br>
@@ -296,10 +388,7 @@ helperRequest = (url, data, headers = {}, fileUploadProgressElement = false)=>{
 		if (typeof(data) !== 'object') {
 			XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		}
-		let allHeaders = {
-			//..._.http.defaultHeaders,
-			...headers
-		};
+		let allHeaders = Object.assign({}, headers);
 		for (let header in allHeaders)
 			XHR.setRequestHeader(header, allHeaders[header]);
 

@@ -404,7 +404,7 @@ Intl.newHelper=function(_='_') {
 			}
 		},
 		async _(scr, fn) {
-			let get = path => path.split('.').reduce((obj, key) => obj?.[key], window),
+			let get = path => path.split('.').reduce((obj, key) => obj && obj[key], window),
 				wrapper = get(fn);
 	
 			await window[_].lazy.load(scr); // await короче Promise.then
@@ -643,7 +643,7 @@ Intl.newHelper=function(_='_') {
 	
 				xhr.open(method, url);
 	
-				let allHeaders = { ...window[_].http.defaultHeaders, ...headers };
+				let allHeaders = Object.assign({}, window[_].http.defaultHeaders, headers);
 				for (let header in allHeaders)
 					xhr.setRequestHeader(header, allHeaders[header]);
 	
@@ -842,16 +842,17 @@ Intl.newHelper=function(_='_') {
 		constructor(storage, name) {
 			this.s = storage;
 			this.n = name;
+
+			this.get = key=>
+				this.s.getItem(this.n + key);
+			this.set = (key, value)=>
+				this.s.setItem(this.n + key, value);
+			this.remove = key=>
+				this.s.removeItem(this.n + key);
+			this.clear = ()=>Object.keys(this.s)
+				.filter(k => k.startsWith(this.n))
+					.forEach(k => this.s.removeItem(k));
 		}
-		get = key=>
-			this.s.getItem(this.n + key);
-		set = (key, value)=>
-			this.s.setItem(this.n + key, value);
-		remove = key=>
-			this.s.removeItem(this.n + key);
-		clear = ()=>Object.keys(this.s)
-			.filter(k => k.startsWith(this.n))
-				.forEach(k => this.s.removeItem(k));
 	};
 
 	window[_].err = {
@@ -1049,7 +1050,7 @@ Intl.newHelper=function(_='_') {
 					onStop:onStop
 				});
 	
-				onStart?.(e);
+				if (onStart) onStart(e);
 			};
 			if (!window[_].drag._i) {
 				document.addEventListener("pointermove", (e) => window[_].drag.move(e));
@@ -1078,7 +1079,8 @@ Intl.newHelper=function(_='_') {
 			mov.style.left=(mov.offsetLeft - dx)+"px";
 		},
 		stop(e) {
-			window[_].drag.active.get(e.pointerId)?.onStop?.(e);
+			let entry = window[_].drag.active.get(e.pointerId);
+			if (entry && entry.onStop) entry.onStop(e);
 			window[_].drag.active.delete(e.pointerId);
 		},
 	};
@@ -1241,8 +1243,9 @@ Intl.newHelper=function(_='_') {
 			this.attrs = attrs;
 			this.animOpen = animOpen;
 			this.animClose = animClose;
+
+			this.generateDOM = (wId,content) => `<div style=overflow:auto;width:100%;height:100%>${content}</div>`.replace(/\{winId\}/g,wId)
 		}
-		generateDOM = (wId,content) => `<div style=overflow:auto;width:100%;height:100%>${content}</div>`.replace(/\{winId\}/g,wId)
 
 		open(content = '') {
 			let winState = window[_].x10.create(this.name, { wm: this.wm }),
@@ -1585,7 +1588,7 @@ Intl.newHelper=function(_='_') {
 			for (let winId in window[_].wins) {
 			let winPre = window[_].wins[winId];
 			//for (let [winId, winPre] of window[_].wins) {
-				let win = { ...winPre },
+				let win = Object.assign({}, winPre),
 					size=win.onUnfull,
 					wEl = win.elem,
 					contentRect=win.content.getBoundingClientRect(),
