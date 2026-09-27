@@ -955,3 +955,43 @@ function createVirtualLink(root) {
 
 	return self;
 }
+
+// FUN
+cssLoaded = {};
+function loadCustomCss(url, ...args) {
+	/*
+	 * Внешняя версия lazy.load(), но для <link rel="stylesheet">.
+	 * Не лежит внутри lazy{...}, т.к. используется реже и не обязана
+	 * шарить приватное состояние объекта — но кэш всё равно нужен,
+	 * чтобы одна и та же тема/css не воткнулась в head дважды.
+	 *
+	 * Ключ префиксуем 'css:', чтобы не пересечься в window[_].lazy.loaded
+	 * с ключами обычных .js/.mjs файлов, если url-basename случайно совпадёт.
+	 */
+	let key = 'css:' + url.split('?')[0],
+		state = cssLoaded;
+
+	if (state[key] === true)
+		return Promise.resolve(args);
+	if (state[key] instanceof Promise)
+		return state[key].then(() => args);
+
+	let promise = new Promise((resolve, reject) => {
+		let link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = url;
+		link.crossOrigin = 'anonymous';
+		link.onload = () => {
+			state[key] = true;
+			resolve(args);
+		};
+		link.onerror = () => {
+			delete state[key];
+			link.remove(); // не оставляем в head мёртвую ссылку на 404-й css
+			reject(new Error('Failed to load css ' + url));
+		};
+		document.head.append(link);
+	});
+	state[key] = promise;
+	return promise;
+}

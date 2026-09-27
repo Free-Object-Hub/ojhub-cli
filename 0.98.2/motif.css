@@ -1,0 +1,335 @@
+/* =====================================================================
+   OBJECT HUB — RETRO 95 THEME
+   Windows 95 / OpenMotif pastiche. Drop this AFTER the original
+   stylesheet — it overrides colors, borders, radii and fonts while
+   leaving layout (flex/grid/media queries) from the original intact.
+   ===================================================================== */
+
+:root {
+	/* classic Win95 gray desktop palette, remapped onto ojhub's vars */
+	--color-bg: #008080;          /* teal desktop */
+	--color-bg-alpha: #008080cc;
+	--color-main: #000080;        /* navy titlebar blue */
+	--color-light: #1084d0;       /* active titlebar highlight */
+	--color-window: #000000;      /* border color for EVERY windowed element
+	                                  (upperWindow/underWindow, debug windows
+	                                  like "pstext", etc). Must be black, not
+	                                  gray — otherwise those borders vanish
+	                                  into the panel fill. */
+	--color-profile: #c0c0c0;
+	--color-profile-alpha: #c0c0c0ee;
+	--color-black: #000000;
+	--color-white: #000000;       /* body text is black on gray, Win95-style */
+
+	/* bevel helpers (not in the original file, used below) */
+	--bevel-hi: #ffffff;
+	--bevel-lo: #808080;
+	--bevel-dk: #000000;
+	--bevel-face: #c0c0c0;
+}
+
+* {
+	border-radius: 0 !important; /* no rounded corners in 1995 */
+}
+
+body {
+	background-color: var(--color-bg);
+	image-rendering: pixelated;
+}
+
+/* Retro system font stack — closest web-safe match to MS Sans Serif */
+p, a, input, textarea, select, option, button, span, label, td, div,
+h1, h2, h3 {
+	font-family: Tahoma, "Segoe UI", Geneva, Verdana, sans-serif !important;
+	color: var(--color-white);
+}
+
+h1, h1 span, h2, h3 {
+	font-optical-sizing: normal;
+	font-weight: bold;
+	letter-spacing: 0;
+}
+
+a {
+	color: #000080;
+	text-decoration: underline;
+	transition: none;
+}
+a:hover {
+	color: #ff0000;
+}
+
+code {
+	font-family: "Courier New", monospace !important;
+}
+
+/* ---------------------------------------------------------------------
+   BUTTONS — classic raised/pressed 3D bevel
+   --------------------------------------------------------------------- */
+.loginbtn, .loginbtnMini, .loginbtnGDPS, .headbtn, .emptybtn.headbtn {
+	background-color: var(--bevel-face);
+	color: #000000;
+	border: none;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf;
+	padding: 6px 14px;
+	transition: none;
+	font-weight: normal;
+}
+.loginbtn:hover, .loginbtnMini:hover, .loginbtnGDPS:hover, .headbtn:hover {
+	background-color: var(--bevel-face);
+	color: #000000;
+}
+.loginbtn:active, .loginbtnMini:active, .loginbtnGDPS:active, .headbtn:active {
+	box-shadow:
+		inset 1px 1px 0 var(--bevel-dk),
+		inset -1px -1px 0 var(--bevel-hi);
+	padding-top: 7px;
+	padding-left: 15px;
+}
+
+/* ---------------------------------------------------------------------
+   TAGS — beveled toggle chips (Motif-style radio/checkbox look)
+   --------------------------------------------------------------------- */
+.tag, .tagUns, .tagSel, .tagPre {
+	background-color: var(--bevel-face);
+	border: none;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf;
+	color: #000000;
+}
+.tagSel, .tagPre, input:checked + .tagUns {
+	box-shadow:
+		inset 1px 1px 0 var(--bevel-dk),
+		inset -1px -1px 0 var(--bevel-hi),
+		inset 2px 2px 0 var(--bevel-lo);
+	background-color: #dcdcdc;
+}
+
+/* ---------------------------------------------------------------------
+   PANELS / WINDOWS — sunken or raised bevel frames
+   --------------------------------------------------------------------- */
+.framelabel, .mainPlate, .framecomm, .framegdps, .framegdpsOld,
+.frameprofile, .framesendcomm, .frameguide, .framegude {
+	background-color: var(--bevel-face);
+	border: none;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf;
+	color: #000000;
+}
+
+/* the "window" menu popup — give it a titlebar-style top edge */
+.framemenu {
+	background-color: var(--bevel-face);
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf,
+		4px 4px 0 rgba(0,0,0,0.4);
+	color: #000000;
+	border-top: 20px solid var(--color-main);
+}
+.framemenu::before {
+	content: "OBJECT HUB";
+	position: absolute;
+	top: -18px;
+	left: 6px;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+/* ---------------------------------------------------------------------
+   HEADER — Windows 95 titlebar
+   --------------------------------------------------------------------- */
+.header {
+	background: linear-gradient(90deg, var(--color-light), var(--color-main));
+	color: #ffffff;
+	border-bottom: none;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi);
+	padding: 4px 6px;
+}
+.header, .header a, .header span, .header p {
+	color: #ffffff !important;
+	font-weight: bold;
+}
+
+/* ---------------------------------------------------------------------
+   BOTTOM NAV — taskbar
+   --------------------------------------------------------------------- */
+.bottomnav {
+	background-color: var(--bevel-face);
+	border-top: none;
+	box-shadow: inset 0 1px 0 var(--bevel-hi), inset 0 2px 0 #dfdfdf;
+}
+.navbtn {
+	color: #000000;
+}
+.navbtn.active, .navbtn:active {
+	background-color: #a0a0a0;
+	box-shadow:
+		inset 1px 1px 0 var(--bevel-dk),
+		inset -1px -1px 0 var(--bevel-hi);
+}
+.navlabel {
+	font-size: 10px;
+}
+
+/* ---------------------------------------------------------------------
+   INPUTS — sunken text fields
+   --------------------------------------------------------------------- */
+.guidInp, input[type="text"], input[type="search"], input[type="password"],
+input[type="email"], textarea, select {
+	background: #ffffff;
+	border: none;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-hi),
+		inset 1px 1px 0 var(--bevel-dk),
+		inset -2px -2px 0 #dfdfdf,
+		inset 2px 2px 0 var(--bevel-lo);
+	color: #000000;
+	padding: 3px 4px;
+}
+.guidInp:hover {
+	margin: 17px 1px 16px 1px;
+	border: none;
+}
+
+/* ---------------------------------------------------------------------
+   WINDOWS — upperWindow (frame) / underWindow (titlebar / drag handle),
+   from window.css
+   --------------------------------------------------------------------- */
+.upperWindow {
+	border: none;
+	background-color: var(--bevel-face);
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf,
+		4px 4px 0 rgba(0,0,0,0.4);
+}
+
+.underWindow {
+	border: none;
+	background: linear-gradient(90deg, var(--color-light), var(--color-main));
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 2px 0 6px;
+	box-sizing: border-box;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+/* ---------------------------------------------------------------------
+   WINDOW BUTTONS — titlebar close/minimize/maximize (winbtn)
+   Buttons contain a text glyph (e.g. ✕ □ _), not svg/img — replaces
+   the scale() hack from window.css with real square bevel buttons.
+   --------------------------------------------------------------------- */
+.winbtn {
+	transform: none !important;
+	width: 22px;
+	height: 18px;
+	margin: 0 2px;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--bevel-face);
+	border: none;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf;
+	color: #000000;
+	font-family: Tahoma, sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	line-height: 1;
+	cursor: pointer;
+}
+.winbtn * {
+	color: #000000;
+	font-weight: bold;
+}
+.winbtn:active {
+	box-shadow:
+		inset 1px 1px 0 var(--bevel-dk),
+		inset -1px -1px 0 var(--bevel-hi);
+}
+
+@media screen and (min-width: 700px) {
+	.winbtn {
+		width: 16px;
+		height: 14px;
+		margin-right: 2px;
+		font-size: 9px;
+	}
+}
+
+/* ---------------------------------------------------------------------
+   JAIL TOOLBAR — the <input class=tag> inside [lid] (openJail's
+   "< > [address] !" bar) reuses the .tag class from filter chips, but
+   it should look like a sunken Win95 address bar, not a raised chip.
+   [lid] is already the scoping hook newHelper.css uses for this toolbar.
+   --------------------------------------------------------------------- */
+[lid] .tag {
+	background-color: #ffffff;
+	color: #000000;
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-hi),
+		inset 1px 1px 0 var(--bevel-dk),
+		inset -2px -2px 0 #dfdfdf,
+		inset 2px 2px 0 var(--bevel-lo);
+	padding: 2px 4px;
+	margin: 0 2px;
+}
+
+/* ---------------------------------------------------------------------
+   MISC RETRO TOUCHES
+   --------------------------------------------------------------------- */
+
+/* classic beveled scrollbar (WebKit/Chromium/Edge) */
+::-webkit-scrollbar {
+	width: 16px;
+	height: 16px;
+}
+::-webkit-scrollbar-track {
+	background: var(--bevel-face);
+}
+::-webkit-scrollbar-thumb {
+	background: var(--bevel-face);
+	box-shadow:
+		inset -1px -1px 0 var(--bevel-dk),
+		inset 1px 1px 0 var(--bevel-hi),
+		inset -2px -2px 0 var(--bevel-lo),
+		inset 2px 2px 0 #dfdfdf;
+}
+
+.Loading {
+	animation: none; /* spinning is too modern; keep it static or swap for an hourglass sprite */
+}
+
+.like, .dislike {
+	filter: grayscale(1) contrast(1.5);
+}
+
+/* remove the fancy display webfont entirely — Unbounded has no place in 1995 */
+h1 span {
+	font-family: Tahoma, sans-serif !important;
+}

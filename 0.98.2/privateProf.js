@@ -1634,6 +1634,86 @@ createWiki = (jId, backpage = 0) => {
 		profilePage(jId, '');
     innerProfile(jId, html);
 };
+addWork = (jId, channel, gdpsId) => {
+	let J = Jexec(jId);
+	if (thisUser.isActive == 0)
+		return accountIsntActiveAlert();
+	let smallString = 'work',
+			bigString = 'Work',
+			tags = '';
+	for (let tag in TagsVacs)
+		tags += renderTagAdding(jId, TagsVacs, 'tags', tag);
+	J.link.set('add'+bigString+'='+channel+'|'+gdpsId);
+	let html = 
+	`<div id=helperContentProfile>`+
+		`<h1${getTrans('add'+bigString)}/h1>`+
+		`<form method=POST enctype="multipart/form-data" action='${sData[5]}${smallString}Add${php}' onsubmit="return enterFormData(${jId},this,'${sData[5]}${smallString}Add${php}')">`+
+			`<label${getTrans('add'+bigString+'01')}/label><br><input class=framelabel type=text name=title style=width:100% required${getTrans(smallString+'Input01', 'input')}<br>`+
+			`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style=width:100% required${getTrans(smallString+'Input02', 'textarea')}/textarea><br>`+
+			`<label${getTrans('add'+bigString+'03')}/label><br>`+
+			`<div style="display:flex;flex-wrap:wrap">`+
+				tags+
+			`</div><br><br>`+
+
+			`<input type=hidden value=${gdpsId} name=id>`+
+			`<input type=hidden value=${channel} name=channel>`+
+
+			`<input formenctype="multipart/form-data" type=submit class=loginbtn${getTrans('add'+bigString, 'inputValue')}`+
+		`</form>`+
+	`</div>`;
+	innerProfile(jId, html);
+};
+editWork = (jId, channel, gdpsId, workId) => {
+	let J = Jexec(jId);
+	if (thisUser.isActive == 0)
+		return accountIsntActiveAlert();
+	if (J.q('[workeditadm]')) return 0;
+	Loading();
+	let html = ``,
+			smallString = 'work',
+			bigString = 'Work';
+	helperRequest(`${sData[5]}${smallString}Edit${php}`, `id=${workId}&gdpsId=${gdpsId}`)
+		.then (data=>{
+			if (J.id('profileWindow')) 
+				J.link.set('edit'+bigString+'='+channel+'|'+gdpsId+'|'+workId);
+			let parsedData = JSON.parse(data),
+				title = parsedData.title,
+				text = parsedData.text,
+				tags = JSON.parse(parsedData.tags),
+				tagss = '';
+			for (let tag in TagsVacs) {
+				let checked = '';
+				if (tags)
+					checked = tags.includes(tag) ? ' checked' : '';
+				tagss += renderTagAdding(jId, TagsVacs, 'tags', tag, checked);
+			}
+
+			html = 
+			`<h1${getTrans('edit'+bigString)}/h1>`+
+			`<form method=POST enctype="multipart/form-data" action='${sData[5]}${smallString}Edit${php}' onsubmit="return enterFormData(${jId},this,'${sData[5]}${smallString}Edit${php}?id=${gdpsId}')">`+
+				`<label${getTrans('add'+bigString+'01')}/label><br><input value="${title}" class=framelabel type=text name=title style=width:100% required${getTrans(smallString+'Input01', 'input')}<br>`+
+				`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style=width:100% required${getTrans(smallString+'Input02', 'input')}${text}</textarea><br>`+
+				`<label${getTrans('add'+bigString+'03')}/label><br>`+				
+				`<div style="display:flex;flex-wrap:wrap">`+
+					tagss+
+				`</div><br><br>`+
+
+				`<input type=hidden value=${workId} name=id>`+
+				`<input type=hidden value=${gdpsId} name=gdpsId>`+
+				`<input type=hidden value=${channel} name=channel>`+
+
+				`<input formenctype="multipart/form-data" type=submit class=loginbtn${getTrans('edit'+bigString, 'inputValue')}`+
+			`</form>`;
+			if (J.id('profileWindow')) 
+				innerProfile(jId, `<div id=helperContentProfile>`+html+`</div>`);
+			else 
+				_.win.open('workEditAdm', 
+					html, 
+				'workeditadm');
+			Loading(1);
+		})
+		.catch(e=>{console.error(e);_.err.handleRejection(e)});
+};
 
 alarmsWindow = jId => {
     let J = Jexec(jId);
@@ -1785,6 +1865,7 @@ profilePage = (jId, innerHtnl = gProfileMini(jId)) => {
 			`</button>`+
 			`<div id="phoneSelector" class=contentAdaptiveBig style="position:absolute;top:15px;width:235px" align="left">`+
 				`<button class=loginbtn onclick="innerProfile(${jId},gProfileMini(${jId}))"${getTrans('profile')}/button><br><br>`+
+				`<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true))"${getTrans('profile')}/button><br><br>`+
 				`<button class=loginbtn onclick="alarmsWindow(${jId});GetAlarms(${jId})" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
 				`</button><br><br>`+
@@ -1796,6 +1877,7 @@ profilePage = (jId, innerHtnl = gProfileMini(jId)) => {
 			`</div>`+
 			`<div id="phoneSelectorSmall" class=contentAdaptiveSmall style=display:none>`+
 				`<button class=loginbtn onclick="innerProfile(${jId},gProfileMini(${jId}));profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
+				`<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true));profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
 				`<button class=loginbtn onclick="alarmsWindow(${jId});profileSwitcherPhone(${jId});GetAlarms(${jId})" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
 				`</button>`+
