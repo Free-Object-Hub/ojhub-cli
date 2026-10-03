@@ -151,6 +151,15 @@ _.win.animFullOn = 'ANIM-full2';
 _.win.animFullOff = 'ANIM-unfull2';
 
 langList = ['RU', 'EN', 'UA', 'DE', 'ES', 'EL', 'CHN'];
+langNames = {
+  RU:  ['Русский',    'ru'],
+  EN:  ['English',    'en'],
+  UA:  ['Українська', 'uk'],
+  DE:  ['Deutsch',    'de'],
+  ES:  ['Español',    'es'],
+  EL:  ['Ελληνικά',   'el'],
+  CHN: ['简体中文',    'zh-Hans'], // упрощённый
+};
 helperStrVer = '0.98.2';
 currentLangVer = 15;
 helperBuildNum = 138;
@@ -293,9 +302,7 @@ JITlink = (container, jId) => {
 			profiles: (userId)=>        {otherProfile(${jId},userId,'pageFind(${jId},0)')},
 			'profiles/': {
 				'': (userId)=>          {otherProfile(${jId},userId,'pageFind(${jId},0)')},
-				"portfolio/": {
-					':p': (...userId)=>	{otherProfile(${jId},userId,'pageFind(${jId},0)',openPortfolio)},
-				},
+				portfolio: (userId)=>   {otherProfile(${jId},userId,'pageFind(${jId},0)',openPortfolio)},
 				camps: (userId)=>       {otherProfile(${jId},userId,'pageFind(${jId},0)',otherCampsWindow)},
 				shows: (userId)=>       {otherProfile(${jId},userId,'pageFind(${jId},1)',otherShowsWindow)},
 				peres: (userId)=>       {otherProfile(${jId},userId,'pageFind(${jId},2)',otherPeresWindow)},
@@ -308,6 +315,7 @@ JITlink = (container, jId) => {
 			'profile/':{
 				'': ()=>                {profilePage(${jId})},
 				subs: ()=>              {profilePage(${jId},'');subsWindow(${jId});GetSubs(${jId})},
+				portfolio: ()=>         {profilePage(${jId},'');openPortfolio(${jId},thisUser.ID,true)},
 			},
 			addedCamps: ()=>            {profilePage(${jId},'');findsWindow(${jId},0)},
 			addedShows: ()=>            {profilePage(${jId},'');findsWindow(${jId},1)},
@@ -912,6 +920,7 @@ function createVirtualLink(root) {
 
 		get() {
 			self._init();
+			console.warn(`virtualLink.get() called`);
 			let links = self.compile(),
 				[firstKey, fisrtValue] = links[0].split('='),
 				cmds = links.slice(1);

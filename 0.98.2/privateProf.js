@@ -874,9 +874,9 @@ switchProfileSettings = (jId, isPhone = 0) => {
     if (isPhone == 0) 
 		html = 
 			`<div class=ANIM-swticherUp id=userSettings2>`+
-				`<button class=loginbtn onclick="profileDevices(${jId})"${getTrans('settings010')}/button><br><br>`+
-				`<button class=loginbtn onclick="innerProfile(${jId});clrEditPage(${jId})"${getTrans('settings009')}/button><br><br>`+
-				`<button class=loginbtn onclick="innerProfile(${jId});keyBindsCfg2(${jId})"${getTrans('settings013')}/button><br><br>`+
+				`<button class=loginbtn onclick="profileDevices(${jId})"${getTrans('settings010')}/button><br>`+
+				`<button class=loginbtn onclick="innerProfile(${jId});clrEditPage(${jId})"${getTrans('settings009')}/button><br>`+
+				`<button class=loginbtn onclick="innerProfile(${jId});keyBindsCfg2(${jId})"${getTrans('settings013')}/button><br>`+
 			`</div>`;
 	else 
 		html = 
@@ -894,11 +894,11 @@ switchProfileProjects = (jId, isPhone = 0) => {
     if (isPhone == 0) 
 		html = 
 			`<div class=ANIM-swticherUp id=userProjects2>`+
-				`<button class=loginbtn onclick="findsWindow(${jId},0)"${getTrans('yourCamps')}/button><br><br>`+
-				`<button class=loginbtn onclick="findsWindow(${jId},1)"${getTrans('yourShows')}/button><br><br>`+
-				`<button class=loginbtn onclick="findsWindow(${jId},2)"${getTrans('yourPeres')}/button><br><br>`+
-				`<button class=loginbtn onclick="findsWindow(${jId},3)"${getTrans('yourTeles')}/button><br><br>`+
-				`<button class=loginbtn onclick="wikisWindow(${jId})"${getTrans('yourWikis')}/button><br><br>`+
+				`<button class=loginbtn onclick="findsWindow(${jId},0)"${getTrans('yourCamps')}/button><br>`+
+				`<button class=loginbtn onclick="findsWindow(${jId},1)"${getTrans('yourShows')}/button><br>`+
+				`<button class=loginbtn onclick="findsWindow(${jId},2)"${getTrans('yourPeres')}/button><br>`+
+				`<button class=loginbtn onclick="findsWindow(${jId},3)"${getTrans('yourTeles')}/button><br>`+
+				`<button class=loginbtn onclick="wikisWindow(${jId})"${getTrans('yourWikis')}/button><br>`+
 			`</div>`;
 	else 
 		html = 
@@ -1045,10 +1045,10 @@ clrEditPage = jId => {
 			MenuR+
 		`</table>`+
 		`<button class=loginbtn onclick=setToColorScheme(${jId})${getTrans('settings002')}/button><br>`+
-		`<button class=loginbtn onclick=dropColorScheme()${getTrans('settings003')}/button><br><br><br>`+
+		`<button class=loginbtn onclick=dropColorScheme()${getTrans('settings003')}/button><br><br>`+
 		`<div style=display:flex>`+
 			`<textarea name=scheme class=framelabel style="width:calc(100% - 170px)" id=scheme>${Slocal.get('ColorScheme')}</textarea>`+
-			`<button class=loginbtn onclick=setColorScheme(${jId})${getTrans('settings004')}/button><br><br>`+
+			`<button class=loginbtn onclick=setColorScheme(${jId})${getTrans('settings004')}/button><br>`+
 		`</div><br>`+
 		basicButton(getTrans('settings007'), "createBasicError(0)")+'<br>'+
 		basicButton(getTrans('settings008'), "createBasicError(1)")+'<br>'+
@@ -1634,7 +1634,7 @@ createWiki = (jId, backpage = 0) => {
 		profilePage(jId, '');
     innerProfile(jId, html);
 };
-addWork = (jId, channel, gdpsId) => {
+addWork = (jId) => {
 	let J = Jexec(jId);
 	if (thisUser.isActive == 0)
 		return accountIsntActiveAlert();
@@ -1643,27 +1643,31 @@ addWork = (jId, channel, gdpsId) => {
 			tags = '';
 	for (let tag in TagsVacs)
 		tags += renderTagAdding(jId, TagsVacs, 'tags', tag);
-	J.link.set('add'+bigString+'='+channel+'|'+gdpsId);
 	let html = 
-	`<div id=helperContentProfile>`+
-		`<h1${getTrans('add'+bigString)}/h1>`+
-		`<form method=POST enctype="multipart/form-data" action='${sData[5]}${smallString}Add${php}' onsubmit="return enterFormData(${jId},this,'${sData[5]}${smallString}Add${php}')">`+
-			`<label${getTrans('add'+bigString+'01')}/label><br><input class=framelabel type=text name=title style=width:100% required${getTrans(smallString+'Input01', 'input')}<br>`+
-			`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style=width:100% required${getTrans(smallString+'Input02', 'textarea')}/textarea><br>`+
+		`<form id="addWorkBtn" method=POST enctype="multipart/form-data" action='${sData[5]}${smallString}Add${php}' onsubmit="return enterFormData(${jId},this,'${sData[5]}${smallString}Add${php}')">`+
+			`<label${getTrans('add'+bigString+'01')}/label><br><input class=framelabel type=text name=title style="width:calc(100% - 40px)" required${getTrans(smallString+'Input01', 'input')}<br>`+
+			`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style="width:calc(100% - 40px)" required${getTrans(smallString+'Input02', 'textarea')}/textarea><br>`+
+			/*
 			`<label${getTrans('add'+bigString+'03')}/label><br>`+
 			`<div style="display:flex;flex-wrap:wrap">`+
 				tags+
 			`</div><br><br>`+
-
-			`<input type=hidden value=${gdpsId} name=id>`+
-			`<input type=hidden value=${channel} name=channel>`+
-
+			*/
+			`<div>`+
+				`<label><input type=radio name=linkType value=0 checked onchange="var i=this.form.elements.gdpsId;i.value='';i.type='text';i.placeholder='ID проекта из каталога'"> Проект из каталога</label><br> `+
+				`<label><input type=radio name=linkType value=1 onchange="var i=this.form.elements.gdpsId;i.value='';i.type='url';i.placeholder='Ссылка на твой канал'"> Внешняя ссылка</label>`+
+			`</div><br>`+
+			`<label${getTrans('add'+bigString+'03')}/label><br><input class=framelabel type=text name=gdpsId style="width:calc(100% - 40px)" required${getTrans(smallString+'Input03', 'input')}<br>`+
+			
 			`<input formenctype="multipart/form-data" type=submit class=loginbtn${getTrans('add'+bigString, 'inputValue')}`+
-		`</form>`+
-	`</div>`;
-	innerProfile(jId, html);
+		`</form>`;
+	let workBtn = J.id('addWorkBtn')
+	if (workBtn) {
+		workBtn.insertAdjacentHTML('afterend', html);
+		workBtn.remove();
+	}
 };
-editWork = (jId, channel, gdpsId, workId) => {
+editWork = (jId, workId) => {
 	let J = Jexec(jId);
 	if (thisUser.isActive == 0)
 		return accountIsntActiveAlert();
@@ -1672,13 +1676,13 @@ editWork = (jId, channel, gdpsId, workId) => {
 	let html = ``,
 			smallString = 'work',
 			bigString = 'Work';
-	helperRequest(`${sData[5]}${smallString}Edit${php}`, `id=${workId}&gdpsId=${gdpsId}`)
+	helperRequest(`${sData[5]}${smallString}Edit${php}?id=${workId}`)
 		.then (data=>{
-			if (J.id('profileWindow')) 
-				J.link.set('edit'+bigString+'='+channel+'|'+gdpsId+'|'+workId);
 			let parsedData = JSON.parse(data),
 				title = parsedData.title,
 				text = parsedData.text,
+				linkType = parsedData.linkType,
+				gdps = parsedData.gdps,
 				tags = JSON.parse(parsedData.tags),
 				tagss = '';
 			for (let tag in TagsVacs) {
@@ -1689,23 +1693,26 @@ editWork = (jId, channel, gdpsId, workId) => {
 			}
 
 			html = 
-			`<h1${getTrans('edit'+bigString)}/h1>`+
-			`<form method=POST enctype="multipart/form-data" action='${sData[5]}${smallString}Edit${php}' onsubmit="return enterFormData(${jId},this,'${sData[5]}${smallString}Edit${php}?id=${gdpsId}')">`+
-				`<label${getTrans('add'+bigString+'01')}/label><br><input value="${title}" class=framelabel type=text name=title style=width:100% required${getTrans(smallString+'Input01', 'input')}<br>`+
-				`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style=width:100% required${getTrans(smallString+'Input02', 'input')}${text}</textarea><br>`+
+			`<form method=POST enctype="multipart/form-data" action='${sData[5]}${smallString}Edit${php}' onsubmit="return enterFormData(${jId},this,'${sData[5]}${smallString}Edit${php}?id=${workId}')">`+
+				`<label${getTrans('add'+bigString+'01')}/label><br><input value="${title}" class=framelabel type=text name=title style="width:calc(100% - 40px)" required${getTrans(smallString+'Input01', 'input')}<br>`+
+				`<label${getTrans('add'+bigString+'02')}/label><br><textarea class=framelabel name=text style="width:calc(100% - 40px)" required${getTrans(smallString+'Input02', 'input')}${text}</textarea><br>`+
 				`<label${getTrans('add'+bigString+'03')}/label><br>`+				
+				/*
 				`<div style="display:flex;flex-wrap:wrap">`+
 					tagss+
 				`</div><br><br>`+
-
-				`<input type=hidden value=${workId} name=id>`+
-				`<input type=hidden value=${gdpsId} name=gdpsId>`+
-				`<input type=hidden value=${channel} name=channel>`+
+				*/
+				`<div>`+
+					`<label><input type=radio name=linkType value=0${linkType == 0 ? ' checked' : ''} onchange="var i=this.form.elements.gdpsId;i.value='';i.type='text';i.placeholder='ID проекта из каталога'"> Проект из каталога</label><br> `+
+					`<label><input type=radio name=linkType value=1${linkType == 1 ? ' checked' : ''} onchange="var i=this.form.elements.gdpsId;i.value='';i.type='url';i.placeholder='Ссылка на твой канал'"> Внешняя ссылка</label>`+
+				`</div><br>`+
+				`<label${getTrans('add'+bigString+'03')}/label><br><input class=framelabel type=${linkType == 1 ? 'url' : 'text'} name=gdpsId value="${gdps}" style="width:calc(100% - 40px)" required${getTrans(smallString+'Input03', 'input')}<br>`+
 
 				`<input formenctype="multipart/form-data" type=submit class=loginbtn${getTrans('edit'+bigString, 'inputValue')}`+
 			`</form>`;
 			if (J.id('profileWindow')) 
-				innerProfile(jId, `<div id=helperContentProfile>`+html+`</div>`);
+				J.id(`w${workId}`).innerHTML = html;
+				//innerProfile(jId, `<div id=helperContentProfile>`+html+`</div>`);
 			else 
 				_.win.open('workEditAdm', 
 					html, 
@@ -1864,15 +1871,15 @@ profilePage = (jId, innerHtnl = gProfileMini(jId)) => {
 				`<div style="transform:rotate(90deg)">|||</div>`+
 			`</button>`+
 			`<div id="phoneSelector" class=contentAdaptiveBig style="position:absolute;top:15px;width:235px" align="left">`+
-				`<button class=loginbtn onclick="innerProfile(${jId},gProfileMini(${jId}))"${getTrans('profile')}/button><br><br>`+
-				`<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true))"${getTrans('profile')}/button><br><br>`+
+				`<button class=loginbtn onclick="innerProfile(${jId},gProfileMini(${jId}))"${getTrans('profile')}/button><br>`+
+				`<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true))"${getTrans('profile')}/button><br>`+
 				`<button class=loginbtn onclick="alarmsWindow(${jId});GetAlarms(${jId})" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
-				`</button><br><br>`+
-				`<button class=loginbtn onclick="subsWindow(${jId});GetSubs(${jId})" style=position:relative${getTrans('gdpsSubs', 'textBtn')}</button><br><br>`+
-				basicButton(getTrans('projects'), `makeSwticher(${jId},0,'userProjects2', switchProfileProjects(${jId},0), 'userProjects', 'switchProfileProjects')`)+'<br><br>'+
+				`</button><br>`+
+				`<button class=loginbtn onclick="subsWindow(${jId});GetSubs(${jId})" style=position:relative${getTrans('gdpsSubs', 'textBtn')}</button><br>`+
+				basicButton(getTrans('projects'), `makeSwticher(${jId},0,'userProjects2', switchProfileProjects(${jId},0), 'userProjects', 'switchProfileProjects')`)+'<br>'+
 				`<div class=profileSwticher id=userProjects></div>`+
-				`<button class=loginbtn onclick="makeSwticher(${jId},0,'userSettings2', switchProfileSettings(${jId},0), 'userSettings', 'switchProfileSettings')"${getTrans('settings000')}/button><br><br>`+
+				`<button class=loginbtn onclick="makeSwticher(${jId},0,'userSettings2', switchProfileSettings(${jId},0), 'userSettings', 'switchProfileSettings')"${getTrans('settings000')}/button><br>`+
 				`<div class=profileSwticher id=userSettings></div>`+
 			`</div>`+
 			`<div id="phoneSelectorSmall" class=contentAdaptiveSmall style=display:none>`+

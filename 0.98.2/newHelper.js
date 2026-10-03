@@ -212,6 +212,7 @@ Intl.newHelper=function(_='_') {
 			 * При popstate команды берутся из хранилища _cmd, вместо самой ссылки
 			 * Сделано это для переноса команд при прыжках по истории
 			 */
+			console.warn(`${_}.link.get() called`);
 			let links = window[_].link.compile(),
 				[ firstKey, fisrtValue ] = links[0].split('='),
 				cmds = links.slice(1);
@@ -506,7 +507,7 @@ Intl.newHelper=function(_='_') {
 		 * !!!: если ключа в пакете нету, будет выброшен warning
 		 */
 		attr:       ` data-trans`,
-		from:		i=>window[_].lang.main[i] || console.warn(`window[_].lang> ${i} is undefined`) || i,
+		from:		i=>window[_].lang.main[i] || console.warn(`${_}.lang> ${i} is undefined`) || i,
 	
 		text:		i=>window[_].lang.attr+`="${i}">${window[_].lang.from(i)}<`,
 		submit:		i=>window[_].lang.attr+`="${i}" value="${window[_].lang.from(i)}">`, // <input type=submit>

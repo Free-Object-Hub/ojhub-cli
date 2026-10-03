@@ -219,6 +219,7 @@ let
 	radioInput = (id = '', name = '', isChecked = 0, otnerArgs)=>{
 		return `<input id="${id}" name="${name}" type=radio ${otnerArgs} ${isChecked ? 'checked' : ''}>`;
 	},
+	defWorkAdd = jId => basicButton('>+<', `addWork(${jId})`, '', 'addWorkBtn'),
 // #endregion
 
 headerButton = (text, Class, oncl)=>{
@@ -246,7 +247,7 @@ headerImg = (link)=>{
 },
 profileContentDiv = jId => {
     let J = Jexec(jId);
-    return `<div style='display: flex; flex-direction: column; height:calc(100vh - 450px); overflow:auto' align=left>`;
+    return `<div id=GDPSesPlace style='display: flex; flex-direction: column; height:calc(100vh - 450px); overflow:auto' align=left>`;
 },
 
 bottomNavButton = (jId, text, Class, oncl, icon = '', matchPath = '')=>{
@@ -1017,7 +1018,7 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 		commBackFunc = backFunc;
 
     J.lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+")";
-    contentPreload(jId, `${newsId},3,5`, `${commBackFunc}(${contentId})`, 0, 0);
+    contentPreload(jId, `${newsId},3,5`, `${commBackFunc}(${jId},${contentId})`, 0, 0);
 
     Loading();
     _.http.req('GET', `${sData[0]}newsC${php}?id=${newsId}`)
@@ -1045,7 +1046,7 @@ getVacsWithComments = (jId, vacId) => {
     let J = Jexec(jId);
     let commBackFunc = 'globalVacs';
     J.lastUsedProfile = `getVacsWithComments(${jId},`+vacId+")";
-    contentPreload(jId, `${vacId},5,12`, `${commBackFunc}(${vacId})`, 0, 0);
+    contentPreload(jId, `${vacId},5,12`, `${commBackFunc}(${jId},${vacId})`, 0, 0);
 
     Loading();
     _.http.req('GET', `${sData[0]}vacsC${php}?id=${vacId}`)
@@ -1440,6 +1441,29 @@ deleteNews = (jId, id, goBack) => {
 			Loading(1);
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
+},
+deleteWork= (jId, id, stage = 0, winId = '') => {
+    let J = Jexec(jId);
+	if (stage === 0) {
+		if (J.q(`[workremove${id}]`)) return;
+		_.win.open('vacRemove',
+			`<p${getTrans('removeSure')}/p>
+			${basicButton(getTrans('delete'), `deleteWork(${jId},${id},1,'{winId}')`)}
+			${basicButton(getTrans('otmena'), `_.x10.get('{winId}').close()`)}`
+		, 'workremove'+id);
+	}
+	if (stage === 1) {
+		Loading();
+		_.http.req('POST', `${sData[5]}workDelete${php}`, `id=${id}`, urlEncoded)
+			.then(data=>{
+				if (data == '-1')
+					return _.err.log('Access denied');
+				J.id('w'+data).remove();
+				_.x10.get(winId).close()
+				Loading(1);
+			})
+			.catch(e=>{console.error(e);_.err.handleRejection(e)});
+	}
 },
 // #endregion
 // #region публичные страницы
@@ -1963,21 +1987,21 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 				`<div style="transform:rotate(90deg)">|||</div>`+
 			`</button>`+
 			`<div id="phoneSelector" class=contentAdaptiveBig style="position:absolute;top:15px;width:235px" align="left">`+
-				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId})"${getTrans('profile')}/button><br><br>`+
-				`<button class=loginbtn onclick="openPortfolio(${jId},${userId})"${getTrans('profile')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId})"${getTrans('searchCamps')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId})"${getTrans('searchShows')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId})"${getTrans('searchPeres')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherWikisWindow(${jId},${userId})"${getTrans('guides09')}/button><br><br>`+
+				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId})"${getTrans('profile')}/button><br>`+
+				`<button class=loginbtn onclick="openPortfolio(${jId},${userId})"${getTrans('profile')}/button><br>`+
+				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId})"${getTrans('searchCamps')}/button><br>`+
+				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId})"${getTrans('searchShows')}/button><br>`+
+				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId})"${getTrans('searchPeres')}/button><br>`+
+				`<button class=loginbtn onclick="otherWikisWindow(${jId},${userId})"${getTrans('guides09')}/button><br>`+
 				`<br><button class=loginbtn onclick="${backButton}"${getTrans('back')}/button>`+
 			`</div>`+
 			`<div id="phoneSelectorSmall" class=contentAdaptiveSmall style=display:none>`+
-				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button><br><br>`+
-				`<button class=loginbtn onclick="openPortfolio(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId});profileSwitcherPhone(${jId})"${getTrans('searchCamps')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId});profileSwitcherPhone(${jId})"${getTrans('searchShows')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId});profileSwitcherPhone(${jId})"${getTrans('searchPeres')}/button><br><br>`+
-				`<button class=loginbtn onclick="otherWikisWindow(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('guides09')}/button><br><br>`+
+				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
+				`<button class=loginbtn onclick="openPortfolio(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
+				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId});profileSwitcherPhone(${jId})"${getTrans('searchCamps')}/button>`+
+				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId});profileSwitcherPhone(${jId})"${getTrans('searchShows')}/button>`+
+				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId});profileSwitcherPhone(${jId})"${getTrans('searchPeres')}/button>`+
+				`<button class=loginbtn onclick="otherWikisWindow(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('guides09')}/button>`+
 				`<br><button class=loginbtn onclick="${backButton}"${getTrans('back')}/button>`+
 			`</div>`+
 			`<div class=profileMobileRightWindow id="profileWindow" align="left">`+
@@ -2214,17 +2238,17 @@ swtichRemove = (jId, name) => {
 },
 
 switchLangMenu = jId => {
-    let J = Jexec(jId);
-    // makeSwticher(jId, 0,'switchHtmlLang2', switchLangMenu(jId), 'switchHtmlLang', 'switchLangMenu')
-    let preLang = '';
-    langList.forEach(lang=>{
-		preLang += 
-		`<button onclick="_.lang.replace('${lang}').then(e=>doLangSetup(e));pushNewLang('${lang}');makeSwticher(${jId},1,'switchHtmlLang2')" style="width:40px;margin:2px" class="emptybtn">`+
-			`<img src="${helperUrl}imgs/${lang}.png" width=40px style="padding-bottom:6px">`+
+	let J = Jexec(jId);
+	let preLang = '';
+	langList.forEach(lang => {
+		const [name, bcp] = langNames[lang];
+		preLang +=
+			`<button lang="${bcp}" onclick="_.lang.replace('${lang}').then(e=>doLangSetup(e));pushNewLang('${lang}');makeSwticher(${jId},1,'switchHtmlLang2')" class="loginbtnMini" style="display:block;width:100%;text-align:left;padding:4px 8px;white-space:nowrap">` +
+			name +
 		`</button>`;
 	});
-    return `<div id=switchHtmlLang2 style="position:absolute;top:0px;left:48px;padding:8px;border:solid var(--color-black) 3px;border-radius:var(--def-border-small);background-color:rgba(255,255,255,.1);">`+
-		preLang+
+	return `<div id=switchHtmlLang2 style="position:absolute;top:0px;left:48px;padding:8px;border:solid var(--color-black) 3px;border-radius:var(--def-border-small);background-color:rgba(255,255,255,.1);">` +
+		preLang +
 	`</div>`;
 };
 // #endregion
@@ -3129,15 +3153,29 @@ renderComms = (jId, parsedData, channel = 0, dataForNextButton = '') => {
 		return `<h1${getTrans('commsNone')}/h1>`;
     return htmlFull;
 },
-renderWork = (jId, worksArray) => {
+renderWork = (jId, worksArray, itsMyWorks) => {
     let J = Jexec(jId);
-	let html = '';
+	let html = '',
+		renderMurder = returnAllProjects()
+			.filter(e => e.author === thisUser.ID)
+			.map(e => e.ID);
 
 	for (let ide in worksArray) {
 		let gdpsData = worksArray[ide];
 		if (Array.isArray(gdpsData) === false)
 			continue;
-		let workId = gdpsData[0],
+		let workId = gdpsData[0];
+
+		html +=
+		`<div id=w${workId} class=framegdpsOld style="width:calc(100% - 40px);">`+
+			workContent(jId, gdpsData, itsMyWorks, renderMurder.includes(parseInt(gdpsData[6])))+
+		`</div>`;
+	}
+	return html;
+},
+workContent = (jId, gdpsData, itsMyWorks, renderMurder = false) => {
+    let J = Jexec(jId),
+			workId = gdpsData[0],
 			GdpsTitle = gdpsData[1],
 			GdpsChannel = gdpsData[2],
 			WorkTitle = gdpsData[3],
@@ -3148,25 +3186,33 @@ renderWork = (jId, worksArray) => {
 			Date = gdpsData[8],
 	
 			joinBtn = '',
-			style = 'class=loginbtn style=display:inline-block';
+			editBtn = '',
+			style = 'class=loginbtn style=display:inline-block',
+			AlexanderPlatz = '';
+
 		if (GdpsTitle === 0)
 			joinBtn = `<a ${style} href="${LinkOrGdpsId}"${getTrans('moreInfo')}/a>`;
 		else
 			joinBtn = `<a ${style} onclick="get${GDPSswitchChannel(GdpsChannel)[1]}(openJail(),${LinkOrGdpsId});event.preventDefault()">${GdpsTitle}</a>`;
 
-		if (OwnerChecked)
-			joinBtn += `!!!!`;
+		if (itsMyWorks)
+			editBtn = basicButton('>?<', `editWork(${jId},${workId})`) + 
+			imageButton(`${helperUrl}imgs/trash.svg`, `deleteWork(${jId},${workId})`, `position:absolute;top:7px;right:7px`);
+		else if (renderMurder)
+			editBtn = basicButton('>=<', `verifyWork(${jId},${workId})`); 
 
-		html +=
-		`<div class=framegdpsOld style="width:calc(100% - 40px);">`+
-			`<h2>${WorkTitle}</h2>`+
-			`<p style=margin:0>${timeAgo(Date)}</p>`+
-			`<div style=min-height:64px>`+
-				`${Markdown(jId, Text)}`+
-				joinBtn+
-			`</div>`+
-		`</div>`;
-	}
+		if (OwnerChecked)
+			AlexanderPlatz += `!!!!`;
+
+	let html =
+	`<h2>${WorkTitle}</h2>`+
+	`<p style=margin:0>${timeAgo(Date)}</p>`+
+	`<div style=min-height:64px>`+
+		`${Markdown(jId, Text)}`+
+		editBtn+
+		joinBtn+
+		`<span id=WO${workId}>${AlexanderPlatz}</span>`+
+	`</div>`;
 	return html;
 },
 timeAgo = (timestamp)=>{
@@ -3315,7 +3361,6 @@ enterFormData = (jId, form, sendPlace) => {
     let J = Jexec(jId);
     let FORMDATA = new FormData(form);
     params = '';
-
     switch (sendPlace) {
 		case sData[1]+'newsPost'+php:
 			let gdpsId = FORMDATA.get('gdps'),
@@ -3336,7 +3381,6 @@ enterFormData = (jId, form, sendPlace) => {
     //	params = new URLSearchParams(FORMDATA).toString();
     //else 
     params = FORMDATA;
-
     Loading();
     _.http.req('POST', sendPlace, params)
 	.then(data=>{
@@ -3397,6 +3441,23 @@ enterFormData = (jId, form, sendPlace) => {
 						_.wins[el.id].close();
 					globalVacs(jId);
 				}
+				break;
+			case `${sData[5]}workAdd${php}`:
+				parsedData = JSON.parse(data),
+					html = renderWork(jId, [parsedData], true);
+				innerGdpsPlace(jId, html, 511)
+				let workBtn = J.id('addWorkBtn')
+				if (workBtn) {
+					workBtn.insertAdjacentHTML('afterend', defWorkAdd(jId));
+					workBtn.remove();
+				}
+				break;
+			case `${sData[5]}workEdit${php}`:
+				parsedData = JSON.parse(data),
+					html = workContent(jId, parsedData, true);
+				let workTab = J.id(`w${parsedData[0]}`)
+				if (workTab)
+					workTab.innerHTML = html;
 				break;
 			default:
 				if (data == '-1')
@@ -3459,6 +3520,26 @@ returnAllWikies = ()=>{
 	for (let wikiId in yourWikies)
 		AllWikies.push(yourWikies[wikiId]);
 	return AllWikies;
+},
+verifyWork = (jId, workId) => {
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('POST', `${sData[5]}workVerify${php}?id=${workId}`)
+		.then(data => {
+			Loading(1);
+			let checked = parseInt(data);
+			if (checked >= 0) {
+				let el = J.id(`WO${workId}`);
+				if (el) {
+					if (checked === 0) el.textContent = '';
+					if (checked === 1) el.textContent = '!!!!';
+					return;
+				}
+				throw 'Cant find work element!';
+			}
+			throw data;
+		})
+		.catch(e => {console.error(e);_.err.handleRejection(e)});
 },
 
 // #endregion
@@ -3784,13 +3865,19 @@ openPortfolio = (jId, userId, itsMyWorks = false) => {
     _.http.req('GET', `${sData[5]}works${php}?id=${userId}`)
 	.then(data=>{
 		let serverResp = JSON.parse(data),
-			userData = serverResp[0];
-		J.link.set('profiles/portfolio/'+userId, userData.username);
+			userData = serverResp[0],
+			addButton = '';
+		if (itsMyWorks) {
+			J.link.set('profile/portfolio');
+			addButton = defWorkAdd(jId);
+		} else
+			J.link.set('profiles/portfolio='+userId, userData.username);
 		let works = renderWork(jId, serverResp, itsMyWorks),
 			html = 
 		`<div id=helperContentProfile>`+
 			`<h1><span${getTrans('portfolio')}/span> ${userData.username}</h1>`+
 			Markdown(jId, userData.resume)+
+			addButton+
 			profileContentDiv(jId)+
 				works+
 			`</div>`+
