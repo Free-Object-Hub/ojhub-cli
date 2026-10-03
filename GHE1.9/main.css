@@ -1,3 +1,13 @@
+:root {
+	--color-main: rgb(157,97,42);
+	--color-light: rgb(255,134,0);
+	--color-weekly: rgb(189,99,0);
+	--color-weekly-alpha: rgba(189,99,0,.6);
+	--color-black: rgb(29,28,22);
+	--color-black-alpha: rgba(29,28,22,.6);
+	--color-bg: rgb(12,12,3);
+}
+
 body {
     background-repeat: no-repeat;
     background-attachment: fixed;

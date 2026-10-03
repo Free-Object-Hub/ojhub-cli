@@ -242,14 +242,14 @@ reStart = (drop = 0, errorId = 0)=>{
         .then((data)=>{
             Loading(1);
             let serverResp = JSON.parse(data);
-            CacheGDPSes = serverResp[1];
-            CacheGuides = serverResp[2];
+            CacheGDPSes = serverResp[2];
+            CacheGuides = [];
             if (postData !== '') {
                 thisUser = serverResp[0];
                 myGdpses = [];
                 myguides = [];
-                myGdpses.push(serverResp[3][0]);
-                myguides.push(serverResp[3][1]);
+                myGdpses.push(serverResp[1][0]);
+                myguides.push(serverResp[1][1]);
             }
             if (window.location.search === '')
                 getLink();
@@ -335,6 +335,7 @@ helperContent = (type, id, otherData = 0)=>{
         backFunc = '';
     switch (type) {
         case 'gdps':
+			type = 'camp';
             lastUsed3 = "helperContent('gdps',"+id+")";
             backFunc = 'pageList())';
             setLink('gdps='+id);
@@ -360,6 +361,8 @@ helperContent = (type, id, otherData = 0)=>{
                 megaAlert('CONTENTISNULL');
                 return;
             }
+			if (type == 'camp')
+				type = 'gdps';
             let dataForNextButton = `${id},'${type}',1`;
 
             Loading(1);
@@ -373,7 +376,8 @@ helperContent = (type, id, otherData = 0)=>{
                         html = GDPSrender(serverResp);
                     innerComments(renderComms(serverResp.comments,3,dataForNextButton), 0);
                     getElement('news').innerHTML = RenderNews(serverResp.news,0,'mini');
-                    renderStat(serverResp.gdpsstat);
+					//выключаем т.к. статистики нет уже 3 года
+                    //renderStat(serverResp.gdpsstat);
                     break;
                 case 'newsC':
                     html = RenderNews(serverResp.gdps,1);
@@ -1920,7 +1924,24 @@ GDPSrenderMini = (parsedData, joinData = '')=>{
         Count++;
         if (Count == 9)
             return html;
-        
+
+		// Object Hub Compat
+        gdpsData = parsedData[Id];
+        id = gdpsData.ID;
+        gdpsTitle = gdpsData.title;
+        description = gdpsData.text;
+        Tags = JSON.parse(gdpsData.tags);
+        os = JSON.parse(gdpsData.os);
+        likesCount = gdpsData.likes;
+        userId = gdpsData.author;
+        username = gdpsData.username;
+        pictureLink = gdpsData.img;
+        renderJoinLink = true;
+        isWeekly = 0;
+        gdpsLang = 'RU';
+        tagsOs =   '';
+
+		/*
         gdpsData = parsedData[Id];
         id = gdpsData[0];
         gdpsTitle = gdpsData[1];
@@ -1935,6 +1956,7 @@ GDPSrenderMini = (parsedData, joinData = '')=>{
         isWeekly = gdpsData[10];
         gdpsLang = gdpsData[13];
         tagsOs =   '';
+		*/
 
         renderJoinLink = renderJoinLink ? '' : `<a class="loginbtnGDPS" data-trans="joinToGdps" href="join${sData[6]}?id=${id}${joinData}" target=_blank>${getTrans('joinToGdps')}</a>`;
 
@@ -2009,6 +2031,22 @@ closeWindow = (windowId)=>{
 GDPSrender = (parsedData, joinData = '')=>{
     let html = '',
 
+		// Object Hub compat
+        gdpsData = parsedData.gdps,
+        id = gdpsData.ID,
+        gdpsTitle = gdpsData.title,
+        description = gdpsData.text,
+        Tags = JSON.parse(gdpsData.tags)
+        os = JSON.parse(gdpsData.os),
+        likesCount = gdpsData.likes,
+        userId = gdpsData.author,
+        username = gdpsData.username,
+        pictureLink = gdpsData.img,
+        renderJoinLink = true,
+        serverStatus = 0 
+        tagsOs =   '';
+
+		/*
         gdpsData = parsedData.gdps,
         id = gdpsData[0],
         gdpsTitle = gdpsData[1],
@@ -2022,6 +2060,7 @@ GDPSrender = (parsedData, joinData = '')=>{
         renderJoinLink = gdpsData[9],
         serverStatus = gdpsData[10],
         tagsOs =   '';
+		*/
 
     Tags.forEach((tag)=>{
         tagsOs += `<div class="tag" data-trans="${toStringGDPS(tag)}">${getTrans(toStringGDPS(tag))}</div>`;
@@ -2223,7 +2262,7 @@ RenderNews = (data, isComm = 0, innerGdpsRendered = 'mega')=>{
         newsText = gdpsData[2];
         userId = gdpsData[3];
         username = gdpsData[4];
-        gdpsId = gdpsData[5];
+        gdpsId = gdpsData[5].slice(1); // Object Hub compat
         gdpsTitle = gdpsData[6];
         date = gdpsData[7];
         likesCount = gdpsData[8];
