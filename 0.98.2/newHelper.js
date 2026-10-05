@@ -466,6 +466,13 @@ Intl.newHelper=function(_='_') {
 		// переделать main на мапу т.к. внутреннее api?
 		// или сохранить оригинальное api на объекте
 		main: {},
+		/*
+		 * Реестр композиторов
+		 *
+		 * ДА! в newHelper lang теперь можно форматировать выходной текст как вам надо!
+		 * Например в object hub я использую самописный Markdown парсер
+		 */
+		regedit: [],
 	
 		load: name => fetch(window[_].lang.addr + name + '.json')
 			.then(r => r.text()),
@@ -488,11 +495,26 @@ Intl.newHelper=function(_='_') {
 					el.src = text;
 				else if (['INPUT','TEXTAREA'].includes(tag))
 					el[ el.type === 'submit' ? 'value' : 'placeholder' ] = text;
-				else
-					el.innerHTML = text;
+				else {
+					let c = el.getAttribute(window[_].lang.composer);
+					el.innerHTML = c ? window[_].lang.compose(c, text) : text;
+				}
 			}
 			// возвращаем для последующей обработки пакета, например для сохранения в window[_].storage
 			return packet;
+		},
+		compose(src, text) {
+			const m = /^\[(\d+)\]\((.*)\)$/.exec(src),
+				f = m && window[_].lang.regedit[m[1]];
+			if (typeof f !== 'function')
+				return console.warn(`${_}.lang> composer ${src} is not registered`) || text;
+			try {
+				return f(...m[2].split(',').map(a =>
+					a === 'this' ? text : (a !== '' && !isNaN(a) ? +a : a)));
+			} catch (e) {
+				console.warn(`${_}.lang> composer ${src} threw`, e);
+				return text;
+			}
 		},
 	
 		/*
@@ -507,6 +529,7 @@ Intl.newHelper=function(_='_') {
 		 * !!!: если ключа в пакете нету, будет выброшен warning
 		 */
 		attr:       ` data-trans`,
+		composer:       ` data-trans-compose`,
 		from:		i=>window[_].lang.main[i] || console.warn(`${_}.lang> ${i} is undefined`) || i,
 	
 		text:		i=>window[_].lang.attr+`="${i}">${window[_].lang.from(i)}<`,

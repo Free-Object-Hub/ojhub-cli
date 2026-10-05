@@ -497,5 +497,32 @@
   "WINDOW-removeDevice":"Удаление устройства",
   "WINDOW-FORUMpost":"Новый пост",
   "WINDOW-listcommands":"Список команд",
-  "WINDOW-guidSettings":"Настройки страницы"
+  "WINDOW-guidSettings":"Настройки страницы",
+
+  "aboutSubtitle": "Авторская платформа для object show креаторов",
+
+  "aboutStoryTitle": "Как это началось",
+  "aboutStoryP1": "Всё началось в 2023 году с GDPS Helper: сайт писался на Athlon 64 X2 под Windows XP. Железо было слабым, поэтому сайт с самого начала должен был быть быстрым",
+  "aboutStoryP2": "Со временем из него вырос GHE, наш собственный движок, и Object Hub. Та же самая среда разработки никуда не делась",
+  "aboutStoryScreenshotAlt": "Тут должна быть картинка но мы её проглотили",
+
+  "aboutSpeedTitle": "Быстро",
+  "aboutSpeedFpsValue": "75 FPS",
+  "aboutSpeedFpsLabel": "на компьютерах середины нулевых",
+  "aboutSpeedCostValue": "$80 в год",
+  "aboutSpeedCostLabel": "стоит сервер",
+  "aboutSpeedRequestsValue": "~1 запрос",
+  "aboutSpeedRequestsLabel": "на действие, 900–4500 байт",
+
+  "aboutOpenText1": "Наш исходный код публичен, любой может внести правку",
+  "aboutOpenText2": "Если хотите, можете сделать PR в наши основные репозитории",
+
+  "aboutHonestTitle": "Честно",
+  "aboutHonestText": "Никаких cookies, никакой рекламы и никакой персональной ленты, любая старая версия клиента остаётся доступной",
+  "aboutHonestTos": "Условия",
+  "aboutHonestPp": "Конфиденциальность",
+  "aboutHonestLoader": "Загрузчик версий",
+
+  "aboutTeamTitle": "Кто делает",
+  "aboutTeamText": "MIOBOMB - Главный мейнтейнер<br>DenisC - автор GDPS Helper 0.9 и некоторых компонентов GHE<br>Шаре - Главный дизайнер"
 }

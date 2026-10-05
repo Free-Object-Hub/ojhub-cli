@@ -1872,7 +1872,7 @@ profilePage = (jId, innerHtnl = gProfileMini(jId)) => {
 			`</button>`+
 			`<div id="phoneSelector" class=contentAdaptiveBig style="position:absolute;top:15px;width:235px" align="left">`+
 				`<button class=loginbtn onclick="innerProfile(${jId},gProfileMini(${jId}))"${getTrans('profile')}/button><br>`+
-				`<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true))"${getTrans('profile')}/button><br>`+
+				(renderBeta ? `<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true))"${getTrans('profile')}/button><br>` : '')+
 				`<button class=loginbtn onclick="alarmsWindow(${jId});GetAlarms(${jId})" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
 				`</button><br>`+
@@ -1884,7 +1884,7 @@ profilePage = (jId, innerHtnl = gProfileMini(jId)) => {
 			`</div>`+
 			`<div id="phoneSelectorSmall" class=contentAdaptiveSmall style=display:none>`+
 				`<button class=loginbtn onclick="innerProfile(${jId},gProfileMini(${jId}));profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
-				`<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true));profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
+				(renderBeta ? `<button class=loginbtn onclick="innerProfile(${jId},openPortfolio(${jId},${thisUser.ID},true));profileSwitcherPhone(${jId})"${getTrans('profile')}/button>` : '')+
 				`<button class=loginbtn onclick="alarmsWindow(${jId});profileSwitcherPhone(${jId});GetAlarms(${jId})" style=position:relative${getTrans('Alarms', 'textBtn')}`+
 				(thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')+
 				`</button>`+

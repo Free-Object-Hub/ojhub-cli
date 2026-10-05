@@ -1537,28 +1537,28 @@ pHeader = jId => {
 	`</div>`;
     return html;
 },
+mainPlate = (jId, h1, p, btns, img) => {
+	let J = Jexec(jId);
+	let text = [];
+	if (!Array.isArray(p))
+		text = `<p${getTrans(p)}/p>`;
+	else {
+		p.forEach(el=>{
+			text.push(`<p${getTrans(el)}/p>`);
+		})
+		text = text.join('');
+	}
+	return `<div class=mainPlate style=width:330px;height:400px>`+
+				`<h2 style="margin:6px 0 6px 0"${getTrans(h1)}/h2>`+
+				text+
+				`<div class=absolute style=bottom:8px;z-index:1>`+
+					(img === '' ? '' : `<img style=margin:0 src="${helperUrl}imgs/${img}" width="144px"><br>`)+
+					btns+
+				`</div>`+
+			`</div>`;
+},
 pageMain = (jId, localIgnore = false) => {
     let J = Jexec(jId);
-    let mainPlate = (jId, h1, p, btns, img) => {
-        let J = Jexec(jId);
-        let text = [];
-        if (!Array.isArray(p))
-			text = `<p${getTrans(p)}/p>`;
-		else {
-			p.forEach(el=>{
-				text.push(`<p${getTrans(el)}/p>`);
-			})
-			text = text.join('');
-		}
-        return `<div class=mainPlate style=width:330px;height:400px>`+
-					`<h2 style="margin:6px 0 6px 0"${getTrans(h1)}/h2>`+
-					text+
-					`<div class=absolute style=bottom:8px;z-index:1>`+
-						`<img style=margin:0 src="${helperUrl}imgs/${img}" width="144px"><br>`+
-						btns+
-					`</div>`+
-				`</div>`;
-    }
     if (!localIgnore)
 		J.link.set('');
 	let gdpses = '',
@@ -1884,25 +1884,65 @@ uvazuha = jId => {
 	`</div>`;
     return html;
 },
-helperAbout = jId => {
-    let J = Jexec(jId);
-    J.link.set('about');
-    let html = pHeader(jId)+
-	`<div id=helperContent>`+
-		`<div class=frameprofile style=text-align:left>`+
-			`<h1${getTrans('aboutHelper')}/h1>`+
-			`<h2${getTrans('history01')}/h2>`+
-			`<p${getTrans('history02')}/p>`+
-			`<p${getTrans('history03')}/p>`+
-			`<button class=loginbtn onclick="innerMain(${jId},uvazuha(${jId}))"${getTrans('HLthanks')}/button>`+
-			`<h2${getTrans('helperSocials')}/h2>`+
-			`<a class=loginbtn href="https://t.me/objecthub" target=_blank${getTrans('helperTg')}/a> `+
-			`<a class=loginbtn href="https://discord.gg/zetb62mqsS" target=_blank${getTrans('helperDs')}/a> `+
-			basicButton(getTrans('news'),`helperNews(${jId},'117/',${thisUser.role})`)+
+helperAbout = (jId) => {
+	let J = Jexec(jId);
+	let stat = (v, l) =>
+		`<h3 style="margin:16px 0 0 0"${getTrans(v)}/h3>`+
+		`<p style=margin:0${getTrans(l)}/p>`;
+	J.link.set('about');
+	return pHeader(jId)+
+	`<div id=helperContent align=center>`+
+        `<div class=contentAdaptiveFlexSmall align=center style=align-items:center;justify-content:center>`+
+			emptyButton(`><img alt="object hub logo" src=${helperUrl}imgs/hubbig.png width=192px height=192px><`, `loadCustomCss(scritpsUrl + '/motif.css')`, 'width:192px;height:192px')+
+			`<h1${getTrans('ojhubname')}/h1>`+
+		`</div>`+
+        `<div class=contentAdaptiveSmall align=center>`+
+			emptyButton(`><img alt="object hub logo" src=${helperUrl}imgs/hubbig.png width=128px height=128px><`, `loadCustomCss(scritpsUrl + '/motif.css')`, 'width:128px;height:128px')+
+			`<h1${getTrans('ojhubname')}/h1>`+
+		`</div>`+
+		`<h3${getTrans('aboutSubtitle')}/h3>`+
+		`<p${getTrans('aboutOpenText1')}/p>`+
+		`<div align=center style=display:flex;justify-content:center>`+
+			`<a target=_blank class=loginbtn href=https://github.com/Free-Object-Hub/>`+
+				`GitHub`+
+			`</a>`+
+			basicButton('>DEV PANEL<', 'debugWindow()')+
+			basicButton('>FPS Counter<', '_.lazy.load(scritpsUrl + `/fps.js`)')+
+		`</div>`+
+		`<p${getTrans('aboutOpenText2')}/p>`+
+
+		`<div class=frameprofile style="width:100%;margin:6px 0;display:flex;flex-wrap:wrap;gap:24px;align-items:center;text-align:left">`+
+			`<div style=flex:1;min-width:300px>`+
+				`<h2 style="margin:6px 0 6px 0"${getTrans('aboutStoryTitle')}/h2>`+
+				`<p${getTrans('aboutStoryP1')}/p>`+
+				`<p${getTrans('aboutStoryP2')}/p>`+
 			`</div>`+
+			`<img src="${helperUrl}imgs/about-wiki.webp" alt="${getTrans('aboutStoryScreenshotAlt',0)}" style="flex:1;min-width:300px;max-width:100%;border-radius:8px">`+
+		`</div>`+
+
+		`<div style=display:flex;flex-wrap:wrap;justify-content:center>`+
+			`<div class=mainPlate style=width:330px;height:400px>`+
+				`<h2 style="margin:6px 0 6px 0"${getTrans('aboutSpeedTitle')}/h2>`+
+				stat('aboutSpeedFpsValue', 'aboutSpeedFpsLabel')+
+				stat('aboutSpeedCostValue', 'aboutSpeedCostLabel')+
+				stat('aboutSpeedRequestsValue', 'aboutSpeedRequestsLabel')+
+			`</div>`+
+			mainPlate(jId,
+				'aboutHonestTitle',
+				'aboutHonestText',
+				basicButton(getTrans('aboutHonestTos'), `window.open('/cli/tos.txt','_blank')`)+
+				basicButton(getTrans('aboutHonestPp'), `window.open('/cli/pp.txt','_blank')`)+
+				basicButton(getTrans('aboutHonestLoader'), `versionLoaderPage(${jId})`),
+				''
+			)+
+			mainPlate(jId,
+				'aboutTeamTitle',
+				'aboutTeamText',
+				'',
+				''
+			)+
 		`</div>`+
 	`</div>`;
-    return html;
 },
 helperNews = (jId, gdpsId, renderOwnButton = 0) => {
     let J = Jexec(jId);
@@ -1988,7 +2028,7 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 			`</button>`+
 			`<div id="phoneSelector" class=contentAdaptiveBig style="position:absolute;top:15px;width:235px" align="left">`+
 				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId})"${getTrans('profile')}/button><br>`+
-				`<button class=loginbtn onclick="openPortfolio(${jId},${userId})"${getTrans('profile')}/button><br>`+
+				(renderBeta ? `<button class=loginbtn onclick="openPortfolio(${jId},${userId})"${getTrans('profile')}/button><br>` : '')+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId})"${getTrans('searchCamps')}/button><br>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId})"${getTrans('searchShows')}/button><br>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId})"${getTrans('searchPeres')}/button><br>`+
@@ -1997,7 +2037,7 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 			`</div>`+
 			`<div id="phoneSelectorSmall" class=contentAdaptiveSmall style=display:none>`+
 				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
-				`<button class=loginbtn onclick="openPortfolio(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
+				(renderBeta ? `<button class=loginbtn onclick="openPortfolio(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button>` : '')+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId});profileSwitcherPhone(${jId})"${getTrans('searchCamps')}/button>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId});profileSwitcherPhone(${jId})"${getTrans('searchShows')}/button>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId});profileSwitcherPhone(${jId})"${getTrans('searchPeres')}/button>`+
@@ -3623,7 +3663,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 			if (li) {
 				tokens.push({
 					type: 'li',
-					ordered: /^\d+$/.test(li[1]),
+					ordered: /^\d/.test(li[1]),
 					text: li[2]
 				});
 				i++;
@@ -3639,7 +3679,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 			while (
 				i < lines.length &&
 				lines[i].trim() !== '' &&
-				! /^(#{1,5})\s|^(~~~|```)|^-{3,}$|^\>|^([*+\-]|\d+)\.\s/.test(lines[i])
+				! /^(#{1,5})\s|^(~~~|```)|^-{3,}$|^\>|^([*+\-]|\d+\.)\s/.test(lines[i])
 			) {
 				buf.push(lines[i]);
 				i++;
@@ -3768,7 +3808,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 						? argsStr.split('|').map(arg => arg.trim())
 						: [];
 					providedArgs = providedArgs.map(arg =>
-						MarkdownGen2(arg, depth + 1, counter)
+						Markdown(arg, depth + 1, counter)
 					);
 					return templateFunction(...providedArgs);
 				} catch (error) {

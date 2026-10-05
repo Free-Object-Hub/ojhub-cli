@@ -3,7 +3,9 @@
    Windows 95 / OpenMotif pastiche. Drop this AFTER the original
    stylesheet — it overrides colors, borders, radii and fonts while
    leaving layout (flex/grid/media queries) from the original intact.
-   ===================================================================== */
+   Author: Claude
+   Patches to GHE 2.X: MIOBOMB
+ w  ===================================================================== */
 
 :root {
 	/* classic Win95 gray desktop palette, remapped onto ojhub's vars */

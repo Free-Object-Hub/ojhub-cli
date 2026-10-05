@@ -299,7 +299,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 						? argsStr.split('|').map(arg => arg.trim())
 						: [];
 					providedArgs = providedArgs.map(arg =>
-						wikiTextGen2(arg, depth + 1, counter)
+						wikiText(arg, depth + 1, counter)
 					);
 					return templateFunction(...providedArgs);
 				} catch (error) {
