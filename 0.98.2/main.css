@@ -289,16 +289,6 @@ altcha-widget {
   will-change: transform;
   backface-visibility: hidden;
 }
-
-@keyframes textFly {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-20px);
-  }
-}
-
 .gdps-list{
 	display:block;
 }
@@ -558,11 +548,6 @@ transform: translateY(2px);
 	width: 100px;
 	height: 100px;
 	animation: 1s aniLoading infinite linear;
-}
-@keyframes aniLoading {
-	0%   {transform:rotate(0deg)}
-	50%  {transform:rotate(180deg)}
-	100% {transform:rotate(360deg)}
 }
 
 .tagUns {
@@ -958,4 +943,48 @@ input:checked + .tagUns {
 		width: min(100%, 900px);
 		margin: 0 auto;
 	}
+
+	.winbtn {
+		transform: scale(1);
+		margin-right: 0;
+	}
+}
+
+.upperWindow {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	border-radius: var(--def-border-small);
+	border: solid var(--color-window) 1px;
+	z-index: 5;
+	max-width: 100vw;
+	max-height: 100vh;
+}
+
+.underWindow {
+	cursor: move;
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	width: 100%;
+	height: 20px;
+	border: solid var(--color-window) 2px;
+	border-top-left-radius: var(--def-border-small);
+	border-top-right-radius: var(--def-border-small);
+}
+
+.winbtn {
+	transform: scale(2);
+	margin-right: 4px;
+}
+
+.alerts {
+	z-index: 6;
+	position: fixed;
+	top: 78px;
+	right: 0;
+}
+
+.profileSwticher {
+	margin-left: var(--def-font);
 }

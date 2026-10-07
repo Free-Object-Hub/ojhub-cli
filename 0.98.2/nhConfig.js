@@ -93,7 +93,7 @@ if (!window.PointerEvent) {
 // КОНЕЦ БРАУЗЕРНЫХ ПОЛИФИЛЛОВ
 
 // 1.8 polyfill
-getTrans = (i,render='text')=>{
+getTrans = (i,render='text',compose=void 0)=>{
 	let text=_.lang.from(i),
 	dT=_.lang.attr,
 	m={
@@ -106,6 +106,11 @@ getTrans = (i,render='text')=>{
 	};
 	if (text== null || text== '')
 		text=i;
+	if (compose && (render==='text')) {
+		text=_.lang.compose(compose,text);
+		// я надеюсь вы будете писать в compose одиночные кавычки а не двойные
+		dT=` data-trans-compose="${compose}"`+dT;
+	}
 	let f=m[render] || (e=>{});
 	return f(dT,text) || text;
 };
@@ -1004,3 +1009,9 @@ function loadCustomCss(url, ...args) {
 	state[key] = promise;
 	return promise;
 }
+
+// "легкий режим" который на самом деле просто отрубает все анимации - этого достаточно
+if (!_.link.compile().includes('easyCss'))
+	loadCustomCss(scritpsUrl + '/window.css?ver=' + scrLoadVer);
+else 
+	_.fade = (elem, anim, actAfter = ()=>{}) => actAfter();
