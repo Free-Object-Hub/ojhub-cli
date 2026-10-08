@@ -1,0 +1,51 @@
+PRIVACY POLICY, Object Hub (objecthub.xyz)
+Version of 2026-10-09
+
+1. WHO WE ARE
+Object Hub (the "Site") is a non-commercial project for the Object Show community. It is run by an individual known as MIOBOMB (the "Operator"). Contact for anything related to your data: miobomb.real@gmail.com
+
+2. WHAT DATA WE COLLECT
+2.1. Account data: username, nickname, email address, password (stored only as a bcrypt hash), session token.
+2.2. Device data for the devices you sign in from: User-Agent string, IP address, country and city (derived from the IP via GeoIP), and technical device fingerprints (static and dynamic). These are used to bind a device to an account and to prevent abuse.
+2.3. Content you create: comments, likes, news, projects, vacancies, profile and portfolio (links, descriptions, resume, social links), poll votes, project subscriptions.
+2.4. Support messages. They are stored only on the Operator's own servers.
+2.5. Push notification subscriptions, if you enabled them.
+2.6. There are no ads, no analytics and no trackers on the Site. We do not build profiles for a personalized feed.
+2.7. The fact that you agreed to the Terms and this Policy at registration: the date and the version of the documents you accepted.
+
+3. COOKIES AND BROWSER STORAGE
+We do not use cookies for analytics or tracking. The only cookie is a functional one that stores your chosen client version (cli_ver). Your session token and interface settings are stored in your browser so the Site can work.
+
+4. HOW WE USE DATA
+To run accounts and Site features, protect against spam and attacks, moderate content, send notifications, answer support requests, and let the administration audit actions.
+
+5. THIRD PARTIES
+5.1. Telegram. Some user actions (new comments, creating or editing projects and news, etc.) are logged to a private Telegram chat of the Operator for auditing and guaranteed delivery of notifications to the administration. Mostly only the fact of the action is recorded; the texts of comments and news are sent in full. IP addresses are not sent there. These records are kept indefinitely.
+5.2. Browser push services (e.g. Google, Mozilla, Apple) deliver push notifications to your device if you enabled them.
+5.3. CDN. For now the anti-bot widget (ALTCHA) may be loaded from the jsdelivr CDN, which can see your IP address.
+5.4. A third-party email service may be added in the future; this policy will be updated.
+5.5. We do not sell your data and do not share it with advertisers.
+5.6. Contacts you choose to put in your profile, portfolio or vacancy applications are visible to other users and project authors. Share only what you are comfortable sharing.
+
+6. WHERE DATA IS STORED
+The Site's server is located in Iceland. The Operator is located in Russia. By using the Site you acknowledge that your data is processed in these countries.
+
+7. RETENTION AND DELETION
+7.1. Account data is kept as long as the account exists.
+7.2. Full account deletion is not implemented yet. On request to miobomb.real@gmail.com we will anonymize your account: your email and password are erased and all linked devices are removed. Content you published (comments, news, projects) stays on the Site, no longer tied to your email.
+7.3. Poll data: after a poll ends (at most 1 year), only the final aggregate results remain and the table of individual votes is deleted.
+7.4. There is no data export feature yet.
+
+8. SECURITY
+Passwords are stored as hashes, and failed sign-ins are delayed to slow brute force. No system is perfectly secure; do not reuse on the Site a password you use elsewhere.
+
+9. CHILDREN
+9.1. The Site is not intended for people under 13. If you are under 13, do not use the Site.
+9.2. If you are a parent or legal guardian and learn that a child under 13 has registered, write to miobomb.real@gmail.com and we will delete or anonymize the account. We will do the same if we learn about such an account ourselves.
+9.3. If you are under 18, we recommend not putting personal contact details in your profile or vacancy applications and telling your parents about any collaboration through the Site.
+
+10. CHANGES
+This policy may change. The current version is always available on the Site; its date is shown at the top.
+
+11. CONTACT
+miobomb.real@gmail.com, or the "Write to support" form in your profile dashboard.

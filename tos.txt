@@ -1,0 +1,50 @@
+TERMS OF SERVICE, Object Hub (objecthub.xyz)
+Version of 2026-10-09
+
+1. GENERAL
+1.1. Object Hub (the "Site") is a free, non-commercial project for the Object Show community: a project catalog, wiki, news, vacancies, portfolios and comments. It is run by MIOBOMB (the "Operator").
+1.2. By using the Site or registering, you accept these Terms and the Privacy Policy. If you do not agree, do not use the Site.
+1.3. The Site is in public beta. Features may change, break or disappear.
+
+2. ACCOUNT
+2.1. You must be at least 13 years old. By ticking the checkboxes at registration, you confirm that this is true and that you accept the Terms and the Privacy Policy.
+2.2. You are responsible for keeping your password safe and for all actions under your account. One person, one account, unless agreed otherwise.
+2.3. Provide a valid email address: it is needed for contact and recovery.
+
+3. YOUR CONTENT
+3.1. You keep the rights to your content (or they stay with the lawful rights holder).
+3.2. By publishing content you grant the Site a free, non-exclusive right to store, display and distribute it on the Site and in its notifications for as long as it is published.
+3.3. Publish only what you have the right to publish. Translations and comics only with the rights holder's permission or under their terms.
+3.4. You are responsible for your content and links.
+
+4. PROHIBITED
+Breaking the law; posting others' material without rights; insults, harassment, threats; spam, vote or activity manipulation, bypassing limits; malware and hacking attempts; impersonating others; falsely claiming participation in projects; publishing other people's personal data without consent; sexual content involving minors and any other content prohibited by law.
+
+5. PORTFOLIOS AND VACANCIES
+5.1. A portfolio entry may link to a catalog project. The project owner may confirm that the author took part in the project, and may later revoke that confirmation.
+5.2. A confirmation is only a mark made by the project owner. The Operator does not verify claimed experience.
+5.3. Vacancies are posted by project authors themselves. The Operator is not a party to any arrangement between authors and applicants and is not responsible for them.
+5.4. If you are under 18 and agree to work together through the Site, we recommend informing your parents or legal guardians. Project authors should not ask minors for personal data, documents or payments, and any agreements involving money should be made only with the involvement of legal guardians. The Operator is not a party to such agreements.
+
+6. MODERATION AND REPORTS
+6.1. The Operator may remove content, hide projects, and restrict or ban accounts without notice if the Terms are believed to be violated.
+6.2. To report content, an infringement or an account, write to miobomb.real@gmail.com or use the support form in your profile. Include a link and a description. Rights holders should attach proof of rights.
+
+7. NO WARRANTY
+The Site is provided "as is", without warranties of availability, data preservation or fitness for any purpose. Backups of your content are not guaranteed.
+
+8. LIMITATION OF LIABILITY
+To the extent permitted by law, the Operator is not liable for damages from using the Site, data loss, actions of other users, or the content of external links.
+
+9. TERMINATION
+You may stop using the Site at any time and request account anonymization (see the Privacy Policy). The Operator may terminate access for violations of the Terms.
+
+10. SOURCE CODE
+The Site's source code is open. Its license is defined separately in the project's repositories and does not affect these Terms.
+
+11. CHANGES AND LAW
+11.1. The Terms may change; the current version is published on the Site. Continuing to use the Site means you accept the changes.
+11.2. Disputes are resolved by negotiation and, failing that, under the law of the Russian Federation.
+
+12. CONTACT
+miobomb.real@gmail.com
