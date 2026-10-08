@@ -166,7 +166,7 @@ langNames = {
   CHN: ['简体中文',    'zh-Hans'], // упрощённый
 };
 helperStrVer = '0.98.2';
-currentLangVer = 15;
+currentLangVer = 16;
 helperBuildNum = 138;
 urlBuildNum = 133;
 scritpsUrl = '/cli/'+helperStrVer;
@@ -738,7 +738,7 @@ function createJail(rootElement, routerLinkInstance) {
 			return;
 		let J = Jexec(jId);
 		let addr = J.link.compile()[0];
-		if (!addr.startsWith('find') && !addr.startsWith('Wikis') && !addr.startsWith('vacs'))
+		if (!addr.startsWith('find') && !addr.startsWith('Wikis') && !addr.startsWith('vacs') && !addr.startsWith('wiki'))
 			return;
 		clearTimeout(J.TimeOut[0]);
 		J.TimeOut[0] = setTimeout(()=>{

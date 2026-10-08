@@ -78,7 +78,7 @@
 
   "Picture01":"(рекомендується картинка 256х256)",
   "Picture02":"(рекомендується картинка 720х300)",
-  "linkRequired":"Ви не обрали посилання!",
+  "descRequired":"Ви не обрали посилання!",
   "linkRequired":"Ви не додали опису!",
   "tagsRequired":"Ви не обрали усі теги!",
 
@@ -251,7 +251,7 @@
   "teleInput05":"https://discord.gg/gdps",
   "teleunckecked":"ТГК не перевірено",
   "telebanned":"ТГК забанено",
-  "didntBan":"Ваш ТГК не буде забанено",
+  "didntBan4":"Ваш ТГК не буде забанено",
   "searchTeles":"ТГ канали",
 
   "enableAlerts":"Увімкнути push-сповіщення",
@@ -496,5 +496,32 @@
   "WINDOW-removeDevice":"Видалення пристрою",
   "WINDOW-FORUMpost":"Новий пост",
   "WINDOW-listcommands":"Список команд",
-  "WINDOW-guidSettings":"Налаштування сторінки"
+  "WINDOW-guidSettings":"Налаштування сторінки",
+
+  "aboutSubtitle": "Авторська платформа для творців object show",
+
+  "aboutStoryTitle": "Як це починалося",
+  "aboutStoryP1": "Усе почалося 2023 року з GDPS Helper: сайт писався на Athlon 64 X2 під Windows XP. Залізо було слабким, тому сайт від самого початку мав бути швидким",
+  "aboutStoryP2": "З часом із нього виріс GHE, наш власний рушій, і Object Hub. Те саме середовище розробки нікуди не поділося",
+  "aboutStoryScreenshotAlt": "Тут мала бути картинка, але ми її проковтнули",
+
+  "aboutSpeedTitle": "Швидко",
+  "aboutSpeedFpsValue": "75 FPS",
+  "aboutSpeedFpsLabel": "на комп'ютерах середини нульових",
+  "aboutSpeedCostValue": "$80 на рік",
+  "aboutSpeedCostLabel": "коштує сервер",
+  "aboutSpeedRequestsValue": "~1 запит",
+  "aboutSpeedRequestsLabel": "на дію, 900–4500 байт",
+
+  "aboutOpenText1": "Наш вихідний код відкритий, будь-хто може внести правку",
+  "aboutOpenText2": "Якщо хочете, можете зробити PR у наші основні репозиторії",
+
+  "aboutHonestTitle": "Чесно",
+  "aboutHonestText": "Жодних cookies, жодної реклами й жодної персональної стрічки, будь-яка стара версія клієнта залишається доступною",
+  "aboutHonestTos": "Умови",
+  "aboutHonestPp": "Конфіденційність",
+  "aboutHonestLoader": "Завантажувач версій",
+
+  "aboutTeamTitle": "Хто це робить",
+  "aboutTeamText": "MIOBOMB - Головний мейнтейнер<br>DenisC - автор GDPS Helper 0.9 і деяких компонентів GHE<br>Шаре - Головний дизайнер"
 }

@@ -68,7 +68,7 @@
 
   "Picture01":"(imagen recomendada 256x256)",
   "Picture02":"(imagen recomendada 720x300)",
-  "linkRequired":"¡No has añadido una descripción!",
+  "descRequired":"¡No has añadido una descripción!",
   "linkRequired":"¡No has seleccionado ningún enlace!",
   "tagsRequired":"¡No has seleccionado todas las etiquetas!",
 
@@ -241,7 +241,7 @@
   "teleInput05":"https://discord.gg/gdps",
   "teleunckecked":"canal sin revisar",
   "telebanned":"canal baneado",
-  "didntBan":"Tu canal no será baneado",
+  "didntBan4":"Tu canal no será baneado",
   "searchTeles":"Canales de TG",
 
   "enableAlerts":"Activar notificaciones push",
@@ -497,5 +497,32 @@
   "WINDOW-removeDevice":"Eliminar dispositivo",
   "WINDOW-FORUMpost":"Nueva publicación",
   "WINDOW-listcommands":"Lista de comandos",
-  "WINDOW-guidSettings":"Ajustes de la página"
+  "WINDOW-guidSettings":"Ajustes de la página",
+
+  "aboutSubtitle": "Una plataforma de creadores para creadores de object show",
+
+  "aboutStoryTitle": "Cómo empezó",
+  "aboutStoryP1": "Todo comenzó en 2023 con GDPS Helper: el sitio se escribió en un Athlon 64 X2 con Windows XP. El hardware era débil, por eso el sitio debía ser rápido desde el principio",
+  "aboutStoryP2": "Con el tiempo, de ahí crecieron GHE, nuestro propio motor, y Object Hub. Ese mismo entorno de desarrollo sigue igual",
+  "aboutStoryScreenshotAlt": "Aquí debería haber una imagen, pero nos la tragamos",
+
+  "aboutSpeedTitle": "Rápido",
+  "aboutSpeedFpsValue": "75 FPS",
+  "aboutSpeedFpsLabel": "en ordenadores de mediados de los 2000",
+  "aboutSpeedCostValue": "$80 al año",
+  "aboutSpeedCostLabel": "cuesta el servidor",
+  "aboutSpeedRequestsValue": "~1 petición",
+  "aboutSpeedRequestsLabel": "por acción, 900–4500 bytes",
+
+  "aboutOpenText1": "Nuestro código fuente es público, cualquiera puede aportar un cambio",
+  "aboutOpenText2": "Si quieres, puedes hacer un PR a nuestros repositorios principales",
+
+  "aboutHonestTitle": "Honesto",
+  "aboutHonestText": "Sin cookies, sin publicidad y sin feed personalizado; cualquier versión antigua del cliente sigue disponible",
+  "aboutHonestTos": "Términos",
+  "aboutHonestPp": "Privacidad",
+  "aboutHonestLoader": "Cargador de versiones",
+
+  "aboutTeamTitle": "Quién lo hace",
+  "aboutTeamText": "MIOBOMB - Maintainer principal<br>DenisC - autor de GDPS Helper 0.9 y de algunos componentes de GHE<br>Share - Diseñador principal"
 }

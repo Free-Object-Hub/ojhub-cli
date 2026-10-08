@@ -9,6 +9,8 @@
     "yourProf":"Το προφίλ σας",
     "register":"Εγγραφή",
     "login":"Είσοδος",
+    "jumpToRegister": "Δεν έχετε λογαριασμό;",
+    "jumpToLogin": "Έχετε λογαριασμό;",
     "logout":"Έξοδος",
     "logout2":"Αποσύνδεση από τον λογαριασμό", 
     "dropPass":"Επαναφορά κωδικού πρόσβασης",
@@ -66,6 +68,7 @@
   
     "Picture01":"(συνιστάται εικόνα 256x256)",
     "Picture02":"(συνιστάται εικόνα 720x300)",
+    "descRequired": "Δεν έχετε προσθέσει περιγραφή!",
     "linkRequired":"Δεν έχετε επιλέξει συνδέσμους!",
     "tagsRequired":"Δεν έχετε επιλέξει όλες τις ετικέτες!",
   
@@ -238,7 +241,7 @@
     "teleInput05":"https://discord.gg/gdps",
     "teleunckecked":"Το κανάλι TG δεν έχει ελεγχθεί",
     "telebanned":"Το κανάλι TG έχει αποκλειστεί",
-    "didntBan":"Το κανάλι σας στο TG δεν θα αποκλειστεί",
+    "didntBan4":"Το κανάλι σας στο TG δεν θα αποκλειστεί",
     "searchTeles":"Κανάλια TG",
   
     "enableAlerts":"Ενεργοποίηση ειδοποιήσεων push",
@@ -494,6 +497,32 @@
     "WINDOW-removeDevice":"Διαγραφή συσκευής",
     "WINDOW-FORUMpost":"Νέα ανάρτηση",
     "WINDOW-listcommands":"Λίστα εντολών",
-    "WINDOW-guidSettings":"Ρυθμίσεις σελίδας"
-  }
-  
+    "WINDOW-guidSettings":"Ρυθμίσεις σελίδας",
+
+  "aboutSubtitle": "Πλατφόρμα δημιουργών για δημιουργούς object show",
+
+  "aboutStoryTitle": "Πώς ξεκίνησε",
+  "aboutStoryP1": "Όλα ξεκίνησαν το 2023 με το GDPS Helper: ο ιστότοπος γραφόταν σε Athlon 64 X2 με Windows XP. Το υλικό ήταν αδύναμο, γι' αυτό ο ιστότοπος έπρεπε να είναι γρήγορος από την αρχή",
+  "aboutStoryP2": "Με τον καιρό, από αυτόν αναπτύχθηκε το GHE, η δική μας μηχανή, και το Object Hub. Το ίδιο περιβάλλον ανάπτυξης δεν πήγε πουθενά",
+  "aboutStoryScreenshotAlt": "Εδώ θα έπρεπε να υπάρχει μια εικόνα, αλλά την καταπιούμε",
+
+  "aboutSpeedTitle": "Γρήγορο",
+  "aboutSpeedFpsValue": "75 FPS",
+  "aboutSpeedFpsLabel": "σε υπολογιστές των μέσων της δεκαετίας του 2000",
+  "aboutSpeedCostValue": "$80 τον χρόνο",
+  "aboutSpeedCostLabel": "κοστίζει ο διακομιστής",
+  "aboutSpeedRequestsValue": "~1 αίτημα",
+  "aboutSpeedRequestsLabel": "ανά ενέργεια, 900–4500 byte",
+
+  "aboutOpenText1": "Ο πηγαίος κώδικάς μας είναι δημόσιος, οποιοσδήποτε μπορεί να κάνει μια αλλαγή",
+  "aboutOpenText2": "Αν θέλετε, μπορείτε να κάνετε PR στα κύρια αποθετήριά μας",
+
+  "aboutHonestTitle": "Ειλικρινά",
+  "aboutHonestText": "Χωρίς cookies, χωρίς διαφημίσεις και χωρίς εξατομικευμένη ροή, οποιαδήποτε παλιά έκδοση του client παραμένει διαθέσιμη",
+  "aboutHonestTos": "Όροι",
+  "aboutHonestPp": "Απόρρητο",
+  "aboutHonestLoader": "Φορτωτής εκδόσεων",
+
+  "aboutTeamTitle": "Ποιοι το φτιάχνουν",
+  "aboutTeamText": "MIOBOMB - Κύριος συντηρητής<br>DenisC - δημιουργός του GDPS Helper 0.9 και ορισμένων στοιχείων του GHE<br>Share - Κύριος σχεδιαστής"
+}

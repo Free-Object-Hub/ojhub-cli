@@ -9,6 +9,8 @@
     "yourProf":"您的个人资料",
     "register":"注册",
     "login":"登录",
+    "jumpToRegister": "还没有账号？",
+    "jumpToLogin": "已有账号？",
     "logout":"退出",
     "logout2":"退出当前账号", 
     "dropPass":"重置密码",
@@ -66,6 +68,7 @@
   
     "Picture01":"（推荐使用256×256尺寸的图片）",
     "Picture02":"（推荐使用720×300尺寸的图片）",
+    "descRequired": "您未添加描述！",
     "linkRequired":"您未选择任何链接！",
     "tagsRequired":"您未完成所有标签的选择！",
   
@@ -196,21 +199,21 @@
     "didntBan3":"您的配音作品不会被封禁",
     "searchPeres":"配音作品列表",
   
-    "Weixintag1":"公开投稿箱",
-    "Weixintag2":"匿名投稿箱",
-    "Weixintag3":"公开社群",
-    "Weixintag4":"资讯类",
-    "Weixintag5":"个人向",
-    "Weixintag6":"创意类",
-    "Weixintag7":"档案类",
-    "Weixintag8":"特色项目",
-    "Weixintag9":"公众号矩阵",
-    "Weixintag10":"互推合作",
-    "Weixintag11":"盾牌发布器",
-    "Weixintag12":"不定期更新",
-    "Weixintag13":"每小时多条",
-    "Weixintag14":"每日多条",
-    "Weixintag15":"每日一条及更少",
+    "Teletag1":"公开投稿箱",
+    "Teletag2":"匿名投稿箱",
+    "Teletag3":"公开社群",
+    "Teletag4":"资讯类",
+    "Teletag5":"个人向",
+    "Teletag6":"创意类",
+    "Teletag7":"档案类",
+    "Teletag8":"特色项目",
+    "Teletag9":"公众号矩阵",
+    "Teletag10":"互推合作",
+    "Teletag11":"盾牌发布器",
+    "Teletag12":"不定期更新",
+    "Teletag13":"每小时多条",
+    "Teletag14":"每日多条",
+    "Teletag15":"每日一条及更少",
     "tags03":"频道内容属性",
     "os03":"发布频率",
   
@@ -238,7 +241,7 @@
     "teleInput05":"https://discord.gg/gdps",
     "teleunckecked":"哔哩哔哩未审核",
     "telebanned":"哔哩哔哩已封禁",
-    "didntBan":"Ваш 哔哩哔哩不会被封禁",
+    "didntBan4":"哔哩哔哩不会被封禁",
     "searchTeles":"哔哩哔哩列表",
   
     "enableAlerts":"开启推送通知",
@@ -494,6 +497,33 @@
     "WINDOW-removeDevice":"删除设备",
     "WINDOW-FORUMpost":"新帖子",
     "WINDOW-listcommands":"命令列表",
-    "WINDOW-guidSettings":"页面设置"
-  }
+    "WINDOW-guidSettings":"页面设置",
+
+  "aboutSubtitle": "面向物品秀创作者的创作者平台",
+
+  "aboutStoryTitle": "起源故事",
+  "aboutStoryP1": "一切始于2023年的 GDPS Helper：网站是在 Windows XP 系统下的 Athlon 64 X2 上编写的。硬件性能有限，所以网站从一开始就必须足够快",
+  "aboutStoryP2": "随着时间推移，它演变成了 GHE——我们自研的引擎，以及 Object Hub。同样的开发环境一直沿用至今",
+  "aboutStoryScreenshotAlt": "这里本该有一张图片，但我们把它吞了",
+
+  "aboutSpeedTitle": "极速",
+  "aboutSpeedFpsValue": "75 FPS",
+  "aboutSpeedFpsLabel": "在2000年代中期的电脑上",
+  "aboutSpeedCostValue": "每年 $80",
+  "aboutSpeedCostLabel": "服务器成本",
+  "aboutSpeedRequestsValue": "约 1 次请求",
+  "aboutSpeedRequestsLabel": "每次操作，900–4500 字节",
+
+  "aboutOpenText1": "我们的源代码公开，任何人都可以提交修改",
+  "aboutOpenText2": "如果愿意，可以向我们的主要仓库提交 PR",
+
+  "aboutHonestTitle": "坦诚",
+  "aboutHonestText": "无 cookies、无广告、无个性化推荐流，任何旧版客户端都保持可用",
+  "aboutHonestTos": "使用条款",
+  "aboutHonestPp": "隐私政策",
+  "aboutHonestLoader": "版本加载器",
+
+  "aboutTeamTitle": "开发团队",
+  "aboutTeamText": "MIOBOMB - 首席维护者<br>DenisC - GDPS Helper 0.9 及部分 GHE 组件的作者<br>Шаре - 首席设计师"
+}
   
