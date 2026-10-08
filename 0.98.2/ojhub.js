@@ -2122,7 +2122,7 @@ loginPage = ()=>{
 		`<h1${getTrans('login')}/h1>
 		<input style=width:75%	id="{winId}-LGusername" class="framelabel" maxlength="32" minlength="3" type="text"${getTrans('login01', 'input')}<br><br>
 		<input style=width:75%;margin-left:20px id="{winId}-LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
-		<button class=emptybtn onclick=seePassword()>
+		<button class=emptybtn onclick=seePassword('{winId}')>
 			<img style=margin:-12px;margin-left:0 id={winId}-LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br>
 		<br><button style="width:calc(100% - 16px)" class="loginbtn" onclick="_.x10.get('{winId}').close();registerPage()"${getTrans('jumpToRegister')}/button><br>
@@ -2145,7 +2145,7 @@ registerPage = ()=>{
 		`<h1${getTrans('register')}/h1>
 		<input style=width:75% id="{winId}-LGusername" class="framelabel" maxlength="32" minlength="3" type="text"${getTrans('login06', 'input')}<br><br>
 		<input style=width:75%;margin-left:20px id="{winId}-LGpassword" class="framelabel" maxlength="64" minlength="5" type="password"${getTrans('login02', 'input')}
-		<button class=emptybtn onclick=seePassword()>
+		<button class=emptybtn onclick=seePassword('{winId}')>
 			<img style=margin:-12px;margin-left:0 id={winId}-LGbtn src=${helperUrl}imgs/PShide.svg width=32px>
 		</button><br><br>
 		<input style=width:75% id="{winId}-LGemail" class="framelabel" required ${getTrans('login03', 'input')}<br>
