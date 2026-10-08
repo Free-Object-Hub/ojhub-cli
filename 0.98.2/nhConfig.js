@@ -718,8 +718,10 @@ function createJail(rootElement, routerLinkInstance) {
 		globalWiki: 0,
 		guideEditorFrame: 0,
 	
-		helperFindData: [0,[],[],1],
-		CacheFinds: [1,'','',1],
+		// две переменные ниже работают с функциями HELPERFIND_REGION
+		helperFindData: [0,[],[],1,''], // нулевой это метод поиска, первый просто теги, второй платформы, третий это канал, четвертый это "кастомные параметры"
+		// переменные для кеша в поиске
+		CacheFinds: [1,'','',1], // канал, кеш, строка поиска и страница
 		ProjectsChannel: 1,
 	
 		lastUsedProfile: `getShow(${jId},117)`,

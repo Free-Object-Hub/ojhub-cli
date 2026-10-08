@@ -175,7 +175,7 @@ FINDrenderInProfileFull = (jId, channel, parsedData) => {
 			basicButton(getTrans('actions'), `makeSwticher(${jId},0,'proj${thisId}', projectBtnsSwticher(${jId},${thisId},${channel}), 'proj-${thisId}')`)+
 			`<div id=proj-${thisId} style=position:relative>`+
 			`</div><br><br>`+
-			basicButton(getTrans('openGdps'), `get${bigString}(${thisId})`)+
+			basicButton(getTrans('openGdps'), `get${bigString}(${jId},${thisId})`)+
 			basicButton(getTrans('edit'+bigString), `editFind(${jId},${channel},${thisId})`)+
 			basicButton(getTrans('vacancies'), `getVacancies(${jId},${channel},${thisId})`)+
 			// `<span${getTrans('isJE')}/span>:`+basicButton(getTrans(!!renderJoinLink ? 'no' : 'yes'), `JEedit(${jId},${thisId})`, '', 'JE'+thisId)+'<br>'+

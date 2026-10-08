@@ -226,8 +226,8 @@ headerButton = (text, Class, oncl)=>{
 	return `<button class="${Class}" onclick="${oncl}"${text}/button>`;
 },
 headerButtons = (jId, switcherM = 0) => {
-    let J = Jexec(jId);
-    if (switcherM === 1) // if phone screen
+	let J = Jexec(jId);
+	if (switcherM === 1) // if phone screen
 		return headerButton(getTrans('main'),	'headbtn',`switchMobileMain(${jId});innerMain(${jId},pageMain(${jId}))`)+
 		headerButton(getTrans('projects'),		'headbtn',`switchMobileMain(${jId});pageFind(${jId},Jexec(${jId}).helperFindData[3])`)+
 		headerButton(getTrans('news'),			'headbtn',`switchMobileMain(${jId});globalNews(${jId})`)+
@@ -235,7 +235,7 @@ headerButtons = (jId, switcherM = 0) => {
 		headerButton(getTrans('guides09'),		'headbtn',`switchMobileMain(${jId});pageWikiList(${jId})`)+
 		headerButton(getTrans('aboutHelper'),	'headbtn',`switchMobileMain(${jId});innerMain(${jId},helperAbout(${jId}))`);
 
-    return headerButton(getTrans('main'),	'headbtn',`innerMain(${jId},pageMain(${jId}))`)+
+	return headerButton(getTrans('main'),	'headbtn',`innerMain(${jId},pageMain(${jId}))`)+
 	headerButton(getTrans('projects'),		'headbtn',`pageFind(${jId},Jexec(${jId}).helperFindData[3])`)+
 	headerButton(getTrans('news'),			'headbtn',`globalNews(${jId})`)+
 	headerButton(getTrans('vacancies'),		'headbtn',`globalVacs(${jId})`)+
@@ -246,8 +246,8 @@ headerImg = (link)=>{
 	return `><img src=${helperUrl}imgs/${link}><`;
 },
 profileContentDiv = jId => {
-    let J = Jexec(jId);
-    return `<div id=GDPSesPlace style='display: flex; flex-direction: column; height:calc(100vh - 450px); overflow:auto' align=left>`;
+	let J = Jexec(jId);
+	return `<div id=GDPSesPlace style='display: flex; flex-direction: column; height:calc(100vh - 450px); overflow:auto' align=left>`;
 },
 
 bottomNavButton = (jId, text, Class, oncl, icon = '', matchPath = '')=>{
@@ -268,8 +268,8 @@ navIcon = (text)=>{
 	return regedit[text] || '';
 },
 bottomNav = jId => {
-    let J = Jexec(jId);
-    return `<nav class="bottomnav">`+
+	let J = Jexec(jId);
+	return `<nav class="bottomnav">`+
 	bottomNavButton(jId, 'projects',	'navbtn',`pageFind(${jId},Jexec(${jId}).helperFindData[3])`, navIcon('projects'), 'find')+
 	bottomNavButton(jId, 'guides09',	'navbtn',`pageWikiList(${jId})`, navIcon('guides09'), 'Wikis')+
 	bottomNavButton(jId, 'news',		'navbtn',`globalNews(${jId})`, navIcon('news'), 'news')+
@@ -313,43 +313,43 @@ likeStyle = {
 	disl: 'filter:drop-shadow(0 0 4px #B12FE4)'
 },
 contentRender = function(
-    jId,
-    preHtml = {
+	jId,
+	preHtml = {
 		ID: 0,
 		title: '???',
 		text: '???',
 		likes: 0,
 		GDPSdata: ['camp','getCamp']
 	},
-    date = 0,
-    authorBtn = 1,
-    likeType = 0,
-    tags = '',
-    specialButtons = 1,
-    connectedWiki = 1,
-    reportButton = '',
-    // работает как кнопка назад в рендере новостей
-    joinData = '',
-    isComm = 1
+	date = 0,
+	authorBtn = 1,
+	likeType = 0,
+	tags = '',
+	specialButtons = 1,
+	connectedWiki = 1,
+	reportButton = '',
+	// работает как кнопка назад в рендере новостей
+	joinData = '',
+	isComm = 1
 ) {
-    let J = Jexec(jId);
-    // LANGS модуль
-    if (likeType === 0) {
+	let J = Jexec(jId);
+	// LANGS модуль
+	if (likeType === 0) {
 		preHtml.text = GdpsesFullLangs.text(""+preHtml.ID)
 	} else {
 		preHtml.text = `>${preHtml.text}<`
 	}
 
-    let joinBtn = 
+	let joinBtn = 
 		`<a class=loginbtn href="join${php}?id=${preHtml.ID}${joinData}" target=_blank${getTrans('joinToGdps')}/a>`;
-    if (preHtml.links)
+	if (preHtml.links)
 		if (typeof preHtml.links == 'object') {
 			joinBtn = '';
 			Object.keys(preHtml.links).forEach(l=>{
 				joinBtn += `<a class=loginbtn target=_blank href="join${php}?id=${preHtml.ID}&type=${l}${joinData}">${l}</a>`;
 			});
 		}
-    let html = `<div class=framegdps ${joinData ? `id=news${preHtml.ID}` : ''} ${isComm == 0 ? 'style="width:calc(100% - 40px)"' : ''}>`+
+	let html = `<div class=framegdps ${joinData ? `id=news${preHtml.ID}` : ''} ${isComm == 0 ? 'style="width:calc(100% - 40px)"' : ''}>`+
 		(preHtml.img || tags ?
 		gdpsAvatar(preHtml.img) : '')+
 		`<h2 id=${preHtml.cType}title${preHtml.ID}>${preHtml.title}</h2>`+
@@ -406,12 +406,12 @@ contentRender = function(
 		imageButton(`${helperUrl}imgs/trash.svg`, `deleteNews(${jId},${preHtml.ID},${isComm})`, `position:absolute;top:20px;right:20px`)
 		: '')+
 	`</div>`;
-    return html;
+	return html;
 },
 contentRenderMinu = function(
-    jId,
-    data,
-    preHtml = [
+	jId,
+	data,
+	preHtml = [
 		joinData,
 		joinBtn,
 		tagsOs,
@@ -419,21 +419,21 @@ contentRenderMinu = function(
 		0,/*contentType*/
 		0,/*liketype*/
 	],
-    renderAuthor = 1,
-    renderDesc = 1,
-    renderTags = 1,
-    renderImage = 1
+	renderAuthor = 1,
+	renderDesc = 1,
+	renderTags = 1,
+	renderImage = 1
 ) {
-    let J = Jexec(jId);
-    let imgClass = ['', ''],
+	let J = Jexec(jId);
+	let imgClass = ['', ''],
 	contentId = data.ID;
-    if (renderImage == 1) {
+	if (renderImage == 1) {
 		imgClass = ['FGDPSimg', 'FGDPSdemo']
 	}
 
-    let btnFuncs = [];
+	let btnFuncs = [];
 
-    switch (preHtml[4]) {
+	switch (preHtml[4]) {
 		case -3: 
 			btnFuncs = ['getForumPost', `openForum(${jId},`+preHtml[0]+')', 'f', './?forumPost='];
 			break;
@@ -456,21 +456,21 @@ contentRenderMinu = function(
 			btnFuncs = ['getTele', `pageFind(${jId},3)`, 't', './?tele='];
 			break;
 	}
-    if (data.mainWiki) {
+	if (data.mainWiki) {
 		contentId = data.mainWiki;
 		btnFuncs[0] = 'getGuide';
 		preHtml[0] = data.ID;
 	}
-    data.isLiked = LIKES.get(preHtml[4], data.ID);
+	data.isLiked = LIKES.get(preHtml[4], data.ID);
 
-    // LANGS модуль
-    if (preHtml[4] > -1) {
+	// LANGS модуль
+	if (preHtml[4] > -1) {
 		data.text = GdpsesShortLangs.text(""+data.ID)
 	} else {
 		data.text = `>${data.text}<`
 	}
 
-    let 
+	let 
 	banWidth = parseInt(preHtml[3].split(';')[0].split(':')[1]) + 16,
 	banHeight = Math.round(banWidth * 0.4166),
 	darkZoneMargin = banHeight - 60,
@@ -505,14 +505,14 @@ contentRenderMinu = function(
 		(renderDesc ? `<p ${renderImage ? 'class="FGDPStext absolute"' : ''} ${renderImage ? 'style="margin:0"' : ''}${data.text}/p>` : '')+
 		(renderTags ? `<div class="flex-row FGDPStags absolute">${preHtml[2]}</div>` : '')+
 	`</div>`;
-    return html;
+	return html;
 },
 openLink = (callback)=>{
 	return false
 },
 contentPreload = (jId, sendCommData = '', backFunc = '', renderNews = 1, renderBan = 1) => {
-    let J = Jexec(jId);
-    let html = pHeader(jId)+
+	let J = Jexec(jId);
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div id="insertable" class="gdps-forum"></div>`+
 		`<div class=gdps-list-place id=GDPSesPlace></div>`+
@@ -539,16 +539,16 @@ contentPreload = (jId, sendCommData = '', backFunc = '', renderNews = 1, renderB
 			(renderNews ? '' : `</div>`)+
 		`</div>`+
 	`</div>`;
-    innerMain(jId, html);
+	innerMain(jId, html);
 },
 contentSendCommForm = (jId, sendCommData) => {
-    let J = Jexec(jId);
-    if (sendCommData != '' && thisUser.isActive === 1)
+	let J = Jexec(jId);
+	if (sendCommData != '' && thisUser.isActive === 1)
 	 return `<div class="framecomm">`+
 				`<input type="text" class="framelabel" id="text" style="width:calc(100% - 16px)" required minlength=10${getTrans('min10chars', 'input')}<br>`+
 				`<button class="loginbtn" onclick="sendComm(${jId},${sendCommData})" id="commentBtn"${getTrans('commSend')}/button>`+
 			`</div>`;
-    return '';
+	return '';
 },
 
 Tags = [
@@ -646,21 +646,21 @@ toStringTagsVacs = (tag)=>{
 },
 
 renderTagSearch = (jId, Array, Class, ArrayId, elemId = '') => {
-    let J = Jexec(jId);
-    let tagName = Array[ArrayId],
+	let J = Jexec(jId);
+	let tagName = Array[ArrayId],
 	customId;
-    if (elemId == '')
+	if (elemId == '')
 		customId = tagName;
 	else 
 		customId = elemId;
-    return `<label class="tagUns" onclick="writeTag(${jId},'${Class}',${ArrayId})" id=${customId}${getTrans(tagName)}/label>`;
+	return `<label class="tagUns" onclick="writeTag(${jId},'${Class}',${ArrayId})" id=${customId}${getTrans(tagName)}/label>`;
 },
 renderTagAdding = (jId, Array, Class, id, checked = '') => {
-    let J = Jexec(jId);
-    let tagName = Array[id];
-    let html = `<input id=T${id} style=display:none name=${Class}[] type=checkbox${checked} value=${id}>`+
+	let J = Jexec(jId);
+	let tagName = Array[id];
+	let html = `<input id=T${id} style=display:none name=${Class}[] type=checkbox${checked} value=${id}>`+
 	`<label class=tagUns for=T${id} value=${id}${getTrans(tagName)}/label>`;
-    return html;
+	return html;
 },
 
 // #endregion
@@ -679,10 +679,10 @@ helperFindData = [0,[],[],1], // нулевой это метод поиска, 
 	wikiesMini = [],
 
 writeTag = (jId, type, tag) => {
-    let J = Jexec(jId);
-    let INDEX = 1,
+	let J = Jexec(jId);
+	let INDEX = 1,
 		elemId = 'Camptag';
-    switch (type) {
+	switch (type) {
 		case 'camp':
 			INDEX = 1;
 			break;
@@ -718,7 +718,7 @@ writeTag = (jId, type, tag) => {
 			elemId = 'Vacstag';
 			break;
 	}
-    if (!J.helperFindData[INDEX].includes(tag)) {
+	if (!J.helperFindData[INDEX].includes(tag)) {
 		J.id(elemId+tag).setAttribute('class','tagSel');
 		J.helperFindData[INDEX].push(tag);
 	} else {
@@ -728,22 +728,22 @@ writeTag = (jId, type, tag) => {
 			J.helperFindData[INDEX].splice(tagPlace, 1);
 		}
 	}
-    J.helperFindData[INDEX].sort((a,b)=>{return a-b});
-    sendFinder(jId);
+	J.helperFindData[INDEX].sort((a,b)=>{return a-b});
+	sendFinder(jId);
 },
 setMethod = (jId, Method) => {
-    let J = Jexec(jId);
-    J.id('method'+J.helperFindData[0]).setAttribute('class','tagPre');
-    J.helperFindData[0] = Method;
-    J.id('method'+J.helperFindData[0]).setAttribute('class','tagSel');
-    sendFinder(jId);
+	let J = Jexec(jId);
+	J.id('method'+J.helperFindData[0]).setAttribute('class','tagPre');
+	J.helperFindData[0] = Method;
+	J.id('method'+J.helperFindData[0]).setAttribute('class','tagSel');
+	sendFinder(jId);
 },
 sendFinder = (jId, page = 0, query = '') => {
-    let J = Jexec(jId);
-    if (J.id('nextGdps'))
+	let J = Jexec(jId);
+	if (J.id('nextGdps'))
 		J.id('nextGdps').remove();
 
-    if (query === '') {
+	if (query === '') {
 		query = 'method='+J.helperFindData[0];
 		let enteredName = J.id('gdpsNameInput').value;
 		if (enteredName != '')
@@ -757,11 +757,13 @@ sendFinder = (jId, page = 0, query = '') => {
 				query += '&os[]='+os;
 			});
 		}
+		if (J.helperFindData[4])
+			query += J.helperFindData[4];
 	}
-    J.lastChannel = J.helperFindData[3];
+	J.lastChannel = J.helperFindData[3];
 
-    Loading();
-    _.http.req('GET', `${sData[3]}new${php}?${query}&page=${page}&channel=${J.helperFindData[3]}`)
+	Loading();
+	_.http.req('GET', `${sData[3]}new${php}?${query}&page=${page}&channel=${J.helperFindData[3]}`)
 		.then(data=>{
 			let GDPSES = JSON.parse(data),
 				renderedData,
@@ -772,6 +774,9 @@ sendFinder = (jId, page = 0, query = '') => {
 			switch (J.helperFindData[3]) {
 				case -5:
 					renderedData = renderVacancy(jId, GDPSES);
+					break;
+				case -2:
+					renderedData = renderGuideMini(jId, GDPSES);
 					break;
 				case -1:
 					renderedData = renderWiki(jId, GDPSES);
@@ -806,32 +811,32 @@ sendFinder = (jId, page = 0, query = '') => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 modifyFindTags = (jId, channel) => {
-    let J = Jexec(jId);
-    if (J.id(`tags${J.helperFindData[3]}`))
+	let J = Jexec(jId);
+	if (J.id(`tags${J.helperFindData[3]}`))
 		J.id(`tags${J.helperFindData[3]}`).style.display = 'none';
-    let actsCount = J.qa('[class=tagSel]').length - 1;
-    J.qa('[class=tagSel]').forEach(el=>{
+	let actsCount = J.qa('[class=tagSel]').length - 1;
+	J.qa('[class=tagSel]').forEach(el=>{
 		if (actsCount == 0)
 			return;
 		actsCount--;
 		el.classList.replace('tagSel', 'tagUns');
 	});
-    J.helperFindData[1] = [];
-    J.helperFindData[2] = [];
-    J.id('channel'+J.helperFindData[3]).setAttribute('class','tagPre');
-    J.helperFindData[3] = channel;
-    J.id('channel'+J.helperFindData[3]).setAttribute('class','tagSel');
-    if (J.id(`tags${J.helperFindData[3]}`))
+	J.helperFindData[1] = [];
+	J.helperFindData[2] = [];
+	J.id('channel'+J.helperFindData[3]).setAttribute('class','tagPre');
+	J.helperFindData[3] = channel;
+	J.id('channel'+J.helperFindData[3]).setAttribute('class','tagSel');
+	if (J.id(`tags${J.helperFindData[3]}`))
 		J.id(`tags${J.helperFindData[3]}`).style.display = '';
-    sendFinder(jId);
+	sendFinder(jId);
 },
 helperComments = (jId, postId, contentType, commPage = 0) => {
-    let J = Jexec(jId);
-    if (J.id('CnextGdps'))
+	let J = Jexec(jId);
+	if (J.id('CnextGdps'))
 		J.id('CnextGdps').remove();
-    let dataForNextButton = `${postId},'${contentType}',${parseInt(commPage + 1)}`;
-    Loading();
-    _.http.req('GET', `${sData[0]}fetchComms${php}?id=${postId}&type=${contentType}&page=${commPage}`)
+	let dataForNextButton = `${postId},'${contentType}',${parseInt(commPage + 1)}`;
+	Loading();
+	_.http.req('GET', `${sData[0]}fetchComms${php}?id=${postId}&type=${contentType}&page=${commPage}`)
 		.then(data=>{
 			let serverResp = JSON.parse(data);
 			innerComments(jId, renderComms(jId, serverResp, contentType, dataForNextButton), 1);
@@ -841,37 +846,37 @@ helperComments = (jId, postId, contentType, commPage = 0) => {
 },
 
 getFind = (jId, channel, id, joinData = 0) => {
-    let J = Jexec(jId);
-    let tinyStr = 'c',
+	let J = Jexec(jId);
+	let tinyStr = 'c',
 			smallString = 'camp',
 			bigString = 'Camp',
 			newsChannel = '.';
-    switch (channel) {
-        case 1:
-            tinyStr = 's';
-            smallString = 'show';
-            bigString = 'Show';
-            newsChannel = ',';
-            break;
-        case 2:
-            tinyStr = 'p';
-            smallString = 'pere';
-            bigString = 'Pere';
-            newsChannel = '/';
-            break;
-        case 3:
-            tinyStr = 't';
-            smallString = 'tele';
-            bigString = 'Tele';
-            newsChannel = '/';
-            break;
-        
-    }
-    J.lastUsedProfile = `getFind(${jId},${channel},${id})`;
-    contentPreload(jId, `${id},1,3`, `pageFind(${jId},`+channel+')');
+	switch (channel) {
+		case 1:
+			tinyStr = 's';
+			smallString = 'show';
+			bigString = 'Show';
+			newsChannel = ',';
+			break;
+		case 2:
+			tinyStr = 'p';
+			smallString = 'pere';
+			bigString = 'Pere';
+			newsChannel = '/';
+			break;
+		case 3:
+			tinyStr = 't';
+			smallString = 'tele';
+			bigString = 'Tele';
+			newsChannel = '/';
+			break;
+		
+	}
+	J.lastUsedProfile = `getFind(${jId},${channel},${id})`;
+	contentPreload(jId, `${id},1,3`, `pageFind(${jId},`+channel+')');
 
-    Loading();
-    _.http.req('GET', `${sData[0]}camp${php}?id=${id}`)
+	Loading();
+	_.http.req('GET', `${sData[0]}camp${php}?id=${id}`)
 		.then(data=>{
 			if (data == '["NONE"]') {
 				pageFind(jId, channel);
@@ -907,27 +912,27 @@ getFind = (jId, channel, id, joinData = 0) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 getCamp = (jId, id, joinData = 0) => {
-    let J = Jexec(jId);
-    getFind(jId, 0,id,joinData);
+	let J = Jexec(jId);
+	getFind(jId, 0,id,joinData);
 },
 getShow = (jId, id, joinData = 0) => {
-    let J = Jexec(jId);
-    getFind(jId, 1,id,joinData);
+	let J = Jexec(jId);
+	getFind(jId, 1,id,joinData);
 },
 getPere = (jId, id, joinData = 0) => {
-    let J = Jexec(jId);
-    getFind(jId, 2,id,joinData);
+	let J = Jexec(jId);
+	getFind(jId, 2,id,joinData);
 },
 getTele = (jId, id, joinData = 0) => {
-    let J = Jexec(jId);
-    getFind(jId, 3,id,joinData);
+	let J = Jexec(jId);
+	getFind(jId, 3,id,joinData);
 },
 loadMoreNews = (jId, gdpsId, backFunc, page, renderType = 0) => {
-    let J = Jexec(jId);
-    if (J.id('nextGdps'))
+	let J = Jexec(jId);
+	if (J.id('nextGdps'))
 		J.id('nextGdps').remove();
-    Loading();
-    _.http.req('GET', `${sData[0]}news${php}?id=${gdpsId}&page=${page}`)
+	Loading();
+	_.http.req('GET', `${sData[0]}news${php}?id=${gdpsId}&page=${page}`)
 		.then(data=>{
 			Loading(1);
 			if (data !== '{}') {
@@ -945,11 +950,11 @@ loadMoreNews = (jId, gdpsId, backFunc, page, renderType = 0) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 loadGlobalNews = (jId, page) => {
-    let J = Jexec(jId);
-    if (J.id('nextGdps'))
+	let J = Jexec(jId);
+	if (J.id('nextGdps'))
 		J.id('nextGdps').remove();
-    Loading();
-    _.http.req('GET', `${sData[0]}newsAll${php}?page=${page}`)
+	Loading();
+	_.http.req('GET', `${sData[0]}newsAll${php}?page=${page}`)
 		.then(data=>{
 			Loading(1);
 			if (data !== '{}') {
@@ -967,8 +972,8 @@ loadGlobalNews = (jId, page) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 gdpsNewsPage = (jId, renderNazad = false, gdpsId = 0, backFunc = '') => {
-    let J = Jexec(jId);
-    let html = pHeader(jId)+
+	let J = Jexec(jId);
+	let html = pHeader(jId)+
 	`<div style=height:60px></div>`+
 	`<div id=helperContent>`+
 		(renderNazad ? `<div class=gdps-forum>`+
@@ -976,12 +981,12 @@ gdpsNewsPage = (jId, renderNazad = false, gdpsId = 0, backFunc = '') => {
 		`</div>` : '')+
 		`<div id=GDPSesPlace class=gdps-forum style=flex-direction:column;align-items:center></div>`+
 	`</div>`;
-    return html;
+	return html;
 },
 getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFunc = '') => {
-    let J = Jexec(jId);
-    let backFunc = '';
-    if (backFuncPre.length === 1) {
+	let J = Jexec(jId);
+	let backFunc = '';
+	if (backFuncPre.length === 1) {
 		switch (backFuncPre) {
 			case '.':
 				backFunc = 'getCamp';
@@ -1014,14 +1019,14 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 				break;
 		}
 	}
-    if (commBackFunc == '')
+	if (commBackFunc == '')
 		commBackFunc = backFunc;
 
-    J.lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+")";
-    contentPreload(jId, `${newsId},3,5`, `${commBackFunc}(${jId},${contentId})`, 0, 0);
+	J.lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+")";
+	contentPreload(jId, `${newsId},3,5`, `${commBackFunc}(${jId},${contentId})`, 0, 0);
 
-    Loading();
-    _.http.req('GET', `${sData[0]}newsC${php}?id=${newsId}`)
+	Loading();
+	_.http.req('GET', `${sData[0]}newsC${php}?id=${newsId}`)
 		.then(data=>{
 			if (data == '["NONE"]') {
 				pageFind(jId, 0);
@@ -1043,13 +1048,13 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 getVacsWithComments = (jId, vacId) => {
-    let J = Jexec(jId);
-    let commBackFunc = 'globalVacs';
-    J.lastUsedProfile = `getVacsWithComments(${jId},`+vacId+")";
-    contentPreload(jId, `${vacId},5,12`, `${commBackFunc}(${jId},${vacId})`, 0, 0);
+	let J = Jexec(jId);
+	let commBackFunc = 'globalVacs';
+	J.lastUsedProfile = `getVacsWithComments(${jId},`+vacId+")";
+	contentPreload(jId, `${vacId},5,12`, `${commBackFunc}(${jId},${vacId})`, 0, 0);
 
-    Loading();
-    _.http.req('GET', `${sData[0]}vacsC${php}?id=${vacId}`)
+	Loading();
+	_.http.req('GET', `${sData[0]}vacsC${php}?id=${vacId}`)
 		.then(data=>{
 			if (data == '["NONE"]') {
 				globalVacs(jId);
@@ -1071,12 +1076,12 @@ getVacsWithComments = (jId, vacId) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 getWikis = (jId, page) => {
-    let J = Jexec(jId);
-    if (J.id('nextGdps'))
+	let J = Jexec(jId);
+	if (J.id('nextGdps'))
 		J.id('nextGdps').remove();
 
-    Loading();
-    _.http.req('GET', `${sData[7]}getWikis${php}?page=${page}`)
+	Loading();
+	_.http.req('GET', `${sData[7]}getWikis${php}?page=${page}`)
 		.then(data=>{
 			let parsedData = JSON.parse(data),
 				page2 = page++,
@@ -1090,28 +1095,28 @@ getWikis = (jId, page) => {
 // #region вставка в разные куски страницы, функция innerMain упомянута тут, за остальные поясню ниже
 // вставка контента в правую половину окна профилей, для телефонов замена всего экрана
 innerProfile = (jId, textContent) => {
-    let J = Jexec(jId);
-    document.documentElement.style = '';
-    if (J.id('profileWindow')) 
+	let J = Jexec(jId);
+	document.documentElement.style = '';
+	if (J.id('profileWindow')) 
 		J.id('profileWindow').innerHTML = textContent;
 	else 
 		return new Error('Cant find "profileWindow" element!');
 },
 // вставка контента в вики данные
 innerWikiControl = (jId, textContent, wikiId = '') => {
-    let J = Jexec(jId);
-    if (J.id('wikiControlP'+wikiId)) 
+	let J = Jexec(jId);
+	if (J.id('wikiControlP'+wikiId)) 
 		J.id('wikiControlP'+wikiId).innerHTML = textContent;
 	else 
 		return new Error('Cant find "profileWindow" element!');
 },
 // вставка контента под рамкой поиска
 innerGdpsPlace = (jId, textContent, insertType = 0, otherId = '') => {
-    let J = Jexec(jId);
-    if (!J.id('GDPSesPlace')) 
+	let J = Jexec(jId);
+	if (!J.id('GDPSesPlace')) 
 		return new Error('Cant find "GDPSesPlace" element!');
 
-    if (insertType == 0) // профили
+	if (insertType == 0) // профили
 		J.id('GDPSesPlace'+otherId).innerHTML = textContent;
 	else if (insertType == 512)
 		J.id('GDPSesPlace'+otherId).insertAdjacentHTML('beforebegin', textContent);
@@ -1124,10 +1129,10 @@ innerGdpsPlace = (jId, textContent, insertType = 0, otherId = '') => {
 },
 // вставка контента в рамку комментариев, прошу обратить внимание ибо у гдпсов она справа, а у гайдов и текстур заполняет весь экран
 innerComments = (jId, textContent, insertType = 0) => {
-    let J = Jexec(jId);
-    if (!J.id('comments')) 
+	let J = Jexec(jId);
+	if (!J.id('comments')) 
 		return new Error('Cant find "comments" element!');
-    if (insertType == 0) // при рендере гдпса
+	if (insertType == 0) // при рендере гдпса
 		J.id('comments').innerHTML = textContent;
 	else 
 		// а эт вроде когда "показать больше"
@@ -1135,10 +1140,10 @@ innerComments = (jId, textContent, insertType = 0) => {
 },
 // вставка контента в рамку гайдов, как попало если что
 innerGuides = (jId, textContent, insertType = 0) => {
-    let J = Jexec(jId);
-    if (!J.id('guidesPlace')) 
+	let J = Jexec(jId);
+	if (!J.id('guidesPlace')) 
 		return new Error('Cant find "guidesPlace" element!');
-    if (insertType == 0)
+	if (insertType == 0)
 		J.id('guidesPlace').insertAdjacentHTML('beforeend',textContent);
 	else 
 		J.id('guidesPlace').insertAdjacentHTML('afterend',textContent);
@@ -1317,18 +1322,18 @@ gLogout = ()=>{
 },
 
 sendComm = (jId, id, channel, likeChannel) => {
-    let J = Jexec(jId);
-    if (thisUser.ID === 0)
+	let J = Jexec(jId);
+	if (thisUser.ID === 0)
 		return;
 
-    Loading();
-    let dataForNextButton = `${id},'${channel}',1`,
+	Loading();
+	let dataForNextButton = `${id},'${channel}',1`,
 		commText = J.id('text').value,
 		data =
 		'ide='	 + encodeURIComponent(id)
 	+ '&type=' + encodeURIComponent(channel)
 	+ '&text=' + encodeURIComponent(commText);
-    _.http.req('POST', `${sData[1]}comment${php}`, data, urlEncoded)
+	_.http.req('POST', `${sData[1]}comment${php}`, data, urlEncoded)
 		.then(data=>{
 			Loading(1);
 			if (data == '-4') {
@@ -1342,20 +1347,20 @@ sendComm = (jId, id, channel, likeChannel) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 editComm = (jId, id, channel) => {
-    let J = Jexec(jId);
-    if (J.id('commEdit'+id) !== null)
+	let J = Jexec(jId);
+	if (J.id('commEdit'+id) !== null)
 		return;
-    _.win.open('commEdit',
+	_.win.open('commEdit',
 		`<textarea class=framelabel style=width:250px id=editText-C${id}>${J.id('commText'+id).textContent}</textarea><br>
 		${basicButton(getTrans('commSend'), `modifyComm(${jId},${id},${channel})`)}`
 	, 'commEdit'+id);
 },
 modifyComm = (jId, id, channel) => {
-    let J = Jexec(jId);
-    let text = J.id('editText-C'+id).value,
+	let J = Jexec(jId);
+	let text = J.id('editText-C'+id).value,
 			data = `id=${id}&type=${channel}&text=${text}`;
-    Loading();
-    _.http.req('POST', `${sData[1]}commentModify${php}`, data, urlEncoded)
+	Loading();
+	_.http.req('POST', `${sData[1]}commentModify${php}`, data, urlEncoded)
 		.then(data=>{
 			Loading(1);
 			_.wins[J.q(`[commEdit${id}]`).id].close();
@@ -1374,9 +1379,9 @@ modifyComm = (jId, id, channel) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 deleteComm = (jId, id, channel) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[4]}comment${php}?ide=${id}&type=${channel}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[4]}comment${php}?ide=${id}&type=${channel}`)
 		.then(data=>{
 			if (data == '-1')
 				return _.err.log('Access denied');
@@ -1386,11 +1391,11 @@ deleteComm = (jId, id, channel) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 editNews = (jId, id, gdpsId) => {
-    let J = Jexec(jId);
-    if (J.id('newsEdit'+id) !== null)
+	let J = Jexec(jId);
+	if (J.id('newsEdit'+id) !== null)
 		return;
-    Loading();
-    _.http.req('GET', `${sData[0]}newsC${php}?id=${id}`)
+	Loading();
+	_.http.req('GET', `${sData[0]}newsC${php}?id=${id}`)
 		.then(data=>{
 			Loading(1);
 			let parsedData = JSON.parse(data),
@@ -1405,13 +1410,13 @@ editNews = (jId, id, gdpsId) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 modifyNews = (jId, id, gdpsId) => {
-    let J = Jexec(jId);
-    let title = _.$.id('editNews1-N'+id).value,
+	let J = Jexec(jId);
+	let title = _.$.id('editNews1-N'+id).value,
 			text = _.$.id('editNews2-N'+id).value,
 			data = `id=${id}&gdps=${gdpsId}&title=${title}&text=${text}`;
 
-    Loading();
-    _.http.req('POST', `${sData[1]}newsModify${php}`, data, urlEncoded)
+	Loading();
+	_.http.req('POST', `${sData[1]}newsModify${php}`, data, urlEncoded)
 		.then(data=>{
 			Loading(1);
 			_.wins[_.$.q(`[newsEdit${id}]`).id].close();
@@ -1430,9 +1435,9 @@ modifyNews = (jId, id, gdpsId) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 deleteNews = (jId, id, goBack) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[4]}newsPost${php}?ide=${id}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[4]}newsPost${php}?ide=${id}`)
 		.then(data=>{
 			if (data == '-1')
 				return _.err.log('Access denied');
@@ -1443,7 +1448,7 @@ deleteNews = (jId, id, goBack) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 deleteWork= (jId, id, stage = 0, winId = '') => {
-    let J = Jexec(jId);
+	let J = Jexec(jId);
 	if (stage === 0) {
 		if (J.q(`[workremove${id}]`)) return;
 		_.win.open('vacRemove',
@@ -1468,13 +1473,13 @@ deleteWork= (jId, id, stage = 0, winId = '') => {
 // #endregion
 // #region публичные страницы
 pHeader = jId => {
-    let J = Jexec(jId);
-    let regBtn = '',
+	let J = Jexec(jId);
+	let regBtn = '',
 		loginBtn = '',
 		regBtnMobile = '',
 		loginBtnMobile = '';
 
-    if (thisUser.ID === 0) {
+	if (thisUser.ID === 0) {
 		regBtn = `<button id=regBtn class="emptybtn" onclick="registerPage()"${getTrans('register')}/button>`;
 		loginBtn =
 		`<button id=btnLogin style="margin-left:12px" class="emptybtn" onclick="loginPage()">`+
@@ -1494,16 +1499,16 @@ pHeader = jId => {
 			`<span>${thisUser.username}</span>`;
 	}
 
-    // (thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')
+	// (thisUser.hasAlarms == 1 ? '<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>' : '')
 
-    if (thisUser.hasAlarms == 1) {
+	if (thisUser.hasAlarms == 1) {
 		loginBtn += `<span style="position:absolute;top:-14px;right:-6px;border:solid red 5px;border-radius:var(--def-border-small)"></span>`;
 		loginBtnMobile += `<span style="position:absolute;top:-4px;right:-4px;border:solid red 5px;border-radius:var(--def-border-small)"></span>`;
 	}
-    loginBtn += `</button>`;
-    loginBtnMobile += `</button>`;
+	loginBtn += `</button>`;
+	loginBtnMobile += `</button>`;
 
-    let html =
+	let html =
 	`<div class="header" id=helperMaster align="left">`+
 		`<nodiv id=switchHtmlLang style=position:relative>`+
 			`<button onclick="makeSwticher(${jId},0,'switchHtmlLang2', switchLangMenu(${jId}), 'switchHtmlLang', 'switchLangMenu')" style="width:40px" class="emptybtn">`+
@@ -1535,7 +1540,7 @@ pHeader = jId => {
 		regBtnMobile+
 		`<p align=right${getTrans('helperVer')}/p>`+
 	`</div>`;
-    return html;
+	return html;
 },
 mainPlate = (jId, h1, p, btns, img) => {
 	let J = Jexec(jId);
@@ -1558,8 +1563,8 @@ mainPlate = (jId, h1, p, btns, img) => {
 			`</div>`;
 },
 pageMain = (jId, localIgnore = false) => {
-    let J = Jexec(jId);
-    if (!localIgnore)
+	let J = Jexec(jId);
+	if (!localIgnore)
 		J.link.set('');
 	let gdpses = '',
 		news = '';
@@ -1576,7 +1581,7 @@ pageMain = (jId, localIgnore = false) => {
 		`<h1${getTrans('T2-wantmore')}/h1>`+
 		basicButton(getTrans('news'), `globalNews(${jId})`)+
 	`</div>`;
-    let html = pHeader(jId)+
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div style="background-color:var(--color-profile)">`+
 			`<div class=contentAdaptiveFlexSmall style=position:relative;align-items:center;justify-content:center;overflow:hidden>`+
@@ -1654,22 +1659,22 @@ pageMain = (jId, localIgnore = false) => {
 			`</div>`+
 		`</div>`+
 	`</div>`;
-    return html;
+	return html;
 },
 pageFind = (jId, channel = 1) => {
-    let J = Jexec(jId);
-    if (J.helperFindData[3] < 0) {
+	let J = Jexec(jId);
+	if (J.helperFindData[3] < 0) {
 		J.helperFindData[3] = J.ProjectsChannel;
 		channel = J.ProjectsChannel;
 	}
-    J.ProjectsChannel = channel;
-    let tagsDiv = '',
+	J.ProjectsChannel = channel;
+	let tagsDiv = '',
 		TagsStr = '',
 		OsStr = '',
 		tags = '',
 		oss = '',
 		customTag = '';
-    for (let num in Tags) {
+	for (let num in Tags) {
 		switch (num) {
 			case '0':
 				TagsStr = 'camp';
@@ -1711,9 +1716,9 @@ pageFind = (jId, channel = 1) => {
 		tags = '';
 		oss = '';
 	}
-    J.helperFindData = [3,[],[],channel];
-    J.link.set('find');
-    let html = pHeader(jId)+
+	J.helperFindData = [3,[],[],channel,''];
+	J.link.set('find');
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div style="height:60px"></div>`+
 		`<div class=mainFinder>`+
@@ -1751,22 +1756,22 @@ pageFind = (jId, channel = 1) => {
 			`</div>`+
 		`</div>`+
 	`</div>`;
-    innerMain(jId, html);
+	innerMain(jId, html);
 
-    let startSearch = false;
-    if (J.CacheFinds[1] == '')
+	let startSearch = false;
+	if (J.CacheFinds[1] == '')
 		startSearch = true;
-    if (channel !== J.CacheFinds[0])
+	if (channel !== J.CacheFinds[0])
 		startSearch = true;
 
-    if (startSearch)
+	if (startSearch)
 		sendFinder(jId);
 },
 pageWikiList = jId => {
-    let J = Jexec(jId);
-    J.helperFindData = [0,null,null,-1];
-    J.link.set('Wikis');
-    let html = pHeader(jId)+
+	let J = Jexec(jId);
+	J.helperFindData = [0,null,null,-1,''];
+	J.link.set('Wikis');
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div style="height:60px"></div>`+
 		`<div id=finder align=left class="frameprofile">`+
@@ -1776,13 +1781,16 @@ pageWikiList = jId => {
 			`</h1>`+
 			`<label${getTrans('findByName')}/label>:<br>`+
 			`<input type=text id=gdpsNameInput class=framelabel style=width:190px${getTrans('wikiName', 'input')}<br><br>`+
+			`<label onclick=setMethod(${jId},0) id=method0 class=tagSel${getTrans('search4')}/label>`+
+			`<label onclick=setMethod(${jId},1) id=method1 class=tagPre${getTrans('mostLike')}/label>`+
+			`<label onclick=setMethod(${jId},2) id=method2 class=tagPre${getTrans('mostDisl')}/label>`+
 		`</div>`+
 		`<div class=gdps-list-place id=GDPSesPlace style="margin-top:35px">`+
 		`</div>`+
 	`</div>`;
-    innerMain(jId, html);
-    Loading();
-    _.http.req('GET', `${sData[7]}getWikis${php}`)
+	innerMain(jId, html);
+	Loading();
+	_.http.req('GET', `${sData[7]}getWikis${php}`)
 		.then(data=>{
 			let parsedData = JSON.parse(data),
 				html = renderWiki(jId, parsedData);
@@ -1792,11 +1800,11 @@ pageWikiList = jId => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 globalNews = jId => {
-    let J = Jexec(jId);
-    J.link.set('news');
-    innerMain(jId, gdpsNewsPage(jId));
-    Loading();
-    _.http.req('GET', `${sData[0]}newsAll${php}?page=0`)
+	let J = Jexec(jId);
+	J.link.set('news');
+	innerMain(jId, gdpsNewsPage(jId));
+	Loading();
+	_.http.req('GET', `${sData[0]}newsAll${php}?page=0`)
 		.then(data => {
 			Loading(1);
 			if (data == '{}') {
@@ -1818,14 +1826,14 @@ globalNews = jId => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 globalVacs = jId => {
-    let J = Jexec(jId);
-    let tags = '';
-    for (let tag in TagsVacs) {
+	let J = Jexec(jId);
+	let tags = '';
+	for (let tag in TagsVacs) {
 		tags += renderTagSearch(jId, TagsVacs, 'vacs', tag, '');
 	}
-    J.helperFindData = [0,[],[],-5];
-    J.link.set('vacs');
-    let html = pHeader(jId)+
+	J.helperFindData = [0,[],[],-5,''];
+	J.link.set('vacs');
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div style="height:60px"></div>`+
 		`<div id=finder align=left class="frameprofile">`+
@@ -1840,13 +1848,17 @@ globalVacs = jId => {
 				`</div>`+
 			`</div>`+
 
+			`<br>`+
+			`<label onclick=setMethod(${jId},0) id=method0 class=tagSel${getTrans('search4')}/label>`+
+			`<label onclick=setMethod(${jId},1) id=method1 class=tagPre${getTrans('mostLike')}/label>`+
+			`<label onclick=setMethod(${jId},2) id=method2 class=tagPre${getTrans('mostDisl')}/label>`+
 		`</div>`+
 		`<div class=gdps-list-place id=GDPSesPlace style="margin-top:35px">`+
 		`</div>`+
 	`</div>`;
-    innerMain(jId, html);
-    Loading();
-    _.http.req('GET', `${sData[8]}getAll${php}?page=0`)
+	innerMain(jId, html);
+	Loading();
+	_.http.req('GET', `${sData[8]}getAll${php}?page=0`)
 		.then(data => {
 			Loading(1);
 			let parsedData = JSON.parse(data);
@@ -1857,9 +1869,9 @@ globalVacs = jId => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 uvazuha = jId => {
-    let J = Jexec(jId);
-    J.link.set('special');
-    let html = pHeader(jId)+
+	let J = Jexec(jId);
+	J.link.set('special');
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div align=center>`+
 			`<h1${getTrans('ojhubname')}/h1>`+
@@ -1882,7 +1894,7 @@ uvazuha = jId => {
 			`</div>`+
 		`</div>`+
 	`</div>`;
-    return html;
+	return html;
 },
 helperAbout = (jId) => {
 	let J = Jexec(jId);
@@ -1892,11 +1904,11 @@ helperAbout = (jId) => {
 	J.link.set('about');
 	return pHeader(jId)+
 	`<div id=helperContent align=center>`+
-        `<div class=contentAdaptiveFlexSmall align=center style=align-items:center;justify-content:center>`+
+		`<div class=contentAdaptiveFlexSmall align=center style=align-items:center;justify-content:center>`+
 			emptyButton(`><img alt="object hub logo" src=${helperUrl}imgs/hubbig.png width=192px height=192px><`, `loadCustomCss(scritpsUrl + '/motif.css')`, 'width:192px;height:192px')+
 			`<h1${getTrans('ojhubname')}/h1>`+
 		`</div>`+
-        `<div class=contentAdaptiveSmall align=center>`+
+		`<div class=contentAdaptiveSmall align=center>`+
 			emptyButton(`><img alt="object hub logo" src=${helperUrl}imgs/hubbig.png width=128px height=128px><`, `loadCustomCss(scritpsUrl + '/motif.css')`, 'width:128px;height:128px')+
 			`<h1${getTrans('ojhubname')}/h1>`+
 		`</div>`+
@@ -1907,7 +1919,7 @@ helperAbout = (jId) => {
 				`GitHub`+
 			`</a>`+
 			basicButton('>DEV PANEL<', 'debugWindow()')+
-			basicButton('>FPS Counter<', '_.lazy.load(scritpsUrl + `/fps.js`)')+
+			basicButton('>FPS Counter<', '_.lazy.load(scritpsUrl + `/fps.js`).then(e=>{fpsWindow();fpsCounter()})')+
 		`</div>`+
 		`<p${getTrans('aboutOpenText2')}/p>`+
 
@@ -1945,12 +1957,12 @@ helperAbout = (jId) => {
 	`</div>`;
 },
 helperNews = (jId, gdpsId, renderOwnButton = 0) => {
-    let J = Jexec(jId);
-    let backFunc = '',
+	let J = Jexec(jId);
+	let backFunc = '',
 			lastFunc = '',
 			gdpsInt = parseInt(gdpsId),
 			renderNazad = true;
-    switch (gdpsId[gdpsId.length-1]) {
+	switch (gdpsId[gdpsId.length-1]) {
 		case '.':
 			backFunc = 'getCamp';
 			lastFunc = '.';
@@ -1965,9 +1977,9 @@ helperNews = (jId, gdpsId, renderOwnButton = 0) => {
 			// renderNazad = false;
 			break;
 	}
-    innerMain(jId, gdpsNewsPage(jId, renderNazad, gdpsId, backFunc));
-    Loading();
-    _.http.req('GET', `${sData[0]}news${php}?id=${gdpsInt}`)
+	innerMain(jId, gdpsNewsPage(jId, renderNazad, gdpsId, backFunc));
+	Loading();
+	_.http.req('GET', `${sData[0]}news${php}?id=${gdpsInt}`)
 		.then(data=>{
 			J.link.set('news/list='+gdpsId+'|'+renderOwnButton);
 			Loading(1);
@@ -1994,17 +2006,17 @@ BETA_fixImg = (url)=>{
 		return url;
 },
 insertBtn = (jId, lastUse, transText = 'showMore', useRemover = 1, group = '') => {
-    let J = Jexec(jId);
-    // кнопка "показать больше"
-    return `<div ${useRemover === 1 ? 'id='+group+'nextGdps ' : ''}class=gdps-helper align=center>`+
+	let J = Jexec(jId);
+	// кнопка "показать больше"
+	return `<div ${useRemover === 1 ? 'id='+group+'nextGdps ' : ''}class=gdps-helper align=center>`+
 		`<button onclick="${lastUse}" class=loginbtn `+
 		`style="font-size:calc(var(--def-font)*2);padding:4px 8px;margin:12px 0"${getTrans(transText)}/button>`+
 	`</div>`;
 },
 
 deviceAddForm = jId => {
-    let J = Jexec(jId);
-    let html = pHeader(jId)+
+	let J = Jexec(jId);
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<form class="frameprofile" method=post onsubmit="return enterFormData(${jId},this,'${sData[1]}deviceAdd${php}')">`+
 			`<h1${getTrans('deviceNotTrust01')}/h1>`+
@@ -2016,11 +2028,11 @@ deviceAddForm = jId => {
 			`<input type=hidden name=device value="${fp.staticName}">`+
 		`</form>`+
 	`</div>`;
-    return html;
+	return html;
 },
 otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
-    let J = Jexec(jId);
-    let html = pHeader(jId)+
+	let J = Jexec(jId);
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div class=frameprofile style="margin:0;height:100%">`+
 			`<button style="position:absolute;top:80px;right:5px" class="contentAdaptiveSmall loginbtn" onclick="profileSwitcherPhone(${jId})">`+
@@ -2049,15 +2061,15 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 			`<p align=right${getTrans('helperVer')}/p>`+
 		`</div>`+
 	`</div>`;
-    innerMain(jId, html);
-    innerHtnl(jId, userId);
+	innerMain(jId, html);
+	innerHtnl(jId, userId);
 },
 // #endregion
 // #region кнопки профиля (лист входов, удалить аларм и т д)
 newsWindow = (jId, contentId = 0, contentType = 'c') => {
-    let J = Jexec(jId);
-    let gdpses = '';
-    if (contentId === 0) {
+	let J = Jexec(jId);
+	let gdpses = '';
+	if (contentId === 0) {
 		gdpses = `<select style=width:90% class=framelabel name=gdps>`;
 		for (let gdpsType in myGdpses)
 			for (let gdpsKey in myGdpses[gdpsType]) {
@@ -2072,7 +2084,7 @@ newsWindow = (jId, contentId = 0, contentType = 'c') => {
 	} else {
 		gdpses = `<input type=hidden name=gdps value=${contentType}${contentId}>`;
 	}
-    let html = 
+	let html = 
 	`<div id=helperContentProfile>`+
 		`<h1 id=blacktext${getTrans('newPost')}/h1>`+
 		`<form method=post onsubmit="return enterFormData(${jId},this,'${sData[1]}newsPost${php}')">`+
@@ -2084,15 +2096,15 @@ newsWindow = (jId, contentId = 0, contentType = 'c') => {
 			`<input type=submit class="loginbtn"${getTrans('publishNews', 'inputValue')}`+
 		`</form>`+
 	`</div>`;
-    return html;
+	return html;
 },
 
 // #endregion
 // #region newHelper.js - окна
 ADwrite = (jId, userId = '') => {
-    let J = Jexec(jId);
-    let anonymusSend = `<p><input type=checkbox name=anonymus> Send as Object hub</p>`;
-    _.win.open('writeAlarm', 
+	let J = Jexec(jId);
+	let anonymusSend = `<p><input type=checkbox name=anonymus> Send as Object hub</p>`;
+	_.win.open('writeAlarm', 
 		`<h1>Write to support</h1>`+
 		`<form onsubmit="return enterFormData(${jId},this,'${sData[1]}writeAlarm${php}')">`+
 			`<input name=windowId value={winId} type=hidden>`+
@@ -2218,15 +2230,15 @@ getConfInfo = (step = 0)=>{
 // #endregion
 // #region свитчеры
 makeSwticher = (
-    jId,
-    switchType = 0,
-    switcherElemId = '',
-    switcherHTML = '',
-    innerElementId = '',
-    switcherName
+	jId,
+	switchType = 0,
+	switcherElemId = '',
+	switcherHTML = '',
+	innerElementId = '',
+	switcherName
 ) => {
-    let J = Jexec(jId);
-    if (switchType === 0) 
+	let J = Jexec(jId);
+	if (switchType === 0) 
 		if (!J.id(switcherElemId))
 			if (typeof innerElementId === 'string') {
 				if (J.id(innerElementId))
@@ -2237,16 +2249,16 @@ makeSwticher = (
 			J.id(switcherElemId).remove();
 	else
 		J.id(switcherElemId).remove();
-    if (false)
+	if (false)
 		if (!J.id(switcherElemId)) // J.link.compile().includes('switcher='+innerElementId)
 			return swtichRemove(jId, innerElementId);
 		else 
 			switchAdd(jId, innerElementId);
 },
 switchScan = (jId, name) => {
-    let J = Jexec(jId);
-    console.log(name);
-    switch(name) {
+	let J = Jexec(jId);
+	console.log(name);
+	switch(name) {
 		case 'switchHtmlLang':
 			return makeSwticher(jId, 0,'switchHtmlLang2', switchLangMenu(jId), 'switchHtmlLang', 'switchLangMenu');
 			break;
@@ -2267,14 +2279,14 @@ switchScan = (jId, name) => {
 	}
 },
 switchAdd = (jId, name) => {
-    let J = Jexec(jId);
-    J.link.add('switcher='+name);
-    return false;
+	let J = Jexec(jId);
+	J.link.add('switcher='+name);
+	return false;
 },
 swtichRemove = (jId, name) => {
-    let J = Jexec(jId);
-    J.link.remove('switcher='+name);
-    return false;
+	let J = Jexec(jId);
+	J.link.remove('switcher='+name);
+	return false;
 },
 
 switchLangMenu = jId => {
@@ -2520,12 +2532,12 @@ LIKES = {
 },
 
 sendLike = (jId, id, channel, isComm = 0) => {
-    let J = Jexec(jId);
-    if (thisUser.ID === 0)
+	let J = Jexec(jId);
+	if (thisUser.ID === 0)
 		return megaAlert(jId, 'needLogin');
 
-    Loading();
-    _.http.req('POST', `${sData[1]}like${php}?ide=${id}&type=${channel}`)
+	Loading();
+	_.http.req('POST', `${sData[1]}like${php}?ide=${id}&type=${channel}`)
 		.then(data=>{
 			let likeValue = JSON.parse(data),
 				likePlace = 'likesCount',
@@ -2543,12 +2555,12 @@ sendLike = (jId, id, channel, isComm = 0) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 sendDislike = (jId, id, channel, isComm = 0) => {
-    let J = Jexec(jId);
-    if (thisUser.ID === 0)
+	let J = Jexec(jId);
+	if (thisUser.ID === 0)
 		return megaAlert(jId, 'needLogin');
 
-    Loading();
-    _.http.req('POST', `${sData[1]}dislike${php}?ide=${id}&type=${channel}`)
+	Loading();
+	_.http.req('POST', `${sData[1]}dislike${php}?ide=${id}&type=${channel}`)
 		.then(data=>{
 			let likeValue = JSON.parse(data),
 				likePlace = 'likesCount',
@@ -2566,17 +2578,17 @@ sendDislike = (jId, id, channel, isComm = 0) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 repaintLikeButton = (jId, id, isComm, liketype = 0) => {
-    let J = Jexec(jId);
-    let like = 'like'+id,
+	let J = Jexec(jId);
+	let like = 'like'+id,
 		disl = 'dislike'+id;
-    if (isComm) {
+	if (isComm) {
 		like = 'likeComm'+id;
 		disl = 'dislikeComm'+id;
 	}
-    let likeElem = J.id(like),
+	let likeElem = J.id(like),
 		dislElem = J.id(disl);
 
-    if (likeElem.style.filter == '' && dislElem.style.filter == '') {
+	if (likeElem.style.filter == '' && dislElem.style.filter == '') {
 		if (liketype == -1) {
 			dislElem.setAttribute('style', likeStyle.disl);
 		} else {
@@ -2584,10 +2596,10 @@ repaintLikeButton = (jId, id, isComm, liketype = 0) => {
 		}
 		return;
 	}
-    if (likeElem.style.filter != '') {
+	if (likeElem.style.filter != '') {
 		likeElem.setAttribute('style', '');
 	}
-    if (dislElem.style.filter != '') {
+	if (dislElem.style.filter != '') {
 		dislElem.setAttribute('style', '');
 	}
 },
@@ -2621,9 +2633,9 @@ SUBS = {
 	}
 },
 subRespond = (jId, gdpsId) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[10]}sub${php}?id=${gdpsId}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[10]}sub${php}?id=${gdpsId}`)
 		.then(data=>{
 			Loading(1);
 			if (data == '1') {
@@ -2643,9 +2655,9 @@ subRespond = (jId, gdpsId) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 subUnrespond = (jId, gdpsId) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[10]}unsub${php}?id=${gdpsId}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[10]}unsub${php}?id=${gdpsId}`)
 		.then(data=>{
 			Loading(1);
 			if (data == '1') {
@@ -2715,8 +2727,8 @@ pushUrlBase64ToUint8Array = (base64String)=>{
 // #region рендер контента (шоу, кемпы)
 
 FINDrenderMini = (jId, channel, parsedData, joinData = '') => {
-    let J = Jexec(jId);
-    let html = '',
+	let J = Jexec(jId);
+	let html = '',
 		Count = 0,
 		preHtml = [],
 		gdpsData = null,
@@ -2724,7 +2736,7 @@ FINDrenderMini = (jId, channel, parsedData, joinData = '') => {
 		renderJoinLink = null,
 		tagsOs = '';
 
-    for (let Id in parsedData) {
+	for (let Id in parsedData) {
 		Count++;
 		tagsOs = '';
 		if (Count == 9)
@@ -2751,17 +2763,17 @@ FINDrenderMini = (jId, channel, parsedData, joinData = '') => {
 		preHtml = [joinData, renderJoinLink, tagsOs, 'width:300px;height:450px', channel, 0];
 		html += contentRenderMinu(jId, gdpsData, preHtml);
 	}
-    return html;
+	return html;
 },
 renderWiki = (jId, parsedData, page = 0) => {
-    let J = Jexec(jId);
-    page++;
-    let html = '',
+	let J = Jexec(jId);
+	page++;
+	let html = '',
 		Count =	0,
 		preHtml = [],
 		gdpsData = null;
 
-    for (let Id in parsedData) {
+	for (let Id in parsedData) {
 		Count++;
 		if (Count == 9) {
 			innerGdpsPlace(jId, insertBtn(jId, `getWikis(${jId},${page})`),-1);
@@ -2773,18 +2785,18 @@ renderWiki = (jId, parsedData, page = 0) => {
 		preHtml = ['', '', '', 'width:300px;height:350px', -1, 8];
 		html += contentRenderMinu(jId, gdpsData, preHtml, 0, 1, 0, 0);
 	}
-    return html;
+	return html;
 },
 
 FINDrender = (jId, channel, parsedData, joinData = '') => {
-    let J = Jexec(jId);
-    let html = '',
+	let J = Jexec(jId);
+	let html = '',
 		gdpsData = parsedData.gdps,
 		TagsLocal = JSON.parse(gdpsData.tags),
 		os = JSON.parse(gdpsData.os),
 		tagsOs = '';
 
-    switch (channel) {
+	switch (channel) {
 		case 0:
 			gdpsData.GDPSdata = ['camp','getCamp'];
 			break;
@@ -2798,36 +2810,36 @@ FINDrender = (jId, channel, parsedData, joinData = '') => {
 			gdpsData.GDPSdata = ['tele','getTele'];
 			break;
 	}
-    gdpsData.isLiked = LIKES.get('p', gdpsData.ID);
+	gdpsData.isLiked = LIKES.get('p', gdpsData.ID);
 
-    let gText = gdpsData.text;
-    try {
+	let gText = gdpsData.text;
+	try {
 		gText = JSON.parse(gdpsData.text)
 	} catch (e) {}
-    GdpsesFullLangs.mount(""+gdpsData.ID, gText)
+	GdpsesFullLangs.mount(""+gdpsData.ID, gText)
 
-    tagsOs += '<div class="flex-row">';
-    if (TagsLocal != null)
+	tagsOs += '<div class="flex-row">';
+	if (TagsLocal != null)
 		TagsLocal.forEach(tag=>{
 			tagsOs += `<div class="tag"${getTrans(toStringTAGS(channel, tag))}/div>`;
 		});
-    tagsOs += '</div>'+'<div class="flex-row">';
-    if (os != null)
+	tagsOs += '</div>'+'<div class="flex-row">';
+	if (os != null)
 		os.forEach(tag=>{
 			tagsOs += `<div class="tag"${getTrans(toStringTAGS(channel, tag))}/div>`;
 		});
-    tagsOs += '</div>';
+	tagsOs += '</div>';
 
 
-    html += contentRender(jId, gdpsData, 0, 0, 0, tagsOs, 1, gdpsData.wiki, gdpsData.ID, joinData);
-    return html;
+	html += contentRender(jId, gdpsData, 0, 0, 0, tagsOs, 1, gdpsData.wiki, gdpsData.ID, joinData);
+	return html;
 },
 RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') => {
-    let J = Jexec(jId);
-    console.warn('renderNews Comm => '+isComm);
-    if (commBackFunc == '')
+	let J = Jexec(jId);
+	console.warn('renderNews Comm => '+isComm);
+	if (commBackFunc == '')
 		commBackFunc = backFunc;
-    let html = '',
+	let html = '',
 		html2 = '',
 		Count = 0,
 		
@@ -2835,13 +2847,13 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 		gdpsData = null,
 		miniRenderMode = '';
 
-    let myCampsIds = [];
-    for (let gdpsType in myGdpses)
+	let myCampsIds = [];
+	for (let gdpsType in myGdpses)
 		for (let gdpsKey in myGdpses[gdpsType]) 
 			if (thisUser.ID == myGdpses[gdpsType][gdpsKey].author) 
 				myCampsIds.push(myGdpses[gdpsType][gdpsKey].ID);
 
-    for (let ide in data)	{
+	for (let ide in data)	{
 		Count++;
 		if (Count == 11) 
 			return html2;
@@ -2940,13 +2952,13 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 	`</div>`;
 		html2 = html2 + html;
 	}
-    if (html2 == '')
+	if (html2 == '')
 		return `<h1 class=contentAdaptiveBig${getTrans('newsNoneReal')}/h1>`;
-    return html2;
+	return html2;
 },
 renderVacancy = (jId, parsedData, isAdmin = thisUser.role, renderMethod = 'm') => {
-    let J = Jexec(jId);
-    let html = '',
+	let J = Jexec(jId);
+	let html = '',
 		Count = 0,
 		TagsLocal = [],
 		tagsOs = '',
@@ -2955,7 +2967,7 @@ renderVacancy = (jId, parsedData, isAdmin = thisUser.role, renderMethod = 'm') =
 		title = '',
 		text = '';
 
-    for (let longId in parsedData) {
+	for (let longId in parsedData) {
 		let id = longId.slice(1);
 		tagsOs = '';
 		Count++;
@@ -3035,12 +3047,12 @@ renderVacancy = (jId, parsedData, isAdmin = thisUser.role, renderMethod = 'm') =
 			`</div>`+
 		`</div>`;
 	}
-    return html;
+	return html;
 },
 vacRespond = (jId, vacId) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[8]}apply${php}?id=${vacId}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[8]}apply${php}?id=${vacId}`)
 		.then(aplId=>{
 			Loading(1);
 			megaAlert(jId, 'reported');
@@ -3054,9 +3066,9 @@ vacRespond = (jId, vacId) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 vacUnrespond = (jId, vacId, aplId) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[8]}removeApl${php}?id=${aplId}&vacId=${vacId}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[8]}removeApl${php}?id=${aplId}&vacId=${vacId}`)
 		.then(data=>{
 			Loading(1);
 			megaAlert(jId, 'otmena');
@@ -3070,12 +3082,12 @@ vacUnrespond = (jId, vacId, aplId) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 renderApplies = (jId, parsedData, backFunc, gdpsId) => {
-    let J = Jexec(jId);
-    let html = '',
+	let J = Jexec(jId);
+	let html = '',
 		Count = 0,
 		tagsOs = '';
 
-    for (let Id in parsedData) {
+	for (let Id in parsedData) {
 		Count++;
 		tagsOs = '';
 		if (Count == 11)
@@ -3094,12 +3106,12 @@ renderApplies = (jId, parsedData, backFunc, gdpsId) => {
 			`</div>`+
 		`</div>`;
 	}
-    return html;
+	return html;
 },
 
 renderComms = (jId, parsedData, channel = 0, dataForNextButton = '') => {
-    let J = Jexec(jId);
-    let commcount = 0,
+	let J = Jexec(jId);
+	let commcount = 0,
 		html = '',
 		htmlFull = '',
 		delBtn = '',
@@ -3116,7 +3128,7 @@ renderComms = (jId, parsedData, channel = 0, dataForNextButton = '') => {
 		isLiked = null,
 		nameColor = null;
 
-    switch (channel) {
+	switch (channel) {
 		case 0:
 		case 1:
 			likeChannel = 3;
@@ -3135,7 +3147,7 @@ renderComms = (jId, parsedData, channel = 0, dataForNextButton = '') => {
 			break;
 	}
 
-    for (let ide in parsedData) {
+	for (let ide in parsedData) {
 		if (commcount == 10) {
 			htmlFull = htmlFull + insertBtn(jId, `helperComments(${jId},${dataForNextButton})`, 'showMore', 1, 'C');
 			return htmlFull;
@@ -3189,12 +3201,12 @@ renderComms = (jId, parsedData, channel = 0, dataForNextButton = '') => {
 
 		html = '';
 	}
-    if (htmlFull == '')
+	if (htmlFull == '')
 		return `<h1${getTrans('commsNone')}/h1>`;
-    return htmlFull;
+	return htmlFull;
 },
 renderWork = (jId, worksArray, itsMyWorks) => {
-    let J = Jexec(jId);
+	let J = Jexec(jId);
 	let html = '',
 		renderMurder = returnAllProjects()
 			.filter(e => e.author === thisUser.ID)
@@ -3214,7 +3226,7 @@ renderWork = (jId, worksArray, itsMyWorks) => {
 	return html;
 },
 workContent = (jId, gdpsData, itsMyWorks, renderMurder = false) => {
-    let J = Jexec(jId),
+	let J = Jexec(jId),
 			workId = gdpsData[0],
 			GdpsTitle = gdpsData[1],
 			GdpsChannel = gdpsData[2],
@@ -3316,12 +3328,12 @@ seePassword = (winId)=>{
 },
 
 profileSwitcherPhone = jId => {
-    let J = Jexec(jId);
-    let
+	let J = Jexec(jId);
+	let
 	profileNavPhone = J.id('phoneSelectorSmall'),
 	profileContent = J.id('helperContentProfile');
 
-    if (J.headerPhoneSwitcher !== 1) {
+	if (J.headerPhoneSwitcher !== 1) {
 		J.headerPhoneSwitcher = 1;
 		profileNavPhone.style.display = 'grid';
 		profileContent.style.display = 'none';
@@ -3332,12 +3344,12 @@ profileSwitcherPhone = jId => {
 	}
 },
 switchMobileMain = jId => {
-    let J = Jexec(jId);
-    let 
+	let J = Jexec(jId);
+	let 
 	helperNavPhone = J.id('helperSecond'),
 	pageContent = J.id('helperContent');
 
-    if (J.headerPhoneSwitcher !== 2) {
+	if (J.headerPhoneSwitcher !== 2) {
 		J.headerPhoneSwitcher = 2;
 		helperNavPhone.style.display = 'grid';
 		pageContent.style.display = 'none';
@@ -3361,47 +3373,47 @@ linkCopy = (string)=>{
 	megaAlert(0, 'copied');
 },
 megaAlert = (jId, text, waitTime = 3000) => {
-    let J = Jexec(jId);
-    let doneText = '';
-    if (!Array.isArray(text))
+	let J = Jexec(jId);
+	let doneText = '';
+	if (!Array.isArray(text))
 		doneText = getTrans(text);
 	else {
 		doneText = `>${text.map(el=>`<span${getTrans(el)}/span>`).join(' ')}<`;
 	}
-    if (text.startsWith('![]'))
+	if (text.startsWith('![]'))
 		text = `<img src=${text.slice(3)}>`;
-    innerMain(jId, `<div class=ALERT id=alert style=top:20%;left:50%><h1${doneText}/h1></div>`,512);
-    setTimeout(()=>{
+	innerMain(jId, `<div class=ALERT id=alert style=top:20%;left:50%><h1${doneText}/h1></div>`,512);
+	setTimeout(()=>{
 		if (_.$.id('alert'))
 			_.$.id('alert').remove();
 	}, waitTime);
-    return false;
+	return false;
 },
 megaAlert2 = (jId, text, waitTime = 3000) => {
-    let J = Jexec(jId);
-    let doneText = '';
-    if (!Array.isArray(text))
+	let J = Jexec(jId);
+	let doneText = '';
+	if (!Array.isArray(text))
 		doneText = text;
 	else {
 		doneText = `>${text.map(el=>`<span>${el}</span>`).join(' ')}<`;
 	}
-    if (text.startsWith('![]'))
+	if (text.startsWith('![]'))
 		text = `<img src=${text.slice(3)}>`;
-    innerMain(jId, `<div class=ALERT id=alert style=top:20%;left:50%><h1>${doneText}</h1></div>`,512);
-    setTimeout(()=>{
+	innerMain(jId, `<div class=ALERT id=alert style=top:20%;left:50%><h1>${doneText}</h1></div>`,512);
+	setTimeout(()=>{
 		if (J.id('alert'))
 			J.id('alert').remove();
 	}, waitTime);
-    return false;
+	return false;
 },
 
 
 
 enterFormData = (jId, form, sendPlace) => {
-    let J = Jexec(jId);
-    let FORMDATA = new FormData(form);
-    params = '';
-    switch (sendPlace) {
+	let J = Jexec(jId);
+	let FORMDATA = new FormData(form);
+	params = '';
+	switch (sendPlace) {
 		case sData[1]+'newsPost'+php:
 			let gdpsId = FORMDATA.get('gdps'),
 				[ch, gdps] = [gdpsId[0], gdpsId.slice(1)];
@@ -3410,19 +3422,19 @@ enterFormData = (jId, form, sendPlace) => {
 			break;
 	}
 
-    let postHasFiles = false;
-    for (let [key, value] of FORMDATA.entries()) {
+	let postHasFiles = false;
+	for (let [key, value] of FORMDATA.entries()) {
 		if (value instanceof File) {
 			postHasFiles = true;
 			break;
 		}
 	}
-    //if (!postHasFiles)
-    //	params = new URLSearchParams(FORMDATA).toString();
-    //else 
-    params = FORMDATA;
-    Loading();
-    _.http.req('POST', sendPlace, params)
+	//if (!postHasFiles)
+	//	params = new URLSearchParams(FORMDATA).toString();
+	//else 
+	params = FORMDATA;
+	Loading();
+	_.http.req('POST', sendPlace, params)
 	.then(data=>{
 		if (sendPlace.indexOf('?') !== -1)
 			sendPlace = sendPlace.split('?')[0];
@@ -3509,15 +3521,15 @@ enterFormData = (jId, form, sendPlace) => {
 	})
 	.catch(e=>{console.error(e);_.err.handleRejection(e)});
 
-    return false;
+	return false;
 },
 
 
 
 updateFileSize = (jId, value) => {
-    let J = Jexec(jId);
-    J.id('fileSize').setAttribute('value', value);
-    J.id('fileSizeInt').innerHTML = value;
+	let J = Jexec(jId);
+	J.id('fileSize').setAttribute('value', value);
+	J.id('fileSizeInt').innerHTML = value;
 },
 
 checkOwn = (contentId, userId, type)=>{
@@ -3586,9 +3598,9 @@ verifyWork = (jId, workId) => {
 // #region викифункции
 
 Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
-    let J = Jexec(jId);
-    const ATTR_RE = /\s*\{([.\#][^\{\}]*)\}\s*$/;
-    const parseBlockAttrs = (text) => {
+	let J = Jexec(jId);
+	const ATTR_RE = /\s*\{([.\#][^\{\}]*)\}\s*$/;
+	const parseBlockAttrs = (text) => {
 		const m = text.match(ATTR_RE);
 		if (!m) return { text, cls: '', id: '' };
 		const clean = text.slice(0, m.index);
@@ -3608,8 +3620,8 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		};
 	};
 
-    // ===== ФАЗА 1: LEXER — режем текст на блочные токены =====
-    const mdLex = (mdText) => {
+	// ===== ФАЗА 1: LEXER — режем текст на блочные токены =====
+	const mdLex = (mdText) => {
 		mdText = mdText.replaceAll(/\r\n/g, '\n').replaceAll(/\r<br>/g, '\n');
 		const lines = mdText.split('\n');
 		const tokens = [];
@@ -3692,8 +3704,8 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		return tokens;
 	};
 
-    // ===== инлайн-разметка внутри текста одного токена =====
-    const mdInline = (text) => {
+	// ===== инлайн-разметка внутри текста одного токена =====
+	const mdInline = (text) => {
 		text = text
 			.replaceAll(/!\[(.*?)\]\((.*?) "(.*?)"\)/g, '<img style=max-width:100% alt="$1" src="$2" $3 />')
 			.replaceAll(/!\[(.*?)\]\((.*?)\)/g, '<img style=max-width:100% alt="$1" src="$2" />')
@@ -3713,8 +3725,8 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		return text;
 	};
 
-    // ===== ФАЗА 2: RENDER — токены в html =====
-    const mdRender = (tokens) => {
+	// ===== ФАЗА 2: RENDER — токены в html =====
+	const mdRender = (tokens) => {
 		let html = '';
 		let listBuf = null;
 		const flushList = () => {
@@ -3783,8 +3795,8 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		return html.trim();
 	};
 
-    // ===== ФАЗА 0: шаблоны =====
-    const mdTemplates = (mdText) =>
+	// ===== ФАЗА 0: шаблоны =====
+	const mdTemplates = (mdText) =>
 		mdText.replace(
 			/\{\{([^}|]+)(?:\|([^}]*))?\}\}/g,
 			(match, templateName, argsStr) => {
@@ -3817,16 +3829,16 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 			}
 		);
 
-    mdText = mdText.replace(/\\(.)/g, (match, char) =>
+	mdText = mdText.replace(/\\(.)/g, (match, char) =>
 		'\u0000ESC' + char.charCodeAt(0).toString(16).padStart(4, '0') + '\u0000'
 	);
-    mdText = mdTemplates(mdText);
-    const tokens = mdLex(mdText);
-    let html = mdRender(tokens);
-    html = html.replace(/\u0000ESC([0-9a-fA-F]{4})\u0000/g, (m, hex) =>
+	mdText = mdTemplates(mdText);
+	const tokens = mdLex(mdText);
+	let html = mdRender(tokens);
+	html = html.replace(/\u0000ESC([0-9a-fA-F]{4})\u0000/g, (m, hex) =>
 		String.fromCharCode(parseInt(hex, 16))
 	);
-    return html;
+	return html;
 },
 // #endregion
 // #region страницы в профилях
@@ -3839,12 +3851,12 @@ toStringRole = (id)=>{
 	};
 },
 dropWindow = jId => {
-    let J = Jexec(jId);
-    _.$.qa('[isloginwindow]').forEach(el=>{
+	let J = Jexec(jId);
+	_.$.qa('[isloginwindow]').forEach(el=>{
 		_.wins[el.id].close();
 	});
-    J.link.set('drop');
-    let html = pHeader(jId)+
+	J.link.set('drop');
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div class="frameprofile" style="width:10cqw%">`+
 			`<h1${getTrans('passReset')}/h1>`+
@@ -3853,15 +3865,15 @@ dropWindow = jId => {
 			`<button class=loginbtn onclick="profilePage(${jId})"${getTrans('back')}/button>`+
 		`</div>`+
 	`</div>`;
-    return html;
+	return html;
 },
 verifyWindow = jId => {
-    let J = Jexec(jId);
-    _.$.qa('[isloginwindow]').forEach(el=>{
+	let J = Jexec(jId);
+	_.$.qa('[isloginwindow]').forEach(el=>{
 		_.wins[el.id].close();
 	});
-    J.link.set('verify');
-    let html = pHeader(jId)+
+	J.link.set('verify');
+	let html = pHeader(jId)+
 	`<div id=helperContent>`+
 		`<div class="frameprofile" style="width:10cqw%">`+
 			`<h1${getTrans('enterCode2')}/h1>`+
@@ -3870,12 +3882,12 @@ verifyWindow = jId => {
 			`<button class=loginbtn onclick="profilePage(${jId})"${getTrans('back')}/button>`+
 		`</div>`+
 	`</div>`;
-    return html;
+	return html;
 },
 otherProfileMini = (jId, userId) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[0]}getUser${php}?id=${userId}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[0]}getUser${php}?id=${userId}`)
 	.then(data=>{
 		let userData = JSON.parse(data);
 		J.link.set('profiles='+userId, userData.username);
@@ -3900,9 +3912,9 @@ otherProfileMini = (jId, userId) => {
 	.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 openPortfolio = (jId, userId, itsMyWorks = false) => {
-    let J = Jexec(jId);
-    Loading();
-    _.http.req('GET', `${sData[5]}works${php}?id=${userId}`)
+	let J = Jexec(jId);
+	Loading();
+	_.http.req('GET', `${sData[5]}works${php}?id=${userId}`)
 	.then(data=>{
 		let serverResp = JSON.parse(data),
 			userData = serverResp[0],
@@ -3928,11 +3940,11 @@ openPortfolio = (jId, userId, itsMyWorks = false) => {
 	.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 otherFindsWindow = (jId, channel, userId) => {
-    let J = Jexec(jId);
-    let [smallString, bigString] = GDPSswitchChannel(channel);
-    J.link.set('profiles/'+smallString+'s='+userId);
-    Loading();
-    _.http.req('GET', `${sData[0]}getAdded${bigString}s${php}?id=${userId}&type=${channel}`)
+	let J = Jexec(jId);
+	let [smallString, bigString] = GDPSswitchChannel(channel);
+	J.link.set('profiles/'+smallString+'s='+userId);
+	Loading();
+	_.http.req('GET', `${sData[0]}getAdded${bigString}s${php}?id=${userId}&type=${channel}`)
 	.then(data=>{
 		let parsedData = JSON.parse(data),
 			gdpses = "";
@@ -3954,22 +3966,22 @@ otherFindsWindow = (jId, channel, userId) => {
 	.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 otherCampsWindow = (jId, userId) => {
-    let J = Jexec(jId);
-    otherFindsWindow(jId, 0, userId);
+	let J = Jexec(jId);
+	otherFindsWindow(jId, 0, userId);
 },
 otherShowsWindow = (jId, userId) => {
-    let J = Jexec(jId);
-    otherFindsWindow(jId, 1, userId);
+	let J = Jexec(jId);
+	otherFindsWindow(jId, 1, userId);
 },
 otherPeresWindow = (jId, userId) => {
-    let J = Jexec(jId);
-    otherFindsWindow(jId, 2, userId);
+	let J = Jexec(jId);
+	otherFindsWindow(jId, 2, userId);
 },
 otherWikisWindow = (jId, userId) => {
-    let J = Jexec(jId);
-    J.link.set('profiles/wikis='+userId);
-    Loading();
-    _.http.req('GET', `${sData[0]}getUserGuides${php}?id=${userId}`)
+	let J = Jexec(jId);
+	J.link.set('profiles/wikis='+userId);
+	Loading();
+	_.http.req('GET', `${sData[0]}getUserGuides${php}?id=${userId}`)
 	.then(data=>{
 		let parsedData = JSON.parse(data),
 			gdpses = "";
@@ -3991,8 +4003,8 @@ otherWikisWindow = (jId, userId) => {
 	.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 FINDrenderInProfile = (jId, parsedData, limit = 9, flags = []) => {
-    let J = Jexec(jId);
-    let html = '',
+	let J = Jexec(jId);
+	let html = '',
 		Count = 0,
 
 		gdpsData = null,
@@ -4006,7 +4018,7 @@ FINDrenderInProfile = (jId, parsedData, limit = 9, flags = []) => {
 		bigString = null,
 		isWeeklyData = ['',''];
 
-    for (let Id in parsedData) {
+	for (let Id in parsedData) {
 		Count++;
 		if (Count == limit)
 			return html;
@@ -4045,11 +4057,11 @@ FINDrenderInProfile = (jId, parsedData, limit = 9, flags = []) => {
 			`</div>`+
 		`</div>`;
 	}
-    return html;
+	return html;
 },
 WIKIrenderInProfile = (jId, parsedData) => {
-    let J = Jexec(jId);
-    let html = '',
+	let J = Jexec(jId);
+	let html = '',
 
 		gdpsData = null,
 		id = null,
@@ -4058,7 +4070,7 @@ WIKIrenderInProfile = (jId, parsedData) => {
 		username = null,
 		guidImg = null;
 
-    for (let Id in parsedData) {
+	for (let Id in parsedData) {
 
 		gdpsData = parsedData[Id];
 		id = gdpsData.ID;
@@ -4082,7 +4094,7 @@ WIKIrenderInProfile = (jId, parsedData) => {
 			`</div>`+
 		`</div>`;
 	}
-    return html;
+	return html;
 },
 // #endregion
 // #region кастомхелпер

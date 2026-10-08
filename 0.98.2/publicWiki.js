@@ -475,7 +475,8 @@ renderGuideMini = (jId, parsedData, page = 0) => {
 		}
 		Count++;
 		if (Count == 9) {
-			innerGdpsPlace(jId, insertBtn(jId, `getGuides(${jId},${J.globalWiki},${page})`),-1);
+			// вроде как у меня уже есть поиск, зачем мне вставлять кнопку "ещё" прямо внутри рендера
+			//innerGdpsPlace(jId, insertBtn(jId, `getGuides(${jId},${J.globalWiki},${page})`),-1);
 			return html;
 		}
 
@@ -496,6 +497,7 @@ renderGuideMini = (jId, parsedData, page = 0) => {
 
 pageGuides = (jId, wiki, backButton = '') => {
     let J = Jexec(jId);
+	J.helperFindData = [0,[],[],-2,'&wikiId='+wiki];
     if (backButton !== '')
 		backButton = `<div class=gdps-forum><button class=loginbtn onclick="${backButton}"${getTrans('back')}/button></div>`;
 
@@ -504,12 +506,19 @@ pageGuides = (jId, wiki, backButton = '') => {
     J.globalWiki = wiki;
     let html = pHeader(jId)+
 	`<div id=helperContent>`+
-		`<h1 align=center>`+
-			`<span id=wikiName></span>`+
-			` <span${getTrans('guides09')}/span>`+
-			(checkWikiOwn(wiki) ? ` <button class=loginbtn onclick="createGuide(${jId},`+wiki+')">+</button>' : '')+
-		`</h1>`+
-		backButton+
+		`<div id=finder align=left class="frameprofile">`+
+			`<h1 align=center>`+
+				`<span id=wikiName></span>`+
+				` <span${getTrans('guides09')}/span>`+
+				(checkWikiOwn(wiki) ? ` <button class=loginbtn onclick="createGuide(${jId},`+wiki+')">+</button>' : '')+
+			`</h1>`+
+			`<label${getTrans('findByName')}/label>:<br>`+
+			`<input type=text id=gdpsNameInput class=framelabel style=width:190px${getTrans('wikiName', 'input')}<br><br>`+
+			`<label onclick=setMethod(${jId},0) id=method0 class=tagSel${getTrans('search4')}/label>`+
+			`<label onclick=setMethod(${jId},1) id=method1 class=tagPre${getTrans('mostLike')}/label>`+
+			`<label onclick=setMethod(${jId},2) id=method2 class=tagPre${getTrans('mostDisl')}/label>`+
+			backButton+
+		`</div>`+
 		`<div class=gdps-list-place id=GDPSesPlace>`+
 		`</div>`+
 	`</div>`;

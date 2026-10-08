@@ -135,9 +135,7 @@ getGuidesAdminControl = (jId, wikiId, page = 0) => {
     let J = Jexec(jId);
     let html = 
 	`<button style="font-size:calc(var(--def-font)*1.5)" class="loginbtn" onclick="createGuide(${jId},${wikiId},1)"${getTrans('guides01')}/button>`+
-	profileContentDiv(jId)+
-		`<div id=GDPSesPlace align=left style=display:flex;flex-wrap:wrap></div>`+
-	`</div>`;
+	`<div id=GDPSesPlace align=left style=display:flex;flex-wrap:wrap></div>`;
     if (page === 0) {
 		J.globalWiki = wikiId;
 		innerWikiControl(jId, html);
