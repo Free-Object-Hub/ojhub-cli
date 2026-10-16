@@ -1,34 +1,34 @@
-// ГАЙД ПО МИНИФИКАЦИИ - J.id() это обычный док гет элембуид. innerMain(jId) это заменить весь контект внутри div id=1st
+// MINIFICATION GUIDE - J.id() is just a doc get elembyid. innerMain(jId) replaces all content inside div id=1st
 
-/* порядок запуска хелпера (жс):
- * вызывается функция `reStart(${jId})`, которая вызывает '_.http.req()' но это мелочи, она назначает глобальные переменные GDPSes и Guides
- * если есть вход в аккаунт назначаются ещё и thisUser, myGdpses и myguides
- * после вызывается функция 'J.link.get()', которая берёт в урл всё после '?' и прогоняя через себя вызывает нужные функции (например '?guides' закинет в гайды, или '?gdps=45' откроет гдпс с айди 45)
- * после выполнения 'J.link.get()' хелпер готов к работе с клиентом
- * !!!: гайд писался к гдпс хелпер 1.8, формально обджект хаб это уже гдпс хелпер 2.1, так что он кардинально устарел
+/* helper launch order (js):
+ * the function `reStart(${jId})` is called, which calls '_.http.req()' but those are trifles, it assigns the global variables GDPSes and Guides
+ * if logged into an account, thisUser, myGdpses and myguides are also assigned
+ * after that 'J.link.get()' is called, which takes everything after '?' in the url and, running it through itself, calls the needed functions (for example '?guides' will take you to guides, or '?gdps=45' will open the gdps with id 45)
+ * after 'J.link.get()' executes, the helper is ready to work with the client
+ * !!!: the guide was written for gdps helper 1.8, formally object hub is already gdps helper 2.1, so it's drastically outdated
 */
 
-/* Поясняю за некоторую легаси парашу - типы комментов и лайков
- * На сервере ошхаба комментарии и лайки определяются и хранятся в каналах в одной таблице, ниже приведен список какой у кого канал
- * тип контента               | лайки | комментарии | каналы | Ко-овнеры
- * Кемпы                      | 0     | 0           | 0      | 1
- * Обджект шоу                | 0     | 0           | 1      | 1
- * переводы                   | 0     | 0           | 2      | 1
- * Вики                       | 8     | -           | -1     | отдельная от soowners таблица wikisoowners
- * Страницы вики              | 7     | 2           | -2     | -
- * Форум посты                | 9     | 4           | -3     | -
- * вакансии                   | 11    | 5           | -5     | -
- * Новости                    | 2     | 3           | -      | -
- * комментарии к кемпам       | 1     | -           | -      | -
- * комментарии к шоу          | 1     | -           | -      | -
- * комментарии к новостям     | 5     | -           | -      | -
- * комментарии к страницам    | 6     | -           | -      | -
- * комментарии к форум постам | 10    | -           | -      | -
- * комментарии к вакансиям    | 12    | -           | -      | -
- * Ваш контент                | 13++  | 6++         | -      | 2++
+/* Explaining some legacy crap - types of comments and likes
+ * On the oshub server, comments and likes are identified and stored in channels in one table, below is the list of who has which channel
+ * content type               | likes | comments | channels | Co-owners
+ * Camps                      | 0     | 0        | 0        | 1
+ * Object show                | 0     | 0        | 1        | 1
+ * dubs                       | 0     | 0        | 2        | 1
+ * Wiki                       | 8     | -        | -1       | a separate table from soowners wikisoowners
+ * Wiki pages                 | 7     | 2        | -2       | -
+ * Forum posts                | 9     | 4        | -3       | -
+ * vacancies                  | 11    | 5        | -5       | -
+ * News                       | 2     | 3        | -        | -
+ * comments to camps          | 1     | -        | -        | -
+ * comments to shows          | 1     | -        | -        | -
+ * comments to news           | 5     | -        | -        | -
+ * comments to pages          | 6     | -        | -        | -
+ * comments to forum posts    | 10    | -        | -        | -
+ * comments to vacancies      | 12    | -        | -        | -
+ * Your content               | 13++  | 6++      | -        | 2++
 */
 
-// #region базовые компоненты ошхаба, связанные с невхелпером
+// #region basic oshub components tied to newhelper
 let 
 captchaLoad = false,
 
@@ -36,9 +36,9 @@ helperVapidPublic = 'BEcP_7U_yMSR7K0oqBHQAHDK5jl9d7zKsxtXn_n7gIUr547kWWtUg_wfBDB
 helperCaptchaSiteKey = '6Ldrt0grAAAAAMdteG7pq6LZ1UYeMvkElvUV7Qhx',
 globalWiki = 0,
 wikiTemplates = {},
-guideEditorFrame = 0, // используется только в редакторе гайдов чтобы можно было удалять разделы не по порядку
-TimeOut = [null,null], // [0] для инпута, [1] для анимаций окон (регистрация и логин)
-headerPhoneSwitcher = 0, // 0 - не нажимался, 1 - в профиле, 2 - в навигаторе
+guideEditorFrame = 0, // used only in the guide editor so you can delete sections out of order
+TimeOut = [null,null], // [0] for input, [1] for window animations (registration and login)
+headerPhoneSwitcher = 0, // 0 - not pressed, 1 - in profile, 2 - in navigator
 ProjectsChannel = 1;
 
 urlEncoded = {'Content-type':'application/x-www-form-urlencoded'},
@@ -73,7 +73,7 @@ GDPSgetChannel = (channel)=>{
 helperSettings = {
 	openGuidesInWindow: parseInt(Slocal.get('openGuidesInWindow')),
 },
-token = Slocal.get('User'); // токен юзера
+token = Slocal.get('User'); // user token
 if (token) 
 	_.http.defaultHeaders['user-token'] = token;
 
@@ -131,7 +131,7 @@ helperInitData = (jId, data)=>{
 };
 helperInit = (jId, drop)=>{
 	let J = Jexec(jId);
-	Fingerprint.generate(token) // если токен есть значит есть и юзер => генерируем девайс токен
+	Fingerprint.generate(token) // if there's a token then there's a user => generate device token
 		.then(fpData=>{
 			LIKES.init();
 			J.link.get();
@@ -200,12 +200,12 @@ errInfo =
 	`USERID: ${thisUser.ID}\n`;
 let
 
-// Главные html теги
+// Main html tags
 	helperIcon = link = _.$.q("link[rel~='icon']"),
 	helperTitle = _.$.q('title'),
 // #endregion
-// #region компоненты
-// #region микрокомпоненты
+// #region components
+// #region microcomponents
 	emptyButton = (text = '', func = '', style = '', id = '', Class = '')=>{
 		return `<button ${id ? 'id="'+id+'"' : ''}class="emptybtn ${Class}" style="${style}" onclick="${func}"${text}/button>`;
 	},
@@ -252,7 +252,7 @@ profileContentDiv = jId => {
 
 bottomNavButton = (jId, text, Class, oncl, icon = '', matchPath = '')=>{
 	let J = Jexec(jId);
-	// делаем сплит чтобы вложенные маршруты не ломали красоту картинки
+	// do a split so that nested routes don't break the beauty of the picture
 	if (J.link.compile()[0].split('/')[0] === matchPath)
 		Class += ' active'
 	return `<button class="${Class}" onclick="${oncl}">${icon}<span class="navlabel"${getTrans(text)}/span></button>`;
@@ -328,12 +328,12 @@ contentRender = function(
 	specialButtons = 1,
 	connectedWiki = 1,
 	reportButton = '',
-	// работает как кнопка назад в рендере новостей
+	// works as a back button in the news render
 	joinData = '',
 	isComm = 1
 ) {
 	let J = Jexec(jId);
-	// LANGS модуль
+	// LANGS module
 	if (likeType === 0) {
 		preHtml.text = GdpsesFullLangs.text(""+preHtml.ID)
 	} else {
@@ -358,7 +358,7 @@ contentRender = function(
 				basicButton(getTrans('gdpsSub'), `subRespond(${jId},${preHtml.ID})`, '', `sub${preHtml.ID}`) :
 				basicButton(getTrans('gdpsUnsub'), `subUnrespond(${jId},${preHtml.ID})`, '', `sub${preHtml.ID}`)
 			)
-			 ///////////////////////////////////////////////////////////////////////////////////// КНОПКА ПОДПИСКИ
+			 ///////////////////////////////////////////////////////////////////////////////////// SUBSCRIBE BUTTON
 		: '')+
 		`<p style="margin:0">`+
 		(authorBtn ?
@@ -463,7 +463,7 @@ contentRenderMinu = function(
 	}
 	data.isLiked = LIKES.get(preHtml[4], data.ID);
 
-	// LANGS модуль
+	// LANGS module
 	if (preHtml[4] > -1) {
 		data.text = GdpsesShortLangs.text(""+data.ID)
 	} else {
@@ -551,6 +551,7 @@ contentSendCommForm = (jId, sendCommData) => {
 	return '';
 },
 
+// Note - tags are the dumbest numbers without any tricks, the client maps them to L10n keys and renders
 Tags = [
 	{
 		'1': 'Camptag1',
@@ -576,6 +577,7 @@ Tags = [
 		'9': 'Showtag9',
 	},
 	{
+		// Dupes use the tags of plain shows because why would I multiply extra keys
 		'1': 'Showtag1',
 		'2': 'Showtag2',
 		'3': 'Showtag3',
@@ -637,7 +639,7 @@ TagsVacs = {
 	9:'Vacstag9',
 	10:'Vacstag10',
 },
-toStringTAGS = (channel, tag)=>{ // используется для рендера, перемещена из региона рендера для более удобного добавления новых тегов
+toStringTAGS = (channel, tag)=>{ // used for rendering, moved from the render region for easier addition of new tags
 	let findArr = Object.assign({}, Tags[channel], Os[channel]);
 	return findArr[tag];
 },
@@ -664,15 +666,16 @@ renderTagAdding = (jId, Array, Class, id, checked = '') => {
 },
 
 // #endregion
-// #region поиск + контент(открытие кемпов вики форумов и т д)
+// #region search + content (opening camps wiki forums etc.)
 
-// две переменные ниже работают с функциями HELPERFIND_REGION
-helperFindData = [0,[],[],1], // нулевой это метод поиска, первый просто теги, второй платформы, третий это канал
+// DEPRECATED: some globals below are already dead because they became components of jails
+// the two variables below work with HELPERFIND_REGION functions
+helperFindData = [0,[],[],1], // the zeroth is the search method, first just tags, second platforms, third is the channel
 
-// переменные для кеша в поиске
-	CacheFinds = [1,'','',1], // канал, кеш, строка поиска и страница
+// variables for the search cache
+	CacheFinds = [1,'','',1], // channel, cache, search string and page
 
-	// переменные для кеша в профилях
+	// variables for the cache in profiles
 	myGdpses = [{},{},{}, {}],
 	myguides = [],
 	yourWikies = [],
@@ -997,7 +1000,7 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 			case '/':
 				backFunc = 'getPere';
 				break;
-			//FIXME:getTele про патч пжпж UwU
+			//FIXME:getTele about the patch plzplz UwU
 			case ';':
 				backFunc = 'globalNews';
 				break;
@@ -1092,8 +1095,8 @@ getWikis = (jId, page) => {
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
 // #endregion
-// #region вставка в разные куски страницы, функция innerMain упомянута тут, за остальные поясню ниже
-// вставка контента в правую половину окна профилей, для телефонов замена всего экрана
+// #region insertion into different pieces of the page, the function innerMain is mentioned here, I'll explain the rest below
+// insert content into the right half of the profile window, for phones replaces the whole screen
 innerProfile = (jId, textContent) => {
 	let J = Jexec(jId);
 	document.documentElement.style = '';
@@ -1102,7 +1105,7 @@ innerProfile = (jId, textContent) => {
 	else 
 		return new Error('Cant find "profileWindow" element!');
 },
-// вставка контента в вики данные
+// insert content into wiki data
 innerWikiControl = (jId, textContent, wikiId = '') => {
 	let J = Jexec(jId);
 	if (J.id('wikiControlP'+wikiId)) 
@@ -1110,35 +1113,35 @@ innerWikiControl = (jId, textContent, wikiId = '') => {
 	else 
 		return new Error('Cant find "profileWindow" element!');
 },
-// вставка контента под рамкой поиска
+// insert content under the search frame
 innerGdpsPlace = (jId, textContent, insertType = 0, otherId = '') => {
 	let J = Jexec(jId);
 	if (!J.id('GDPSesPlace')) 
 		return new Error('Cant find "GDPSesPlace" element!');
 
-	if (insertType == 0) // профили
+	if (insertType == 0) // profiles
 		J.id('GDPSesPlace'+otherId).innerHTML = textContent;
 	else if (insertType == 512)
 		J.id('GDPSesPlace'+otherId).insertAdjacentHTML('beforebegin', textContent);
 	else if (insertType == 511)
 		J.id('GDPSesPlace'+otherId).insertAdjacentHTML('afterbegin', textContent);
-	else if (insertType >= 1) // в поиске устарел
+	else if (insertType >= 1) // deprecated in search
 		J.id('GDPSesPlace'+otherId).insertAdjacentHTML('beforeend', textContent);
-	else // в поиске но лучще это
+	else // in search but this is better
 		J.id('GDPSesPlace'+otherId).insertAdjacentHTML('afterend', textContent);
 },
-// вставка контента в рамку комментариев, прошу обратить внимание ибо у гдпсов она справа, а у гайдов и текстур заполняет весь экран
+// insert content into the comments frame, please note because for gdps it's on the right, but for guides and textures it fills the whole screen
 innerComments = (jId, textContent, insertType = 0) => {
 	let J = Jexec(jId);
 	if (!J.id('comments')) 
 		return new Error('Cant find "comments" element!');
-	if (insertType == 0) // при рендере гдпса
+	if (insertType == 0) // when rendering a gdps
 		J.id('comments').innerHTML = textContent;
 	else 
-		// а эт вроде когда "показать больше"
+		// and this is apparently for "show more"
 		J.id('comments').insertAdjacentHTML('beforeend', textContent);
 },
-// вставка контента в рамку гайдов, как попало если что
+// insert content into the guides frame, however it goes
 innerGuides = (jId, textContent, insertType = 0) => {
 	let J = Jexec(jId);
 	if (!J.id('guidesPlace')) 
@@ -1149,9 +1152,9 @@ innerGuides = (jId, textContent, insertType = 0) => {
 		J.id('guidesPlace').insertAdjacentHTML('afterend',textContent);
 },
 // #endregion
-// #region разные формы
+// #region various forms
 sendRegisterForm = async (wId)=>{
-	await Fingerprint.generate(fp === ''); // если токена нет то он пойдёт генерироваться
+	await Fingerprint.generate(fp === ''); // if there's no token it will go generate
 	let username = _.$.id(wId+'-LGusername').value,
 		password = _.$.id(wId+'-LGpassword').value,
 		email	= _.$.id(wId+'-LGemail'	 ).value,
@@ -1208,7 +1211,7 @@ sendRegisterForm = async (wId)=>{
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});;
 },
 sendLoginForm = async (wId)=>{
-	await Fingerprint.generate(fp === ''); // если токена нет то он пойдёт генерироваться
+	await Fingerprint.generate(fp === ''); // if there's no token it will go generate
 	let username = _.$.id(wId+'-LGusername').value,
 		password = _.$.id(wId+'-LGpassword').value,
 		altchaDatas = document.querySelectorAll('altcha-widget input[name="altcha"]'),
@@ -1471,7 +1474,7 @@ deleteWork= (jId, id, stage = 0, winId = '') => {
 	}
 },
 // #endregion
-// #region публичные страницы
+// #region public pages
 pHeader = jId => {
 	let J = Jexec(jId);
 	let regBtn = '',
@@ -1522,7 +1525,7 @@ pHeader = jId => {
 			`<div style=position:absolute;right:8px;top:16px>`+
 				`<nodiv id=switchHtmlLogin style=position:relative>`+
 					regBtn+
-					loginBtn+ // !ПОИСК! switchLogin = function
+					loginBtn+ // !SEARCH! switchLogin = function
 				`</nodiv>`+
 			`</div>`+
 		`</div>`+
@@ -2007,7 +2010,7 @@ BETA_fixImg = (url)=>{
 },
 insertBtn = (jId, lastUse, transText = 'showMore', useRemover = 1, group = '') => {
 	let J = Jexec(jId);
-	// кнопка "показать больше"
+	// "show more" button
 	return `<div ${useRemover === 1 ? 'id='+group+'nextGdps ' : ''}class=gdps-helper align=center>`+
 		`<button onclick="${lastUse}" class=loginbtn `+
 		`style="font-size:calc(var(--def-font)*2);padding:4px 8px;margin:12px 0"${getTrans(transText)}/button>`+
@@ -2065,7 +2068,7 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 	innerHtnl(jId, userId);
 },
 // #endregion
-// #region кнопки профиля (лист входов, удалить аларм и т д)
+// #region profile buttons (login sheet, delete alarm etc.)
 newsWindow = (jId, contentId = 0, contentType = 'c') => {
 	let J = Jexec(jId);
 	let gdpses = '';
@@ -2100,7 +2103,7 @@ newsWindow = (jId, contentId = 0, contentType = 'c') => {
 },
 
 // #endregion
-// #region newHelper.js - окна
+// #region newHelper.js - windows
 ADwrite = (jId, userId = '') => {
 	let J = Jexec(jId);
 	let anonymusSend = `<p><input type=checkbox name=anonymus> Send as Object hub</p>`;
@@ -2228,7 +2231,7 @@ getConfInfo = (step = 0)=>{
 	}
 },
 // #endregion
-// #region свитчеры
+// #region switchers
 makeSwticher = (
 	jId,
 	switchType = 0,
@@ -2304,16 +2307,16 @@ switchLangMenu = jId => {
 	`</div>`;
 };
 // #endregion
-// #region девайс
+// #region device
 class Fingerprint {
 	static async generate(generateFp = '') {
 		console.info('device token? '+!!generateFp);
 		if (!generateFp)
 			return {};
-		// Постоянная часть (шифрованная строка)
+		// Permanent part (encrypted string)
 		const staticName = await this.getPermanentFingerprint();
 
-		// Временная часть (JSON строка для удобства)
+		// Temporary part (JSON string for convenience)
 		const dynamic = encodeURIComponent(JSON.stringify({
 			userAgent: navigator.userAgent,
 			viewport: `${window.innerWidth}x${window.innerHeight}`,
@@ -2422,22 +2425,22 @@ class Fingerprint {
 }
 let fp = '',
 // #endregion
-// #region новые клиентские лайки
-/* ДЛЯ НАЧАЛА стоит сказат как оно работает
- * Из-за легаси модели гдпс хелпера доставшейся ошхабу по наследству у нас нет как таковой логики в сервисе лайков. -1 это лайк а просто 1 дизлайк, почему? так удобнее удалять лайки! (это кстати помогло ошхабу очень быстро реализовать возможность удаления лайков, ну а на хелпере оно не прижилось)
- * Здесь вы увидете обычную прослойку для получения лайков из внешнего хранилища, ибо это внешнее ультракомпактное хранилище было сделано великим DenisC
+// #region new client likes
+/* TO BEGIN WITH, it's worth saying how it works
+ * Due to the legacy model of gdps helper inherited by oshub, we don't have any real logic in the likes service. -1 is a like and just 1 is a dislike, why? because it's more convenient to remove likes! (this by the way helped oshub very quickly implement the ability to remove likes, well, and on helper it didn't take root)
+ * Here you will see a usual layer for getting likes from an external storage, because this external ultra-compact storage was made by the great DenisC
 */
 LIKES = {
-	// каждый ключ объекта - канал, каждый канал содержит массив где минусовое число лайк а плюсовое дизлайк
+	// each object key is a channel, each channel contains an array where a negative number is a like and a positive is a dislike
 	data: {
-		// некоторых классов тут нет так как они будут удалены из ошхаба в ближайшем обновлении, как пример форумы, и страницы вики ибо там оно не будет нужно (максимум комменты но оно не имеет никакого отношения к сервису лайков)
-		"p": new Set(), // все проекты (канал >= 0)
-		"c": new Set(), // комментарии (нет это не кемпы, мио не тупи)
-		"n": new Set(), // новости
-		"g": new Set(), // "гайды" АКА страницы в вики
-		"w": new Set(), // сами вики
-		"f": new Set(), // форумы ну вроде бы
-		"v": new Set(), // вакансии
+		// some classes aren't here because they will be removed from oshub in the nearest update, for example forums, and wiki pages because they won't need it there (at most comments but that has nothing to do with the likes service)
+		"p": new Set(), // all projects (channel >= 0)
+		"c": new Set(), // comments (no, this isn't camps, mio, don't be dumb)
+		"n": new Set(), // news
+		"g": new Set(), // "guides" AKA wiki pages
+		"w": new Set(), // the wikis themselves
+		"f": new Set(), // forums well I think so
+		"v": new Set(), // vacancies
 	},
 	chIdToStr: {
 		0:	'p',
@@ -2604,11 +2607,11 @@ repaintLikeButton = (jId, id, isComm, liketype = 0) => {
 	}
 },
 // #endregion
-// #region уведомления!
+// #region notifications!
 /*
- * Подписки!
+ * Subscriptions!
  *
- * Я не знаю что вам сказать тут, технически они слизаны с вакансий потому что мне так удобно
+ * I don't know what to tell you here, technically they're copied from vacancies because it's convenient for me
  */
 SUBS = {
 	data: new Set(),
@@ -2679,7 +2682,7 @@ subUnrespond = (jId, gdpsId) => {
 
 pushSubscribe = async ()=>{
 	if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-		console.warn('push не поддерживается этим браузером');
+		console.warn('push is not supported by this browser');
 		return false;
 	}
 
@@ -2711,7 +2714,7 @@ pushSendToServer = async (sub)=>{
 		res = await _.http.req('POST', `${sData[2]}sub.php`, data, urlEncoded);
 
 	if (res !== '1') {
-		console.error('push: не удалось сохранить подписку', res);
+		console.error('push: failed to save subscription', res);
 		return false;
 	}
 
@@ -2724,7 +2727,7 @@ pushUrlBase64ToUint8Array = (base64String)=>{
 	return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
 },
 // #endregion
-// #region рендер контента (шоу, кемпы)
+// #region content rendering (shows, camps)
 
 FINDrenderMini = (jId, channel, parsedData, joinData = '') => {
 	let J = Jexec(jId);
@@ -3297,7 +3300,7 @@ timeAgo = (timestamp)=>{
 	};
 },
 // #endregion
-// #region прочий хлам
+// #region other junk
 Loading = (stop = 0, customImg = 'src=https://objecthub.xyz/imgs/load.svg')=>{
 	if (stop == 0)
 		document.body.insertAdjacentHTML('beforeend',
@@ -3595,7 +3598,7 @@ verifyWork = (jId, workId) => {
 },
 
 // #endregion
-// #region викифункции
+// #region wiki functions
 
 Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 	let J = Jexec(jId);
@@ -3620,7 +3623,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		};
 	};
 
-	// ===== ФАЗА 1: LEXER — режем текст на блочные токены =====
+	// ===== PHASE 1: LEXER — split text into block tokens =====
 	const mdLex = (mdText) => {
 		mdText = mdText.replaceAll(/\r\n/g, '\n').replaceAll(/\r<br>/g, '\n');
 		const lines = mdText.split('\n');
@@ -3704,7 +3707,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		return tokens;
 	};
 
-	// ===== инлайн-разметка внутри текста одного токена =====
+	// ===== inline markup inside the text of one token =====
 	const mdInline = (text) => {
 		text = text
 			.replaceAll(/!\[(.*?)\]\((.*?) "(.*?)"\)/g, '<img style=max-width:100% alt="$1" src="$2" $3 />')
@@ -3725,7 +3728,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		return text;
 	};
 
-	// ===== ФАЗА 2: RENDER — токены в html =====
+	// ===== PHASE 2: RENDER — tokens to html =====
 	const mdRender = (tokens) => {
 		let html = '';
 		let listBuf = null;
@@ -3795,26 +3798,26 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 		return html.trim();
 	};
 
-	// ===== ФАЗА 0: шаблоны =====
+	// ===== PHASE 0: templates =====
 	const mdTemplates = (mdText) =>
 		mdText.replace(
 			/\{\{([^}|]+)(?:\|([^}]*))?\}\}/g,
 			(match, templateName, argsStr) => {
 				if (depth >= 6) {
-					return '<div class="template-error">Превышена глубина вложенности шаблонов</div>';
+					return '<div class="template-error">Template nesting depth exceeded</div>';
 				}
 				if (counter.n >= 5000) {
-					return '<div class="template-error">Превышен лимит вызовов шаблонов</div>';
+					return '<div class="template-error">Template call limit exceeded</div>';
 				}
 				try {
-					// Считаем любой найденный вызов.
+					// Count any found call.
 					counter.n++;
 					templateName = templateName.trim();
 					const templateFunction =
 						(wikiTemplates[J.globalWiki] && wikiTemplates[J.globalWiki][templateName]) ||
 						(wikiTemplates[0] && wikiTemplates[0][templateName]);
 					if (!templateFunction) {
-						return `<div class="template-missing">Шаблон "${templateName}" не найден</div>`;
+						return `<div class="template-missing">Template "${templateName}" not found</div>`;
 					}
 					let providedArgs = argsStr
 						? argsStr.split('|').map(arg => arg.trim())
@@ -3824,7 +3827,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 					);
 					return templateFunction(...providedArgs);
 				} catch (error) {
-					return `<div class="template-error">Ошибка в шаблоне: ${error.message}</div>`;
+					return `<div class="template-error">Error in template: ${error.message}</div>`;
 				}
 			}
 		);
@@ -3841,7 +3844,7 @@ Markdown = (jId, mdText, depth = 0, counter = { n: 0 }) => {
 	return html;
 },
 // #endregion
-// #region страницы в профилях
+// #region pages in profiles
 toStringRole = (id)=>{
 	switch (id) {
 		case 0: return getTrans('role00', 0);
@@ -4097,7 +4100,7 @@ WIKIrenderInProfile = (jId, parsedData) => {
 	return html;
 },
 // #endregion
-// #region кастомхелпер
+// #region customhelper
 cssRoot = document.body.style,
 colorGenerator = ()=>{
 	let [Sizes, Radios] = Slocal.get('ColorScheme').split('/');
@@ -4187,7 +4190,7 @@ if (Slocal.get('ColorVer') < 7 || !Slocal.get('ColorVer')) {
 };
 colorGenerator();
 // #endregion
-// #region предстартовые проверки
+// #region pre-launch checks
 
 let createBasicError = type=>{
 	if (type == 0)
@@ -4266,7 +4269,7 @@ new Function(Slocal.get('Hotkeys'))();
 // #endregion 
 
 // #endregion
-// #region команды
+// #region commands
 let patchUrl = ()=>{
 	if (_.$.q('[shell]'))
 		return;
@@ -4313,17 +4316,17 @@ lsClear = ()=>{
 },
 
 // #endregion
-// #region проверка здоровья
+// #region health check
 nextStep = 0,
 
-// TODO: сделать реальные провери ошибок
+// TODO: make real error checks
 heartStep = [
-	/* ФОРМАТ ОШИБОК:
+	/* ERROR FORMAT:
 	 *
-	 * null = всё впорядке
-	 * "err" = вывести текст ошибки
+	 * null = everything's fine
+	 * "err" = output error text
 	 *
-	 * я вдохновился golang когда придумывал формат ошибок
+	 * I was inspired by golang when coming up with the error format
 	 */
 
 	() => {

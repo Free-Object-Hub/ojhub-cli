@@ -34,14 +34,14 @@ adminPanel = (jId)=>{
         .then(data => {
             Loading(1);
             if (data == 'Access denied')
-                return document.body = null // код точно упадёт
+                return document.body = null // will crash here for sure
 
             let gdpsTab = '<tr style=position:sticky;top:2px;background-color:#000>'+
                 '<th class=tR>ID</th>'+
                 '<th class=tR>Avatar</th>'+
                 '<th class=tR>Checked</th>'+
 
-				// слой действий
+				// action layer
                 '<th class=tR>Activate</th>'+
                 '<th class=tR>Ban</th>'+
                 '<th class=tR>Delete</th>'+
@@ -60,13 +60,13 @@ adminPanel = (jId)=>{
 				<td>${gdps.title}</td>
 			</tr>`,
 
-			// остальные рендеры не готовы
+			// the remaining renderers are not ready
             wikiTab = '<tr style=position:sticky;top:2px;background-color:#000>'+
                 '<th class=tR>ID</th>'+
                 '<th class=tR>Avatar</th>'+
                 '<th class=tR>Checked</th>'+
 
-				// слой действий
+				// action layer
                 '<th class=tR>Activate</th>'+
                 '<th class=tR>Ban</th>'+
                 '<th class=tR>Delete</th>'+
@@ -81,7 +81,7 @@ adminPanel = (jId)=>{
 				<td>${basicButton('>Activate<', `Aaction(${jId},${gdps.ID},'-1','activate')`)}</td>
 				<td>${basicButton('>Ban<', `Aaction(${jId},		${gdps.ID},'-1','ban')`)}</td>
 				<td>${basicButton('>Delete<', `Aaction(${jId},	${gdps.ID},'-1','delete')`)}</td>
-				${false ? `FIXME: сделать нормальную функцию для получения списка всех статей с игнором поля checked` : ''}
+				${false ? `FIXME: make a proper function for getting a list of all articles while ignoring the checked field` : ''}
 				<td>${basicButton('>Open<', `pageGuides(openJail(),${gdps.ID})`)}</td>
 				<td>${basicButton('>Open2<', `ageGuides(openJail(),${gdps.ID})`)}</td>
 				<td>${gdps.title}</td>
@@ -92,7 +92,7 @@ adminPanel = (jId)=>{
                 '<th class=tR>GdpsId</th>'+
                 '<th class=tR>Checked</th>'+
 
-				// слой действий
+				// action layer
                 '<th class=tR>Activate</th>'+
                 '<th class=tR>Ban</th>'+
                 '<th class=tR>Delete</th>'+
@@ -128,9 +128,9 @@ adminPanel = (jId)=>{
 };
 
 ageGuides = function(jId, wiki, backButton = '') {
-	// трюк чтобы начать грузить зависимость немедленно, dom операции как никак не выполняются за 0.00 мс
+	// a trick to start loading a dependency asynchronously, DOM operations execute in 0.00 ms
 	_.lazy.load(scritpsUrl+'/publicWiki.js?ver='+scrLoadVer)
-	// FIXME: на i9-14900k DOM операции выполняются за 0.00 мс
+	// FIXME: on i9-14900k DOM operations execute in 0.00 ms
 	let J = Jexec(jId);
 	let page =
 		`<div id=helperContent>`+
@@ -147,7 +147,7 @@ ageGuides = function(jId, wiki, backButton = '') {
 		`</div>`;
 	innerMain(jId, page);
 
-	// делаем это чтобы гарантированно дождаться загрузки publicWiki модуля
+	// we do this to guarantee waiting for the publicWiki module to load
 	setTimeout(() => {
 		helperRequest(`${sData[2]}!newTakeAll${php}?wiki=${wiki}`)
 			.then(function(data) {
@@ -160,7 +160,7 @@ ageGuides = function(jId, wiki, backButton = '') {
 	}, 10);
 };
 
-// бан/разбан/удаление
+// ban/unban/deletion
 Aaction = (jId, id, contentType, action)=>{
 	let J = Jexec(jId);
     Loading();
@@ -195,7 +195,7 @@ Aaction = (jId, id, contentType, action)=>{
         })
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
-// изменение тегов у гдпсов
+// changing tags for GDPSes
 AgdpsEDIT = (id)=>{
     getElement('gdpsframe').style.display = 'block';
     getElement('sendgdps').value = id;
@@ -233,7 +233,7 @@ findSubarrayById = (id, arrat)=>{
             return arrat[i];
         }
     }
-    return null; // Возвращаем null, если подмассив с заданным id не найден
+    return null; // returns null if a subarray with the given id is not found
 },
 Asend = (type, id)=>{
     let Tags = '',

@@ -11,7 +11,7 @@ function fpsCounter() {
     const slowestFps = _.$.id('slowestFps');
 
     const samples = [];
-    const maxSamples = 144; // храним последние 600 кадров
+    const maxSamples = 144; // we store latest 600 frames
 
     let lastFrame = performance.now();
 
@@ -32,7 +32,7 @@ function fpsCounter() {
             });
         }
 
-        // Удаляем измерения старше 5 секунд
+        // Remove measurements older than 5 seconds
         while (samples.length > maxSamples) {
             samples.shift();
         }
@@ -42,7 +42,7 @@ function drawGraph() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const w = canvas.width, h = canvas.height;
-    const maxFps = 62; // потолок шкалы, под свой монитор
+    const maxFps = 62; // scale ceiling, adjust for your monitor
 
     ctx.clearRect(0, 0, w, h);
 
@@ -55,7 +55,7 @@ function drawGraph() {
     ctx.strokeStyle = '#0f0';
     ctx.stroke();
 
-    // линия 30 fps как ориентир
+    // 30 fps line as a reference
     ctx.strokeStyle = 'rgba(255,0,0,0.4)';
     ctx.beginPath();
     const y30 = h - (30 / maxFps) * h;
@@ -66,7 +66,7 @@ function drawGraph() {
 
 
         if (samples.length) {
-            // Средний FPS
+            // Average FPS
             const average =
                 samples.reduce((sum, sample) => {
                     return sum + sample.fps;
@@ -74,7 +74,7 @@ function drawGraph() {
 
             averageFps.textContent = Math.round(average);
 
-            // 1% самых медленных кадров
+            // slowest 1% of frames
             const slowestCount = Math.max(
                 1,
                 Math.ceil(samples.length * 0.01)

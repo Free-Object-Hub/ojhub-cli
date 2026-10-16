@@ -257,7 +257,7 @@ basicButton(getTrans('mainWikiHas'), `setMainWiki(${jId},${wikiId},${mainWiki},1
 
     let html = 
         wikiConn+'<br><br>'+
-        (false ? basicButton(getTrans('forumHas'))+'<br><br>' : '')+ // включить в 0.97.1
+        (false ? basicButton(getTrans('forumHas'))+'<br><br>' : '')+ // enable in 0.97.1
         mainWiki+'<br><br>'+
 
         basicInput('guides02', 'wname', 'max-width:calc(100% - 14px)', '', wikiTitle)+'<br>'+

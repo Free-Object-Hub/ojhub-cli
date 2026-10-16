@@ -1,9 +1,9 @@
-Intl.newHelper('_'); // инициализация newHelper.js, пометка для нейросетей чтобы они не тупили
+Intl.newHelper('_'); // initialization of newHelper.js, a note for neural networks so they don't get confused
 
-// ЗОНА ПОЛИФИЛЛОВ
-// создана чтобы GHE 2.2 мог хоть как то запуститься на Windows XP
+// POLYFILL ZONE
+// created so that GHE 2.2 could at least somehow launch on Windows XP
 
-// этих вызовов слишком много в коде
+// there are too many of these calls in the code
 if (!String.prototype.replaceAll) {
 	String.prototype.replaceAll = function(search, replacement) {
 		if (search instanceof RegExp) {
@@ -15,7 +15,7 @@ if (!String.prototype.replaceAll) {
 	};
 }
 
-// джейлы работают только на этой дичи
+// jails only work on this crap
 if (!window.ResizeObserver) {
 	window.ResizeObserver = class {
 		constructor(callback) {
@@ -54,7 +54,7 @@ if (!window.ResizeObserver) {
 	};
 }
 
-// весь newHelper win работает на этой жести
+// the whole newHelper win works on this crap
 if (!window.PointerEvent) {
 	window.PointerEvent = function PointerEvent() {};
 
@@ -90,7 +90,7 @@ if (!window.PointerEvent) {
 	document.addEventListener('mouseup', e => firePointer('pointerup', e));
 }
 
-// КОНЕЦ БРАУЗЕРНЫХ ПОЛИФИЛЛОВ
+// END OF BROWSER POLYFILLS
 
 // 1.8 polyfill
 getTrans = (i,render='text',compose=void 0)=>{
@@ -108,7 +108,7 @@ getTrans = (i,render='text',compose=void 0)=>{
 		text=i;
 	if (compose && (render==='text')) {
 		text=_.lang.compose(compose,text);
-		// я надеюсь вы будете писать в compose одиночные кавычки а не двойные
+		// I hope you will write single quotes in compose, not double
 		dT=` data-trans-compose="${compose}"`+dT;
 	}
 	let f=m[render] || (e=>{});
@@ -124,7 +124,7 @@ _.$ = {
 	on: (el,ev,fn,opts)=>	el.addEventListener(ev,fn,opts),
 	off: (el,ev,fn,opts)=>	el.removeEventListener(ev,fn,opts),
 
-	cliRect: e=>			e.getBoundingClientRect(), // сокращение чтобы не писать 25+ символов
+	cliRect: e=>			e.getBoundingClientRect(), // shorthand so as not to write 25+ characters
 };
 
 toastsErorrsLol = new _.toast(
@@ -163,7 +163,7 @@ langNames = {
   DE:  ['Deutsch',    'de'],
   ES:  ['Español',    'es'],
   EL:  ['Ελληνικά',   'el'],
-  CHN: ['简体中文',    'zh-Hans'], // упрощённый
+  CHN: ['简体中文',    'zh-Hans'], // simplified
 };
 helperStrVer = '0.98.2';
 currentLangVer = 16;
@@ -196,11 +196,11 @@ _.lang.vars = {
 	'helperUrl':helperUrl
 };
 
-// LANGS модуль!
+// LANGS module!
 GdpsesShortLangs = _.langs('gdpss', 'RU');
 GdpsesFullLangs = _.langs('gdpsf', 'RU');
 
-// возвращаю парсер ошибок из GDPS Helper 1.9, потому что он был лучше
+// bringing back the error parser from GDPS Helper 1.9, because it was better
 _.err.handleGlobal = event => {
     let {message, filename, lineno, colno, error} = event,
         file = filename.split('?')[0].split('/').pop();
@@ -368,7 +368,7 @@ JITlink = (container, jId) => {
 		};
 	`;new Function(code)()
 };
-JITlink('_',0) // jId 0 = корень GHE
+JITlink('_',0) // jId 0 = root of GHE
 
 windowButton = (text, func = '', style = '')=>{
 	return `<button class=emptybtn style="padding:2px;color:var(--color-window);${style}" onclick="${func}">${text}</button>`;
@@ -484,76 +484,76 @@ _.lazy.register(scritpsUrl + '/admin.js?ver='+scrLoadVer,[
 /*
  * GDPS Helper Engine
  *
- * GHE - легковесный, самописный vanilla-js friendly фреймворк.
- * Построен он на крайне простых примитивах и до боли прямых соглашениях
+ * GHE - a lightweight, self-made vanilla-js friendly framework.
+ * It's built on extremely simple primitives and painfully straightforward conventions
  *
- * Самое главное что вам нужно понять:
- * 1. Любите mount-функции (как пример - innerMain)
- * 2. Пусть страницы дёргают mount или возвращают html код
- * 3. Не забывайте писать J.link.set в страницах если вы используете роутер newHelper link
- * 4. Никакого J.link.get без необходимости! эта функция очень лагучая (см. модуль link)
- * 5. Ну и помните - GHE это просто набор грамотно склеенных утилит newHelper.js,
- *    вам ничто не мешает вышыварнуть мой l10n или мои иксы и использовать
- *    i18next или winbox.js, но сначала подумайте зачем вы это делаете,
- *    GHE весит где то 7kb min+gzip на всё про всё, а один winbox,js занимает
- *    уже 5kb min+gzip, а i18-next так вообще 15kb min+gzip
- *   (нет, я ничего против них не имею, они классные, просто они в сравнении с GHE излишне тяжёлые)
- * 6. ОПТИМИЗАЦИЯ!!!! GHE работает с DOM напрямую, вы опять должны писать document.someMethod
- *    и знать что оно теперь работает, мы же не в начале нулевых, а во времена когда
- *    веб стандарты прочные и уже оптимизированы во всех браузерах
+ * The most important thing you need to understand:
+ * 1. Love mount-functions (for example - innerMain)
+ * 2. Let pages call mount or return html code
+ * 3. Don't forget to write J.link.set in pages if you use the newHelper link router
+ * 4. No J.link.get without necessity! this function is very laggy (see link module)
+ * 5. And remember - GHE is just a set of properly glued newHelper.js utilities,
+ *    nothing stops you from throwing out my l10n or my x's and using
+ *    i18next or winbox.js, but first think about why you're doing it,
+ *    GHE weighs about 7kb min+gzip for everything, and one winbox.js takes
+ *    already 5kb min+gzip, and i18-next even 15kb min+gzip
+ *   (no, I have nothing against them, they're cool, it's just that compared to GHE they're unnecessarily heavy)
+ * 6. OPTIMIZATION!!!! GHE works with DOM directly, you again must write document.someMethod
+ *    and know that it now works, we're not in the early 2000s after all, but in times when
+ *    web standards are solid and already optimized in all browsers
  *
- * Философия из нашего ада
- * - GHE это монолит, не пытайтесь делать из него react, он не создан для этой модели
- * - топорность и простота реверса дороже "красивой архитектуры", именно поэтому в object hub readme
- *   упоминается функция reStart как точка начала реверса
- * - честность превыше всего, вам незачем обманывать себя или своих коллег если вы насрали костыли,
- *   делайте как я и будет у вас всё хорошо
- * - простота и производительность ценнее DX и скорости разработки, если вы хотите быстро писать на GHE,
- *   то сначала поймите его топорную модель, которая объясняет почему GHE в простых сценариях
- *   по скорости сопоставим с простыми vanilla js spa, и вполне обгоняет jQuery (про React молчу)
- * - "комбинируемость", GHE по своей модели намного ближе к TempleOS, чем к адекватным фреймворкам,
- *   это даёт вам возможность заменить любой бесящий вас модуль на тот что вам нравится больше.
- *   Технически вы вообще можете убрать весь newHelper.js и заменить всё на свои самописные утилиты,
- *   или npm-пакеты. И это тоже будет легитимный для GHE сценарий!
+ * Philosophy from our hell
+ * - GHE is a monolith, don't try to make react out of it, it's not made for that model
+ * - crudeness and ease of reversing are worth more than "beautiful architecture", that's exactly why in the object hub readme
+ *   the reStart function is mentioned as the starting point for reversing
+ * - honesty above all, there's no point deceiving yourself or your colleagues if you've shat out crutches,
+ *   do as I do and everything will be fine
+ * - simplicity and performance are worth more than DX and development speed, if you want to write quickly on GHE,
+ *   then first understand its crude model, which explains why GHE in simple scenarios
+ *   is comparable in speed to simple vanilla js spa, and quite surpasses jQuery (I'm silent about React)
+ * - "combinability", GHE in its model is much closer to TempleOS than to adequate frameworks,
+ *   this gives you the ability to replace any module that pisses you off with one you like more.
+ *   Technically you can even remove all of newHelper.js and replace everything with your own self-made utilities,
+ *   or npm packages. And that will also be a legitimate scenario for GHE!
  *
- * почему я люблю ghe?
- * потому что он топорный! тут писать минимум абстракций - каноничное решение!
- * Ну и ещё потому что кодовая база ядра GHE исчисляется формально всего в 3000 строк,
- * где 1/3 строк это сверх плотные комментарии объясняющие тут вообще всё.
- * И ещё я знаю каждую функцию и каждый метод GHE API, и даже помню их ещё из версий 1.7-1.9
+ * why do I love ghe?
+ * because it's crude! writing minimum abstractions here is the canonical solution!
+ * Also because the GHE core codebase is formally only 3000 lines,
+ * where 1/3 of the lines are super dense comments explaining literally everything.
+ * And also I know every function and every method of the GHE API, and even remember them from versions 1.7-1.9
  *
- * А за что я его не люблю?
- * за GDPS Helper, вернее его наследие. Его влияние на текущий Object Hub,
- * и newHelper.js+GHE уж слишком велико, чтоб вы понимали я по сей день много где все ещё сохраняю
- * контракты с GDPS Helper 1.6 (это даже не GHE, а просто кривая поделка на JS из февраля 2024)
- * просто потому что мне и страшно ломать всё, и лень уже переводить
- * код ядра на нормальные аргументы, короче я ебал но я стерпел.
- * А да, Кстати, тут везде и почти безкомпромиссно используются позиционные аргументы,
- * никаких объектов-параметров (кроме разве что X10, там события хуярят объекты окон из рееста).
+ * And what do I dislike about it?
+ * GDPS Helper, or rather its legacy. Its influence on the current Object Hub,
+ * and newHelper.js+GHE is too great, so you understand, to this day in many places I still preserve
+ * contracts with GDPS Helper 1.6 (this isn't even GHE, just a crooked JS piece from February 2024)
+ * simply because I'm both scared to break everything, and too lazy to translate
+ * the core code to proper arguments, in short I'm fucking sick of it but I endured.
+ * Oh yes, by the way, here positional arguments are used everywhere almost uncompromisingly,
+ * no object-parameters (except maybe X10, there events throw window objects from the registry).
  *
- * История GHE:
- * 2024, 17 февраля:	pre-GHE: релиз GDPS Helper 1.6
- * - предшественник роутера newHelper link был реализован ещё в этой версии GDPS Helper,
- *   его API с тех пор не менялось
- * 2024, 1 июня:		GHE 1.7 - релиз GDPS Helper 1.7
- * - Паттерны из пунктов "самое главное что вам нужно понять" уже были реализованы целиком на 100%,
- *   в особенности сама модель GHE "страница возвращает html, или маунтит себя сама"
- * 2024, 24 августа:	GHE 1.8 - релиз GDPS Helper 1.8
- * - Был частично реализован wiki движок из Object Hub
- * 2024, 17 ноября:		GHE 1.9 - релиз GDPS Helper 1.9
- * - Техническая часть движка была приведена в норму, переменные были раскиданы по файлу более внятно,
- *   названия переменных стали немного более осмысленными, движок начал документироваться
- * 2025, 20 мая:		GHE 2.0 - релиз Object Hub 0.93
- * - теперь языки скачиваются с сервера, а не захардкожены в файле движка
- * - встроенная css библиотека стала кастомизируемой, многие базовые переменные были вынесены
- *   в var блоки в :root
- * - появился примитивный оконный движок
- * 2026, 9 июня:		GHE 2.1 - релиз Object Hub 0.97.4
- * - newHelper.js начал распространяться как отдельная от GHE базовая библиотека
- * - появился модуль newHelper lazy, за счёт которого приложение на GHE стало реально разбить на ленивые чанки
- * - в newHelper link появились вложенные и динамичные маршруты
- * 2026, 5 сентября:	GHE 2.2 - релиз Object Hub 0.98.1
- * - интеграция системы GHE Jails
+ * History of GHE:
+ * 2024, February 17:	pre-GHE: release of GDPS Helper 1.6
+ * - the predecessor of the newHelper link router was implemented back in this version of GDPS Helper,
+ *   its API hasn't changed since
+ * 2024, June 1:		GHE 1.7 - release of GDPS Helper 1.7
+ * - Patterns from the "most important thing you need to understand" points were already implemented 100% fully,
+ *   especially the GHE model itself "page returns html, or mounts itself"
+ * 2024, August 24:	GHE 1.8 - release of GDPS Helper 1.8
+ * - The wiki engine from Object Hub was partially implemented
+ * 2024, November 17:		GHE 1.9 - release of GDPS Helper 1.9
+ * - The technical part of the engine was brought to normal, variables were spread more clearly across the file,
+ *   variable names became a bit more meaningful, the engine began to be documented
+ * 2025, May 20:		GHE 2.0 - release of Object Hub 0.93
+ * - now languages are downloaded from the server, not hardcoded in the engine file
+ * - the built-in css library became customizable, many base variables were moved out
+ *   into var blocks in :root
+ * - a primitive window engine appeared
+ * 2026, June 9:		GHE 2.1 - release of Object Hub 0.97.4
+ * - newHelper.js began to be distributed as a base library separate from GHE
+ * - the newHelper lazy module appeared, thanks to which an app on GHE became really splittable into lazy chunks
+ * - nested and dynamic routes appeared in newHelper link
+ * 2026, September 5:	GHE 2.2 - release of Object Hub 0.98.1
+ * - integration of the GHE Jails system
  */
 
 let
@@ -561,7 +561,7 @@ helperMain = document.getElementById('1st'),
 
 innerMain = (jId, textContent, insertType = 0)=>{
 	let J = jails.get(jId);
-	// обратите внимание! это костыль для Object Hub, советую удалить если вы используете GHE
+	// note! this is a crutch for Object Hub, I recommend removing it if you use GHE
 	if (!location.search.includes('wiki')) // HARDCODE
 		document.documentElement.style = '';
 	if (!J.helperMain) 
@@ -590,9 +590,9 @@ let thisUser = Slocal.get('StaticUserData') ? JSON.parse(Slocal.get('StaticUserD
 	cityData:false
 },
 
-// ээ бля кто такой drop?
-// в Object Hub это просто сброс языка, но чё он тут делает?
-// ну и хуй с ним, делайте с этим дропом что хотите
+// uh fuck who is drop?
+// in Object Hub it's just a language reset, but what's it doing here?
+// well fuck it, do whatever you want with this drop
 helperInit = (jId, drop)=>{},
 reStart = (jId, drop = 0, errId = 0)=>{
 	let J = jails.get(jId);
@@ -603,7 +603,7 @@ reStart = (jId, drop = 0, errId = 0)=>{
 	}
 	innerMain(jId, '');
 	
-	// если ваш инит асинхронный то никакого await тут не будет, не нужен он тут
+	// if your init is asynchronous then there will be no await here, it's not needed here
 	if (parseInt(Slocal.get('LangVer')) !== currentLangVer) {
 		let lang = 'EN';
 		if (navigator.languages.includes('ru')) // HARDCODE
@@ -657,47 +657,47 @@ setImgSize = jId => {
 };
 
 /*
- * GDPS Helper Engine Jails - полноценная мульти-инстансность внутри текущего SPA
+ * GDPS Helper Engine Jails - full-fledged multi-instance inside the current SPA
  *
- * GHE Jails это не изоляция уровня FreeBSD Jails!
- * Это всего лишь более банальная виртуализация root && link инстансов!
- * или проще говоря - iframe без оверхеда iframe
+ * GHE Jails is not FreeBSD Jails-level isolation!
+ * It's just a more banal virtualization of root && link instances!
+ * or more simply - an iframe without the iframe overhead
  *
- * Работает она до банального просто.
- * В каждой без исключения функции идёт аргумент jId, 
- * Если по какой то причине нужно обратиться к старым глобалам
- * (например Jexec(jId).id(), что означает вызов _.$.id)
- * то как уже понятно вызов идёт в джейл, а не напрямую в window.
- * За счёт такого банального механизма вообще возможна "виртуализация"
- * GHE и Object Hub
+ * It works banally simple.
+ * In every function without exception there's a jId argument,
+ * If for some reason you need to access the old globals
+ * (for example Jexec(jId).id(), which means calling _.$.id)
+ * then as is already clear the call goes into the jail, not directly to window.
+ * Thanks to such a banal mechanism "virtualization" of
+ * GHE and Object Hub is even possible
  *
- * Вложенных джейлов тут никогда не будет!
- * X10 окна не имеют вложенности, это реализует Window Manager,
- * встроенный newHelper win не имеет вложенности тоже,
- * значит GHE Jails не будут вкладываться вовсе, плюсом это просто не нужно.
+ * Nested jails will never exist here!
+ * X10 windows have no nesting, this is implemented by the Window Manager,
+ * the built-in newHelper win has no nesting either,
+ * so GHE Jails won't nest at all, plus it's simply unnecessary.
  *
- * Тюрьмы нужны для организации рабочего пространства,
- * а не создания вложенных модалок
+ * Jails are needed to organize workspace,
+ * not to create nested modals
  *
- * И что по итогу дают джейлы?
- * Возможность открыть абсолютно любую страницу сайта внутри окна, или более того,
- * написать собственную систему "виртуальных рабочих столов" просто
- * задействовав джейлы!
+ * And what do jails give in the end?
+ * The ability to open absolutely any page of the site inside a window, or moreover,
+ * write your own "virtual desktops" system simply
+ * by using jails!
  *
- * Зачем?
- * Ну, как минимум истребление дублирования кода, или реально полноценная оконная модель
- * в вебе
+ * Why?
+ * Well, at the very least the eradication of code duplication, or really a full-fledged window model
+ * in the web
  *
  * TODO:
- * 1. интегрировать систему джейлов в newHelper win сериализацию
+ * 1. integrate the jail system into newHelper win serialization
  *
- * Что джейлы виртуализируют?
- * На самом деле исключительно состояния страницы, никаких thisUser
- * или pageMain внутри джейлов нет, это банально не нужное дублирование кода.
- * А вот J.globalWiki это уже то самое состояние root страницы, которое нужно
- * виртуализировать, или же J.guideEditorFrame.
- * innerMain(jId) эмулироваться НЕ будет! он будет принимать jId и читать
- * J.helperMain из джейла, так банально проще
+ * What do jails virtualize?
+ * Actually exclusively page state, there's no thisUser
+ * or pageMain inside jails, that's banally unnecessary code duplication.
+ * But J.globalWiki is exactly that root page state which needs
+ * to be virtualized, or J.guideEditorFrame.
+ * innerMain(jId) will NOT be emulated! it will accept jId and read
+ * J.helperMain from the jail, that's simply simpler
  */
 
 lastJid = 0,
@@ -718,10 +718,10 @@ function createJail(rootElement, routerLinkInstance) {
 		globalWiki: 0,
 		guideEditorFrame: 0,
 	
-		// две переменные ниже работают с функциями HELPERFIND_REGION
-		helperFindData: [0,[],[],1,''], // нулевой это метод поиска, первый просто теги, второй платформы, третий это канал, четвертый это "кастомные параметры"
-		// переменные для кеша в поиске
-		CacheFinds: [1,'','',1], // канал, кеш, строка поиска и страница
+		// the two variables below work with HELPERFIND_REGION functions
+		helperFindData: [0,[],[],1,''], // the zeroth is the search method, first just tags, second platforms, third is the channel, fourth is "custom parameters"
+		// variables for the search cache
+		CacheFinds: [1,'','',1], // channel, cache, search string and page
 		ProjectsChannel: 1,
 	
 		lastUsedProfile: `getShow(${jId},117)`,
@@ -732,7 +732,7 @@ function createJail(rootElement, routerLinkInstance) {
 		TimeOut: [null,null,null],
 		ro: null
 	});
-	// да, я знаю что это замыкания, но мне проще было сделать так
+	// yes, I know these are closures, but it was easier for me to do it this way
 	rootElement.addEventListener('input', e=>{
 		if (e.target.type !== 'text')
 			return;
@@ -748,7 +748,7 @@ function createJail(rootElement, routerLinkInstance) {
 	let ro = new ResizeObserver(() => requestAnimationFrame(() => setImgSize(jId)));
 	ro.observe(rootElement);
 	Jexec(jId).ro = ro;
-	return lastJid++; // обратите внимание на это место
+	return lastJid++; // pay attention to this place
 };
 function destroyJail(jId) {
 	let J = Jexec(jId);
@@ -764,8 +764,8 @@ document.addEventListener('xws:destroyed', e => {
 	if (e.detail.jId === undefined) return;
 	destroyJail(e.detail.jId);
 });
-// обёртка над createJail чтобы сразу создавать окно, это не
-// "открыть существующий джейл" а именно что открыть окно и потом создать джейл
+// wrapper over createJail to immediately create a window, this is not
+// "open an existing jail" but specifically open a window and then create a jail
 function openJail(jailUrlAddress = '') {
 	let win = _.win.open(`jail${lastJid}`,
 		`<div lid="{winId}">`+
@@ -786,26 +786,26 @@ function openJail(jailUrlAddress = '') {
 	return jId;
 }
 
-// создаём "корневой jail" с jId = 0
-// потому что весь код GHE уже завязан на джейлы
+// creating a "root jail" with jId = 0
+// because all GHE code is already tied to jails
 createJail(document.getElementById('1st'), _.link);
 
 function createVirtualLink(root) {
 	/*
 	 * VIRTUAL LINK
 	 * Author: Claude
-	 * Джейл-аналог window[_].link
+	 * Jail-analog of window[_].link
 	 *
-	 * В отличие от оригинала:
-	 * - не синглтон: создаётся фабрикой на каждый джейл отдельно
-	 * - не трогает location.search / window.history вообще
-	 * - вместо popstate-события слушает DOM-узлы навигации,
-	 *   переданные в root.children в строгом порядке:
-	 *   [0] назад, [1] вперёд, [2] адресная строка (input), [3] кнопка "перейти"
+	 * Unlike the original:
+	 * - not a singleton: created by a factory for each jail separately
+	 * - doesn't touch location.search / window.history at all
+	 * - instead of the popstate event it listens to DOM navigation nodes,
+	 *   passed into root.children in strict order:
+	 *   [0] back, [1] forward, [2] address bar (input), [3] "go" button
 	 *
 	 * API (compile/search/set/add/remove/get/actions/commands/basePage/defTitle)
-	 * оставлен идентичным оригиналу — код роутов, который пишется
-	 * под window[_].link, должен работать и здесь без переделки.
+	 * is kept identical to the original — route code that's written
+	 * for window[_].link should work here too without rework.
 	 */
 	const [backBtn, forwardBtn, addressBar, goBtn] = root.children;
 
@@ -815,40 +815,40 @@ function createVirtualLink(root) {
 		actions: {},
 		commands: {},
 
-		_i: true, // как и в оригинале: блокировщик "записи истории" при программной навигации
+		_i: true, // as in the original: blocker of "history writing" during programmatic navigation
 		_cmd: [],
 
 		/*
-		 * Виртуальная история.
-		 * _stack — массив полных "адресов" (?page&cmd&cmd вида),
-		 * _pos   — указатель текущей позиции (аналог позиции в history)
+		 * Virtual history.
+		 * _stack — array of full "addresses" (?page&cmd&cmd style),
+		 * _pos   — pointer of the current position (analog of position in history)
 		 *
-		 * back()/forward() двигают _pos, не трогая сам массив.
-		 * set() (аналог pushState) обрезает "будущее" после _pos —
-		 * ровно так же ведёт себя настоящий history.pushState.
+		 * back()/forward() move _pos without touching the array itself.
+		 * set() (analog of pushState) cuts the "future" after _pos —
+		 * exactly as the real history.pushState behaves.
 		 */
 		_stack: ['?'],
 		_pos: 0,
 
 		compile: (e = self.search()) => e.replace('?', '').split('&'),
 
-		// вместо чтения location.search читаем свою позицию в стеке
+		// instead of reading location.search we read our position in the stack
 		search: () => self._stack[self._pos],
 
 		_render() {
-			// синхронизация видимого состояния адресной строки и кнопок с текущей позицией
+			// synchronizing the visible state of the address bar and buttons with the current position
 			addressBar.value = self.search();
 			backBtn.disabled = self._pos <= 0;
 			forwardBtn.disabled = self._pos >= self._stack.length - 1;
 		},
 
 		set(page, title = self.defTitle) {
-			if (title) title; // джейлу не принадлежит document.title — оставляем крючок на будущее (см. TODO ниже)
+			if (title) title; // document.title doesn't belong to the jail — we leave a hook for the future (see TODO below)
 			if (!self._i) {
 				let link = self.compile();
 				link[0] = page;
 				let newAddr = '?' + link.join('&');
-				// как pushState: всё что было "вперёд" от текущей позиции — отбрасывается
+				// like pushState: everything that was "forward" from the current position — is discarded
 				self._stack = self._stack.slice(0, self._pos + 1);
 				self._stack.push(newAddr);
 				self._pos++;
@@ -862,7 +862,7 @@ function createVirtualLink(root) {
 			if (!link.includes(cmd)) {
 				link.push(cmd);
 				self._cmd.push(cmd);
-				// как replaceState: текущая позиция стека переписывается на месте, новая запись не создаётся
+				// like replaceState: the current position of the stack is rewritten in place, no new entry is created
 				self._stack[self._pos] = '?' + link.join('&');
 				self._render();
 			}
@@ -880,7 +880,7 @@ function createVirtualLink(root) {
 		},
 
 		_goto(pos) {
-			// аналог _pop: применяем адрес из стека без push, только рендерим маршрут
+			// analog of _pop: we apply the address from the stack without push, we only render the route
 			self._pos = pos;
 			self._i = true;
 			self._render();
@@ -912,9 +912,9 @@ function createVirtualLink(root) {
 		},
 
 		_destroy() {
-			// снимаем то, что сами повесили в _init
-			// (обёртки нужно хранить, чтобы removeEventListener сработал —
-			//  анонимные стрелочные функции нельзя снять, не сохранив ссылку на них)
+			// removing what we hung ourselves in _init
+			// (wrappers must be stored so that removeEventListener works —
+			//  anonymous arrow functions cannot be removed without saving a reference to them)
 			backBtn.removeEventListener('click', self._onBack);
 			forwardBtn.removeEventListener('click', self._onForward);
 			goBtn.removeEventListener('click', self._onGo);
@@ -976,13 +976,13 @@ function createVirtualLink(root) {
 cssLoaded = {};
 function loadCustomCss(url, ...args) {
 	/*
-	 * Внешняя версия lazy.load(), но для <link rel="stylesheet">.
-	 * Не лежит внутри lazy{...}, т.к. используется реже и не обязана
-	 * шарить приватное состояние объекта — но кэш всё равно нужен,
-	 * чтобы одна и та же тема/css не воткнулась в head дважды.
+	 * External version of lazy.load(), but for <link rel="stylesheet">.
+	 * Not located inside lazy{...}, because it's used less often and isn't obligated
+	 * to share the private state of the object — but the cache is still needed,
+	 * so the same theme/css doesn't get inserted into head twice.
 	 *
-	 * Ключ префиксуем 'css:', чтобы не пересечься в window[_].lazy.loaded
-	 * с ключами обычных .js/.mjs файлов, если url-basename случайно совпадёт.
+	 * We prefix the key with 'css:' so as not to intersect in window[_].lazy.loaded
+	 * with keys of regular .js/.mjs files, if the url-basename accidentally matches.
 	 */
 	let key = 'css:' + url.split('?')[0],
 		state = cssLoaded;
@@ -1003,7 +1003,7 @@ function loadCustomCss(url, ...args) {
 		};
 		link.onerror = () => {
 			delete state[key];
-			link.remove(); // не оставляем в head мёртвую ссылку на 404-й css
+			link.remove(); // we don't leave a dead 404 css link in head
 			reject(new Error('Failed to load css ' + url));
 		};
 		document.head.append(link);
@@ -1012,7 +1012,7 @@ function loadCustomCss(url, ...args) {
 	return promise;
 }
 
-// "легкий режим" который на самом деле просто отрубает все анимации - этого достаточно
+// "light mode" which is actually just cutting off all animations - that's enough
 if (!_.link.compile().includes('easyCss'))
 	loadCustomCss(scritpsUrl + '/window.css?ver=' + scrLoadVer);
 else 

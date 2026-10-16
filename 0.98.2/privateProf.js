@@ -1654,8 +1654,8 @@ addWork = (jId) => {
 			`</div><br><br>`+
 			*/
 			`<div>`+
-				`<label><input type=radio name=linkType value=0 checked onchange="var i=this.form.elements.gdpsId;i.value='';i.type='text';i.placeholder='ID проекта из каталога'"> Проект из каталога</label><br> `+
-				`<label><input type=radio name=linkType value=1 onchange="var i=this.form.elements.gdpsId;i.value='';i.type='url';i.placeholder='Ссылка на твой канал'"> Внешняя ссылка</label>`+
+				`<label><input type=radio name=linkType value=0 checked onchange="var i=this.form.elements.gdpsId;i.value='';i.type='text';i.placeholder='Project ID from catalog'"> Project from catalog</label><br> `+
+				`<label><input type=radio name=linkType value=1 onchange="var i=this.form.elements.gdpsId;i.value='';i.type='url';i.placeholder='Link to your channel'"> External link</label>`+
 			`</div><br>`+
 			`<label${getTrans('add'+bigString+'03')}/label><br><input class=framelabel type=text name=gdpsId style="width:calc(100% - 40px)" required${getTrans(smallString+'Input03', 'input')}<br>`+
 			
@@ -1703,8 +1703,8 @@ editWork = (jId, workId) => {
 				`</div><br><br>`+
 				*/
 				`<div>`+
-					`<label><input type=radio name=linkType value=0${linkType == 0 ? ' checked' : ''} onchange="var i=this.form.elements.gdpsId;i.value='';i.type='text';i.placeholder='ID проекта из каталога'"> Проект из каталога</label><br> `+
-					`<label><input type=radio name=linkType value=1${linkType == 1 ? ' checked' : ''} onchange="var i=this.form.elements.gdpsId;i.value='';i.type='url';i.placeholder='Ссылка на твой канал'"> Внешняя ссылка</label>`+
+					`<label><input type=radio name=linkType value=0${linkType == 0 ? ' checked' : ''} onchange="var i=this.form.elements.gdpsId;i.value='';i.type='text';i.placeholder='Project ID from catalog'"> Project from catalog</label><br> `+
+					`<label><input type=radio name=linkType value=1${linkType == 1 ? ' checked' : ''} onchange="var i=this.form.elements.gdpsId;i.value='';i.type='url';i.placeholder='Link to your channel'"> External link</label>`+
 				`</div><br>`+
 				`<label${getTrans('add'+bigString+'03')}/label><br><input class=framelabel type=${linkType == 1 ? 'url' : 'text'} name=gdpsId value="${gdps}" style="width:calc(100% - 40px)" required${getTrans(smallString+'Input03', 'input')}<br>`+
 

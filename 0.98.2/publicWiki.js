@@ -32,7 +32,7 @@ MediaRender = (comicText)=>{
 setPage = (comicId, pageId)=>{
 	_.$.id(comicId+'_pagePlace').innerHTML = _.$.id(comicId+'_'+pageId).innerHTML;
 
-	// логика кнопок, я хз как её насрал!!
+	// button logic, I have no idea how I shat it out!!
 	let pageNum = parseInt(pageId.slice(1)),
 		pagePre = pageNum - 1,
 		pageNxt = pageNum + 1;
@@ -67,14 +67,14 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 		};
 	};
 
-    // ===== ФАЗА 1: LEXER =====
+    // ===== PHASE 1: LEXER =====
     const wtLex = (wikitext) => {
 		const lines = wikitext.split('\n');
 		const tokens = [];
 		let i = 0;
 		while (i < lines.length) {
 			const line = lines[i];
-			// таблица {| ... |}
+			// table {| ... |}
 			if (line.trim().startsWith('{|')) {
 				const body = [line.replace('{|', '')];
 				i++;
@@ -92,7 +92,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 				});
 				continue;
 			}
-			// заголовки
+			// headings
 			const h4 = line.match(/^====(.+?)====$/);
 			if (h4) {
 				tokens.push({
@@ -123,7 +123,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 				i++;
 				continue;
 			}
-			// нумерованный пункт ##
+			// numbered item ##
 			const oli = line.match(/^##\s*(.+)$/);
 			if (oli) {
 				tokens.push({
@@ -134,7 +134,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 				i++;
 				continue;
 			}
-			// маркированный пункт **
+			// bulleted item **
 			const uli2 = line.match(/^\*\*\s*(.+)$/);
 			if (uli2) {
 				tokens.push({
@@ -145,7 +145,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 				i++;
 				continue;
 			}
-			// нумерованный пункт #
+			// numbered item #
 			const oli1 = line.match(/^#\s*(.+)$/);
 			if (oli1) {
 				tokens.push({
@@ -156,7 +156,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 				i++;
 				continue;
 			}
-			// маркированный пункт *
+			// bulleted item *
 			const uli1 = line.match(/^\*\s*(.+)$/);
 			if (uli1) {
 				tokens.push({
@@ -167,13 +167,13 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 				i++;
 				continue;
 			}
-			// пустая строка
+			// empty line
 			if (line.trim() === '') {
 				tokens.push({ type: 'space' });
 				i++;
 				continue;
 			}
-			// обычная строка
+			// regular line
 			tokens.push({
 				type: 'p',
 				text: line
@@ -183,7 +183,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 		return tokens;
 	};
 
-    // ===== инлайн-разметка =====
+    // ===== inline markup =====
     const wtInline = (text) => {
 		text = text
 			.replaceAll(/&#039;&#039;&#039;&#039;&#039;(.+?)&#039;&#039;&#039;&#039;&#039;/g, '<strong><em>$1</em></strong>')
@@ -199,7 +199,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 		return text;
 	};
 
-    // ===== ФАЗА 2: RENDER =====
+    // ===== PHASE 2: RENDER =====
     const wtRender = (tokens) => {
 		let html = '';
 		let listBuf = null;
@@ -275,16 +275,16 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 		return html;
 	};
 
-    // ===== ФАЗА 0: шаблоны =====
+    // ===== PHASE 0: templates =====
     const wtTemplates = (wikitext) =>
 		wikitext.replace(
 			/\{\{([^}|]+)(?:\|([^}]*))?\}\}/g,
 			(match, templateName, argsStr) => {
 				if (depth >= 6) {
-					return '<div class="template-error">Превышена глубина вложенности шаблонов</div>';
+					return '<div class="template-error">Template nesting depth exceeded</div>';
 				}
 				if (counter.n >= 5000) {
-					return '<div class="template-error">Превышен лимит вызовов шаблонов</div>';
+					return '<div class="template-error">Template call limit exceeded</div>';
 				}
 				try {
 					counter.n++;
@@ -293,7 +293,7 @@ wikiText = (jId, wikitext, depth = 0, counter = { n: 0 }) => {
 						(wikiTemplates[J.globalWiki] && wikiTemplates[J.globalWiki][templateName]) ||
 						(wikiTemplates[0] && wikiTemplates[0][templateName]);
 					if (!templateFunction) {
-						return `<div class="template-missing">Шаблон "${templateName}" не найден</div>`;
+						return `<div class="template-missing">Template "${templateName}" not found</div>`;
 					}
 					let providedArgs = argsStr
 						? argsStr.split('|').map(arg => arg.trim())
@@ -475,7 +475,7 @@ renderGuideMini = (jId, parsedData, page = 0) => {
 		}
 		Count++;
 		if (Count == 9) {
-			// вроде как у меня уже есть поиск, зачем мне вставлять кнопку "ещё" прямо внутри рендера
+			// as if I already have search, why would I insert a "more" button right inside the render
 			//innerGdpsPlace(jId, insertBtn(jId, `getGuides(${jId},${J.globalWiki},${page})`),-1);
 			return html;
 		}
@@ -700,7 +700,7 @@ openWikiSidebar = (jId, wikiId, guideId) => {
     if (headers.length > 0)
 		_.win.open('wikisidebar',
 			html,
-		`bus=${wikiId}-${guideId} style=width:220px;height:400px`);
+		`bus=${wikiId}-${guideId} style=width:220px;height=400px`);
 };
 gotoHeading = (jId, headId, winId) => {
     let J = Jexec(jId);

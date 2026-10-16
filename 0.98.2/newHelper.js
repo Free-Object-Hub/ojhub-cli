@@ -1,28 +1,28 @@
 /*
- * Перед вами код newHelper.js версии 2.1.9,
- * Фронтенд библиотека сверхлегких и мощных утилит.
- * Библиотека построена на базе фабрики
- * Которая начинается с Intl.newHelper=function(namespace){...};
- * Причина использоватся Intl.newHelper банально проста
- * Если я в 2.1.0 засирал глобалскоуп одной полу гибкой переменной
- * И парочкой addEventListener,
- * То почему бы не начать отказываться от засирания глобал скоупа
- * при скачивании библиотеки как такового
- * И да, для инициализации ньюхелпера реально нужно писать
- * Intl.newHelper(yourVar) чтобы newHelper появился в window.yourVar
+ * Before you is the code of newHelper.js version 2.1.9,
+ * A frontend library of super-light and powerful utilities.
+ * The library is built on the basis of a factory
+ * That begins with Intl.newHelper=function(namespace){...};
+ * The reason for using Intl.newHelper is trivially simple
+ * If in 2.1.0 I was polluting the global scope with one semi-flexible variable
+ * And a couple of addEventListener,
+ * Then why not start abandoning global scope pollution
+ * when downloading the library as such
+ * And yes, to initialize newhelper you actually need to write
+ * Intl.newHelper(yourVar) for newHelper to appear in window.yourVar
  * 
- * Стиль комментариев
- * FIXME - странное поведение функции, которое желательно бы переделать
- *         ну или просто заметки для себя на будущее
- * HMM - требует уточнения
- * !!! - обратите внимание
- * See also - почитайте для понимания как устроено
+ * Comment style
+ * FIXME - strange function behavior that would be desirable to redo
+ *         or just notes for myself for the future
+ * HMM - requires clarification
+ * !!! - pay attention
+ * See also - read for understanding how it's built
  *
  * 
- * HMM: рассмотреть переход на es6 экспорт вместо вкладывания фабрики в Intl
- * HMM: рассмотреть переделку окон под iife фабрику
+ * HMM: consider switching to es6 export instead of nesting the factory into Intl
+ * HMM: consider redoing windows as an iife factory
  * 
- * Модули пришедшие с релизом 2.1:
+ * Modules that came with the 2.1 release:
  * link
  * lazy
  * lang
@@ -33,51 +33,51 @@
  * hotkeys
  * win (+wins)
  *
- * Модули удалённые после 2.1 (ищите полифиллы в конце файла):
+ * Modules removed after 2.1 (look for polyfills at the end of the file):
  * $
  *
- * Новые модули, готовятсяк релизу в 2.2
- * их апи может быть чуть чуть нестабильно
- * link (пропатченный, см. window[_].link.get => dynamic)
+ * New modules, preparing for release in 2.2
+ * their api may be slightly unstable
+ * link (patched, see window[_].link.get => dynamic)
  * form
  * pipe/pipeAsync
- * drag (портирован из win._initDrag)
- * fade (портирован из win._animate)
- * x10 (x window system - портирован и рефакторнут из кусков win)
+ * drag (ported from win._initDrag)
+ * fade (ported from win._animate)
+ * x10 (x window system - ported and refactored from pieces of win)
  * toast
 
  *
- * Модули, имена которых зарезервированы на 2.3++
- * не используйте их неймспейсы для плагинов:
+ * Modules whose names are reserved for 2.3++
+ * don't use their namespaces for plugins:
  * filezone
  * ikarus
  * tables
  * resize
  *
- * Плагины, новый паттерн который я хочу узаконить в 2.2
- * Это не _.use(), не _.plugins, не мутация прототипа
- * Простое назначение _.myPlugin = pluginFabric(_);
- * (где _ это уже вызванная фабрика ядра)
- * Как предполагается работать? также как и Intl.newHelper(namespace)
- * Фабрика плагина возвращает объект, метод, или класс, или что вам нужно
- * Вам для подключения плагина просто нужно дать плагину неймспейс внутри ядра
- * И вызвать фабрику, всё!
+ * Plugins, a new pattern I want to legitimize in 2.2
+ * It's not _.use(), not _.plugins, not prototype mutation
+ * Just a simple assignment _.myPlugin = pluginFabric(_);
+ * (where _ is the already-called core factory)
+ * How is it supposed to work? same as Intl.newHelper(namespace)
+ * The plugin factory returns an object, method, or class, or whatever you need
+ * To plug in a plugin you just need to give the plugin a namespace inside the core
+ * And call the factory, that's it!
  *
- * О модуле таблиц!!!!
- * Я его удалил потому что создавать второй движок окон мне нахуй не надо
- * Эта блядота заняла бы у меня ещё порядка 200-400 строк просто чтобы стать
- * "хорошей альтернативой" условным react-tables или datatables
- * Если я и захочу его делать снова то ждите 2.4, может быть тогда у меня хватит ума
- * Придумать как сделать правильно, и по своему
- * А щас, пусть эта гнида горит в аду, не место недопиленному говну в ядре unix.js
+ * About the tables module!!!!
+ * I removed it because I fucking don't need to create a second window engine
+ * This bitch would have taken me another 200-400 lines just to become
+ * a "good alternative" to conditional react-tables or datatables
+ * If I do want to do it again then wait for 2.4, maybe by then I'll be smart enough
+ * To figure out how to do it right, and in my own way
+ * And right now, let this scum burn in hell, there's no place for half-finished shit in the core of unix.js
  *
- * А если вам нужны именно ньюхелпер таблицы
- * Будьте добры проверить исходники 2.1.6 на npm
- * Или пилите самодельные таблицы через innerHTML или window[_].html
- * Что вам удобнее то и берите
+ * And if you really need newhelper tables
+ * Be so kind as to check the 2.1.6 sources on npm
+ * Or build your own tables via innerHTML or window[_].html
+ * Whichever is more convenient for you, take it
  *
- * Я (MIOBOMB) хочу релизнуть 2.2 уже после 2.1.8,
- * ибо мне в идеале закончить тосты и Object Hub 0.98
+ * I (MIOBOMB) want to release 2.2 already after 2.1.8,
+ * because ideally I want to finish toasts and Object Hub 0.98
  */
 
 // deprecated!!
@@ -90,24 +90,24 @@ Intl.newHelper=function(_='_') {
 
 	window[_].link = {
 		/*
-		 * МОДУЛЬ ССЫЛОК
+		 * LINKS MODULE
 		 * Author: MIOBOMB (2023-2026)
 		 * Last patch: 2.1.7
 		 * 
-		 * Работает по принципу [ссылка, команды...]
-		 * Пример: ?home&debug&lang=ru
+		 * Works on the principle of [link, commands...]
+		 * Example: ?home&debug&lang=ru
 		 *          ^^^^ ^^^^^^^^^^^^^
-		 *      страница команды
+		 *      page  commands
 		 * 
-		 * В процессе разработки ядра 2.0 в Object hub я понял
-		 * Что команды могут быть очень полезными для отладки
-		 * Но в теории на них можно повешать все модальные и прочие действия
+		 * During development of the 2.0 core in Object hub I understood
+		 * That commands can be very useful for debugging
+		 * But in theory you can hang all modal and other actions on them
 		 * 
-		 * !!!: в функции get() работает весь роутинг, в т.ч. вложенный для страниц
-		 * !!!: пожалуйста, относитесь к этому модулю не как к "компонентной модели"
-		 *      или что у вас там в реактивном вебе.
-		 *      А относитесь к нему как к серверному маршрутизатору,
-		 *      вы же ведь можете сделать красивые и адекватные маршруты.
+		 * !!!: inside the get() function all the routing works, including nested for pages
+		 * !!!: please, treat this module not as a "component model"
+		 *      or whatever you have in reactive web.
+		 *      But treat it as a server-side router,
+		 *      you can make pretty and adequate routes after all.
 	   	 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/History_API
@@ -117,38 +117,38 @@ Intl.newHelper=function(_='_') {
 		actions: {},
 		commands: {},
 
-		_i: true, // _i - блокировщик pushState в set()
+		_i: true, // _i - pushState blocker in set()
 		_pop() {
 			/*
-			 * Popstate движок
+			 * Popstate engine
 			 *
-			 * Сделан он для сохранения команд в истории
-			 * Это уникальная фича newHelper.js
+			 * It's made for preserving commands in history
+			 * This is a unique feature of newHelper.js
 			 *
-			 * Зачем я сделал сохранение команд?
-			 * Он вырос из потребностей object hub
-			 * Для меня это потребность сохранять
-			 * отладочные состояния в url
-			 * или вызывать функции одноразки, например:
-			 * - вызов модалки с конкретными данными (&user=1)
-			 * - смена настроек SPA по команде (язык, тема...)
+			 * Why did I make command preservation?
+			 * It grew out of the needs of object hub
+			 * For me it's a need to preserve
+			 * debug states in the url
+			 * or call one-shot functions, for example:
+			 * - calling a modal with specific data (&user=1)
+			 * - changing SPA settings by command (language, theme...)
 			 * - 
-			 * - сброс localStorage
-			 * для вас это может быть всё что угодно
-			 * но если он вам не нужен - link.popInit=true
+			 * - resetting localStorage
+			 * for you it can be anything
+			 * but if you don't need it - link.popInit=true
 			 *
-			 * popstate срабатывает когда:
-			 * - пользователь прыгает по истории назад/вперёд
-			 * - мы вызываем history.pushState (не replaceState)
+			 * popstate fires when:
+			 * - the user jumps back/forward through history
+			 * - we call history.pushState (not replaceState)
 			 * 
-			 * _i различает эти случаи:
-			 * true = пользователь прыгнул назад
-			 * false = страница пишет свой адрес в ссылку
+			 * _i distinguishes these cases:
+			 * true = user jumped back
+			 * false = the page writes its own address into the link
 			 */
-			// HMM: некоторые браузеры могут вызывать popstate и при реплейсе
+			// HMM: some browsers may fire popstate on replace too
 			if (!window[_].link._i) {
-				// здесь происходит перенос команд при popstate
-				// читайте window[_].link.get() если хотите узнать почему
+				// here commands are transferred on popstate
+				// read window[_].link.get() if you want to know why
 				let newUrl='?' + [window[_].link.compile()[0],...window[_].link._cmd].join('&');
 				window[_].link._i=true;
 				history.replaceState(null,null,newUrl);
@@ -167,11 +167,11 @@ Intl.newHelper=function(_='_') {
 
 		compile: (e=location.search)=>e.replace('?','').split('&'),
 		/*
-		 * Я знаю что это нарушение изоляции,
-		 * но для сохранения API в object hub
-		 * я создал этот метод, чтобы
-		 * GHE Jails могли читать не window.location,
-		 * а внутреннее "свойство" роутера
+		 * I know this is a violation of isolation,
+		 * but for preserving the API in object hub
+		 * I created this method, so that
+		 * GHE Jails could read not window.location,
+		 * but an internal "property" of the router
 		 */
 		search: e=>location.search,
 		set(page, title = window[_].link.defTitle) {
@@ -204,13 +204,13 @@ Intl.newHelper=function(_='_') {
 		get() {
 			window[_].link._init();
 			/*
-			 * Страницы бросают ошибку чтобы вызвать базовую страницу
-			 * Команды тем временем так не делают
-			 * Потому что сломанная команда не так страшна как сломанная страница
-			 * И вдруг на вашем сайте висит трекер от гугла который что то пишет в url
+			 * Pages throw an error to call the base page
+			 * Commands meanwhile don't do that
+			 * Because a broken command is not as scary as a broken page
+			 * And suddenly your site has a google tracker that writes something to the url
 			 * 
-			 * При popstate команды берутся из хранилища _cmd, вместо самой ссылки
-			 * Сделано это для переноса команд при прыжках по истории
+			 * On popstate commands are taken from the _cmd store, instead of the link itself
+			 * This is done to transfer commands when jumping through history
 			 */
 			console.warn(`${_}.link.get() called`);
 			let links = window[_].link.compile(),
@@ -224,30 +224,30 @@ Intl.newHelper=function(_='_') {
 					main(fisrtValue);
 				} else {
 					/*
-					 * ВЛОЖЕННЫЙ РОУТЕР
+					 * NESTED ROUTER
 					 *
-					 * Фича которую я сделал случайно
-					 * в поединке с бекендером-вайбкодером
+					 * A feature I made by accident
+					 * in a duel with a backend vibe-coder
 					 *
-					 * Заодно со скуки я сделал динамические маршруты
-					 * Я офигел когда понял что они полностью рабочие
-					 * Впрочем динамика работает также как и везде
-					 * называете свой ключ с двоеточия и всё работает
+					 * Also out of boredom I made dynamic routes
+					 * I was stunned when I realized they fully work
+					 * Although dynamics work the same as everywhere
+					 * you name your key starting with a colon and everything works
 					 *
 					 * !!!:
-					 * Чтобы создать вложенность вам нужно
-					 * сделать объект вместо функции
-					 * и обязательно добавить "/" в конце ключа
-					 * и внутри объекта уже описывать либо
-					 * ещё большую вложенность, либо маршруты
-					 * ТАКЖЕ
-					 * Если вы используете динамический роутер
-					 * Ваши query параметры будут удалены
-					 * А сама переменная передаваемая в функцию
-					 * Станет массивом, который нужно раскрыть
-					 * Количество динамики в пути - количество элементов массива
+					 * To create nesting you need
+					 * to make an object instead of a function
+					 * and обязательно add "/" at the end of the key
+					 * and inside the object describe either
+					 * even more nesting, or routes
+					 * ALSO
+					 * If you use the dynamic router
+					 * Your query parameters will be deleted
+					 * And the variable passed to the function
+					 * Will become an array, which needs to be spread
+					 * Number of dynamics in the path - number of array elements
 					 *
-					 * Пример роутера:
+					 * Example router:
 					 *
 					 * {
 					 *   '':          ()=>mainPage(),
@@ -262,8 +262,8 @@ Intl.newHelper=function(_='_') {
 					 * }
 					 *
 					 * FIXME:
-					 * сделать документацию
-					 * или хотябы интродакшн с интерактивом
+					 * make documentation
+					 * or at least an intro with interactive
 					 */
 					let dynamic = [];
 					for (let point of route){
@@ -303,39 +303,39 @@ Intl.newHelper=function(_='_') {
 
 	window[_].lazy = {
 		/*
-		 * МОДУЛЬ ЛЕНИ
+		 * LAZY MODULE
 		 * Author: MIOBOMB (2024-2026)
 		 * Last patch: 2.1.4
 		 * 
-		 * Создаёт в глобальной области видимости прокси функции
-		 * Вызывающие загрузку скрипта с внещним модулем
-		 * Был сделан через глобальную область, так намного проще создавать лень
+		 * Creates proxy functions in the global scope
+		 * That trigger loading a script with an external module
+		 * Was made through the global scope, that way it's much simpler to create laziness
 		 * 
-		 * !!!: Функции обёртки в register() должны быть повешаны на window
-		 *      Иначе lazy._ провалится в рекурсию ошибок, не наступайте на мои грабли
+		 * !!!: The wrapper functions in register() must be attached to window
+		 *      Otherwise lazy._ will fall into error recursion, don't step on my rake
 		 * 
-		 * HMM: будет ли легче создавать лень в легаси проектах через es6 импорты
+		 * HMM: will it be easier to create laziness in legacy projects via es6 imports
 		 *
 		 * See also: 
 		 * - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Window/window
-		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function (для _())
+		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function (for _())
 		 */
 		loaded: {},
 		load(url, ...args) {
 			/*
-			 * ...args передаются в Promise.resolve(args)
-			 * Это позволяет делать window[_].lazy.load('script.js', 'данные', 'для', 'колбека')
-			 * И потом в .then((a,b,c)=>...) получать эти аргументы
+			 * ...args are passed to Promise.resolve(args)
+			 * This allows doing window[_].lazy.load('script.js', 'data', 'for', 'callback')
+			 * And later in .then((a,b,c)=>...) getting those arguments
 			 * 
-			 * Тройное состояние скрипта в lazy.loaded:
-			 * - true: уже загружен => сразу резолвим
-			 * - Promise: грузится сейчас => ждём тот же промис
-			 * - undefined: ещё не грузили => создаём новый промис
+			 * Triple state of a script in lazy.loaded:
+			 * - true: already loaded => resolve immediately
+			 * - Promise: loading right now => wait for the same promise
+			 * - undefined: not loaded yet => create a new promise
 			 * 
-			 * Это защита от двойной загрузки одного скрипта
+			 * This is protection against double loading of the same script
 			 */
-			let key = url.split('?')[0], // отсекаем параметры, чтобы не дублировать
+			let key = url.split('?')[0], // cut off parameters so as not to duplicate
 				state = window[_].lazy.loaded;
 			if (state[key] === true)
 				return Promise.resolve(args);
@@ -361,9 +361,9 @@ Intl.newHelper=function(_='_') {
 		},
 		loadEsm(url, ...args) {
 			/*
-			 * Отдельно от load(), т.к. ES-модули не текут в глобальный scope —
-			 * значит script.onload/onerror работают, а вот state[key] === true
-			 * кэш всё равно нужен, чтобы не импортировать модуль повторно
+			 * Separately from load(), because ES modules don't leak into the global scope —
+			 * so script.onload/onerror work, but the state[key] === true
+			 * cache is still needed so as not to import the module again
 			 */
 			let key = url.split('?')[0],
 				state = window[_].lazy.loaded;
@@ -408,7 +408,7 @@ Intl.newHelper=function(_='_') {
 			let get = path => path.split('.').reduce((obj, key) => obj && obj[key], window),
 				wrapper = get(fn);
 	
-			await window[_].lazy.load(scr); // await короче Promise.then
+			await window[_].lazy.load(scr); // await is shorter than Promise.then
 	
 			if (wrapper !== get(fn))
 				return get(fn);
@@ -418,82 +418,82 @@ Intl.newHelper=function(_='_') {
 
 	window[_].lang = {
 		/*
-		 * МОДУЛЬ ПЕРЕВОДОВ (l10n)
+		 * TRANSLATIONS MODULE (l10n)
 		 * Author: MIOBOMB (2024-2026)
 		 * Contributors:
-		 * - DenisC - логика метода load + патч всего модуля (2025)
+		 * - DenisC - logic of the load method + patch of the whole module (2025)
 		 * Last patch: 2.1.8
 		 * 
-		 * По слухам этот модуль лучше чем многие i18n реализации, и лучше всех l10n
-		 * Всё потому что он из коробки умеет переводить страницу без перезагрузки
+		 * Rumor has it this module is better than many i18n implementations, and better than all l10n
+		 * All because out of the box it can translate a page without reloading
 		 * 
-		 * !!!: parse() обрабатывает ключи из vars и подставляет их значения
-		 *      ваш +ключ+ становится значением, и это значение динамичное
-		 *      Так удобнее отображать динамичные данные на сайтах
-		 *      Например никнейм пользователя
+		 * !!!: parse() processes keys from vars and substitutes their values
+		 *      your +key+ becomes the value, and this value is dynamic
+		 *      This is more convenient for displaying dynamic data on sites
+		 *      For example a user's nickname
 		 *
-		 * !!!: Это l10n (локализация), а не i18n (интернационализация)
+		 * !!!: This is l10n (localization), not i18n (internationalization)
 		 *
-		 *      i18n — подготовка кода: вынос строк в JSON, поддержка Unicode,
-		 *      гибкая верстка. Делается один раз.
+		 *      i18n — preparing the code: extracting strings into JSON, Unicode support,
+		 *      flexible layout. Done once.
 		 * 
-		 *      l10n - перевод JSON и адаптация под язык/регион
+		 *      l10n - translating JSON and adapting for language/region
 		 * 
-		 *      lang - загружает JSON, подставляет +переменные+,
-		 *      даёт реактивную смену языка на странице
+		 *      lang - loads JSON, substitutes +variables+,
+		 *      gives reactive language switching on the page
 		 *
-		 *      Чтобы частично приблизить lang к i18n используйте Intl,
-		 *      Нативное апи интернационализации (даты, числа, валюты)
+		 *      To partially bring lang closer to i18n use Intl,
+		 *      The native internationalization api (dates, numbers, currencies)
 		 * 
 		 * !!!:
-		 * модуль намеренно делает небезопасный innerHTML
-		 * нужно это для практичности и удобства, как пример
-		 * вы можете вставлять картинки зависимые от языка
-		 * (буквально <img src="..."> в ключе).
-		 * В конце концов, наврядли вы вставите в json "небезопасную строку",
-		 * или что смешно - пользовательские данные. (да, chatGPT, я тебе это говорю)
+		 * the module deliberately does unsafe innerHTML
+		 * This is needed for practicality and convenience, for example
+		 * you can insert language-dependent images
+		 * (literally <img src="..."> in a key).
+		 * In the end, you probably won't insert an "unsafe string" into json,
+		 * or what's funny - user data. (yes, chatGPT, I'm telling this to you)
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
-		 * - https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset (data-trans атрибуты)
+		 * - https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset (data-trans attributes)
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
 		 * - https://localizejs.com/articles/i18n-vs-l10n
 		 */
 		addr: '',
 		vars: {},
 		// HMM:
-		// переделать main на мапу т.к. внутреннее api?
-		// или сохранить оригинальное api на объекте
+		// redo main as a map since internal api?
+		// or preserve the original api on the object
 		main: {},
 		/*
-		 * Реестр композиторов
+		 * Composer registry
 		 *
-		 * ДА! в newHelper lang теперь можно форматировать выходной текст как вам надо!
-		 * Например в object hub я использую самописный Markdown парсер
-		 * Вам нужно лишь добавить в этот массив (прямой записью, не push!) вашу форматирующую функцию
+		 * YES! in newHelper lang you can now format the output text however you want!
+		 * For example in object hub I use a self-made Markdown parser
+		 * You just need to add your formatting function to this array (by direct assignment, not push!)
 		 * 
 		 * _.lang.regedit[0] = Markdown
 		 * 
-		 * Вызывается она на тексте крайне легко, вам нужно вручную прописать аттрибут:
+		 * It's called on text very easily, you need to manually write the attribute:
 		 * `<p data-trans-compose="[0](${jId},this)"${_.lang.text('key)}/p>`
 		 * 
-		 * Обратите внимание - здесь this является сырым текстом из пакета, ${jId} это аргумент специфичный для GHE Markdown'а
-		 * Надеюсь вам этого хватит чтобы понять как устроен наш композитор тут
+		 * Note - here this is the raw text from the packet, ${jId} is an argument specific for GHE Markdown
+		 * I hope this is enough for you to understand how our composer is built here
 		 */
 		regedit: [],
 	
 		load: name => fetch(window[_].lang.addr + name + '.json')
 			.then(r => r.text()),
 		parse: (packet, vars = window[_].lang.vars)=>
-			// HMM: переделать под общий синтаксис типа {var}
+			// HMM: redo under a common syntax like {var}
 			packet.replace(/\+([^+]+)\+/g, (match, key)=>{
 				let v = vars[key];
 				return v !== undefined ? v : match;
 			}),
 		async replace(name){
 			const packet = await window[_].lang.load(name);
-			window[_].lang.main = JSON.parse(window[_].lang.parse(packet)); // без замены языка нельзя начинать перевод
+			window[_].lang.main = JSON.parse(window[_].lang.parse(packet)); // without language replacement you can't start translation
 	
 			for (let el of document.querySelectorAll(`[${window[_].lang.attr}]`)) {
 				let key = el.dataset.trans,
@@ -509,7 +509,7 @@ Intl.newHelper=function(_='_') {
 					el.innerHTML = c ? window[_].lang.compose(c, text) : text;
 				}
 			}
-			// возвращаем для последующей обработки пакета, например для сохранения в window[_].storage
+			// return for subsequent packet processing, for example for saving to window[_].storage
 			return packet;
 		},
 		compose(src, text) {
@@ -527,15 +527,15 @@ Intl.newHelper=function(_='_') {
 		},
 	
 		/*
-		 * Получатели строки из пакета автоматически формируют HTML
-		 * Это позволяет заметно упростить работу с кодом
-		 * Вместо отдельного указания data-trans и lang.from
-		 * вы можете написать   `<h1${window[_].lang.text('yourKey')}/h1>`
-		 * А пришлось бы писать `<h1 data-trans="yourKey">${window[_].lang.from('yourKey')}</h1>`
-		 * Согласитесь, и короче и удобнее ведь?
-		 * Не повторяйте моих ошибок и примите это как победу в лотерее
+		 * String getters from the packet automatically form HTML
+		 * This allows noticeably simplifying work with code
+		 * Instead of separately specifying data-trans and lang.from
+		 * you can write   `<h1${window[_].lang.text('yourKey')}/h1>`
+		 * But you'd have to write `<h1 data-trans="yourKey">${window[_].lang.from('yourKey')}</h1>`
+		 * Agree, it's both shorter and more convenient, right?
+		 * Don't repeat my mistakes and accept this as a lottery win
 		 * 
-		 * !!!: если ключа в пакете нету, будет выброшен warning
+		 * !!!: if there's no key in the packet, a warning will be thrown
 		 */
 		attr:       ` data-trans`,
 		composer:       ` data-trans-compose`,
@@ -559,41 +559,41 @@ Intl.newHelper=function(_='_') {
 
 	window[_].langs = (storeName, initLang = 'RU')=>{
 		/*
-		 * МОДУЛЬ СУПЕР ПЕРЕВОДОВ (l10n для карточек)
+		 * SUPER TRANSLATIONS MODULE (l10n for cards)
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.9
 		 * 
-		 * Мульти-инстансная вариация оригинального l10n.
-		 * Спроектирована специально под сценарий горячего перевода контента карточек на сайте,
-		 * учтите что ваши карточки вместо голого текста должны отдавать JSON со всеми вариациями перевода.
+		 * Multi-instance variation of the original l10n.
+		 * Designed specifically for the scenario of hot translation of card content on a site,
+		 * note that your cards must return JSON with all translation variations instead of bare text.
 		 *
-		 * Обратите внимание на main!
-		 * Он отныне не является источником истины для текста, а является свалкой для всех языков разом.
-		 * При этом, langs явно знает какой язык сейчас выбран на сайте.
+		 * Pay attention to main!
+		 * It is no longer the source of truth for text, but is a dump for all languages at once.
+		 * At the same time, langs explicitly knows which language is currently selected on the site.
 		 *
-		 * Также обратите внимание что mount() принимает вторым аргументом *словарь* для конкретно взятой карточки,
-		 * всё потому что маунт сам создаёт объекты языков если их нет, и суёт в них все вариации переводов которые
-		 * доступны для отдельно взятой карточки (по этому карточка должна вместо текста отдавать JSON)
+		 * Also note that mount() takes as second argument a *dictionary* for a specific card,
+		 * all because mount itself creates language objects if they don't exist, and shoves into them all translation variations that
+		 * are available for a particular card (that's why the card must return JSON instead of text)
 		 *
 		 * !!!:
-		 * Модуль не предназначен для перевода различных типов атрибутов,
-		 * только текст, только хардкор, смиритесь.
+		 * The module is not intended for translating various types of attributes,
+		 * only text, only hardcore, deal with it.
 		 *
 		 * See also:
-		 * - оригинальный модуль lang
-		 * - https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset (data-trans атрибуты)
+		 * - the original lang module
+		 * - https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset (data-trans attributes)
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
 		 */
 		let thisLang = {
 			name: storeName,
-			selected: '', // имя выбранного языка
+			selected: '', // name of the selected language
 			current: [],
-			main: {}, // внутри лежат мапы с названиями языков
+			main: {}, // inside are maps with language names
 		
 			mount(key, dict) {
-				// если пришёл старый формат данных (строка а не объект словаря)
-				// пишем в текущий выбранный язык чтобы не крашнуться.
-				// в конце концов fallback в рендере есть, никто не умрёт, просто fps упадёт
+				// if old data format arrived (string instead of dict object)
+				// write to the current selected language so as not to crash.
+				// after all there's a fallback in render, nobody will die, just fps will drop
 				if (typeof dict === 'string')
 					return void this.current.set(key, dict)
 				for (let lang in dict) {
@@ -612,7 +612,7 @@ Intl.newHelper=function(_='_') {
 					if (text)
 						el.textContent = text;
 				}
-				// НЕ возвращаем ничего, потому что местный main - динамичный
+				// do NOT return anything, because the local main is dynamic
 			},
 			cleanup: str => str
 				.replace(/&/g, '&amp;')
@@ -622,12 +622,12 @@ Intl.newHelper=function(_='_') {
 				.replace(/'/g, '&#39;'),
 		
 			/*
-			 * Получатели строки из пакета автоматически формируют HTML
+			 * String getters from the packet automatically form HTML
 			 *
-			 * В отличии от lang умеет работать только с текстом.
-			 * Причины на это есть в первом варнинге.
+			 * Unlike lang it can only work with text.
+			 * There are reasons for this in the first warning.
 			 * 
-			 * !!!: если ключа в пакете нету, вы получите мусор (НЕТ, ПОКА ЧТО FIXME)
+			 * !!!: if there's no key in the packet, you'll get garbage (NO, FOR NOW FIXME)
 			 */
 			attr:       `data-${storeName}-trans`,
 			from(i) {
@@ -637,7 +637,7 @@ Intl.newHelper=function(_='_') {
 					if (this.main[lang].has(i))
 						return this.main[lang].get(i);
 				}
-				return i; // совсем нигде нет — возвращаем ключ как последний фолбэк
+				return i; // not anywhere — return the key as last fallback
 			},
 			text(i) {
 				return ` ${this.attr}="${i}">${this.cleanup(this.from(i))}<`
@@ -651,18 +651,18 @@ Intl.newHelper=function(_='_') {
 
 	window[_].http = {
 		/*
-		 * HTTP-КЛИЕНТ
+		 * HTTP CLIENT
 		 * Author: MIOBOMB (2024-2026)
 		 * Last patch: 2.1.4
 		 *
-		 * Обычная обёртка нав XHR для быстрых запросов
-		 * Использую XHR вместо fetch
-		 * Мне нужен прогресс загрузки (fetch его не даёт)
-		 * Да и вам тоже не помешает прогресс загрузки
+		 * A usual wrapper over XHR for fast requests
+		 * I use XHR instead of fetch
+		 * I need load progress (fetch doesn't give it)
+		 * And you won't mind load progress either
 		 *
-		 * В defaultHeaders вы можете установить хедеры по умолчанию
-		 * Как пример Authorization: 'your token'
-		 * HMM: добавить возможность игнорировать дефолтные хедеры
+		 * In defaultHeaders you can set default headers
+		 * For example Authorization: 'your token'
+		 * HMM: add ability to ignore default headers
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
@@ -680,8 +680,8 @@ Intl.newHelper=function(_='_') {
 				for (let header in allHeaders)
 					xhr.setRequestHeader(header, allHeaders[header]);
 	
-				// !!!: fileProgressElement ожидает <progress> элемент без min/max
-				// Потому что value от 0 до 1
+				// !!!: fileProgressElement expects a <progress> element without min/max
+				// Because value is from 0 to 1
 				if (fileProgressElement)
 					xhr.upload.onprogress= e=>{
 						if (e.lengthComputable) {
@@ -711,21 +711,21 @@ Intl.newHelper=function(_='_') {
 
 	window[_].html = function(strs, ...args) {
 		/*
-		 * Шаблонные строки в DOM
+		 * Template strings in DOM
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.4
 		 * 
-		 * Позволяет писать window[_].html`<div>${content}</div>`
-		 * И получать настоящий DOM-элемент, а не строку
+		 * Allows writing window[_].html`<div>${content}</div>`
+		 * And getting a real DOM element, not a string
 		 * 
-		 * Почему через template?
-		 * - Скрипты не выполняются (никаких xss!)
-		 * - Можно создать несколько элементов разом
-		 * - Быстрее чем createElement для сложных структур
-		 * - Банально удобнее createElement для сложных древ
+		 * Why via template?
+		 * - Scripts don't execute (no xss!)
+		 * - Can create several elements at once
+		 * - Faster than createElement for complex structures
+		 * - Simply more convenient than createElement for complex trees
 		 *
-		 * HMM: проверить производительность этого генератора dom
-		 * HMM: проверить факт о "защите от xss" из-за on* атрибутов
+		 * HMM: check the performance of this dom generator
+		 * HMM: check the fact about "xss protection" because of on* attributes
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement
@@ -749,7 +749,7 @@ Intl.newHelper=function(_='_') {
 		template.innerHTML = fullStr;
 		const content = template.content;
 	
-		// для создания вложенности html элементов заменяем плейсхолдеры
+		// to create nesting of html elements replace the placeholders
 		const it = document.createTreeWalker(
 			content,
 			NodeFilter.SHOW_COMMENT
@@ -765,12 +765,12 @@ Intl.newHelper=function(_='_') {
 
 	window[_].pipe = function(data, ...fns) {
 		/*
-		 * КАСТОМНЫЙ PIPE ОПЕРАТОР
+		 * CUSTOM PIPE OPERATOR
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.4
 		 * 
-		 * Никакой магии, обычный синхронный |>
-		 * для мутации таблиц будет самое то
+		 * No magic, a usual synchronous |>
+		 * for mutating tables it's just the thing
 		 *
 		 * See also:
 		 * - https://github.com/tc39/proposal-pipeline-operator/blob/main/README.md
@@ -782,12 +782,12 @@ Intl.newHelper=function(_='_') {
 
 	window[_].pipeAsync = async function(data, ...fns) {
 		/*
-		 * КАСТОМНЫЙ PIPE ОПЕРАТОР 2
+		 * CUSTOM PIPE OPERATOR 2
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.7
 		 * 
-		 * Никакой магии, обычный асинхронный |>
-		 * для получения и мутации данных сойдёт
+		 * No magic, a usual asynchronous |>
+		 * for fetching and mutating data it'll do
 		 *
 		 * See also:
 		 * - https://github.com/tc39/proposal-pipeline-operator/blob/main/README.md
@@ -802,15 +802,15 @@ Intl.newHelper=function(_='_') {
 
 	window[_].form = { // TS DONE HMM no
 		/*
-		 * АВТОСОХРАНЕНИЕ ФОРМ
+		 * FORM AUTOSAVE
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.4
 		 * 
-		 * Позволяет сохранять состояние формы на случай
-		 * Если в офисе внезапно выключат свет
+		 * Allows saving form state in case
+		 * The power goes out at the office suddenly
 		 * 
-		 * HMM: может сделать более полноценный модуль форм
-		 *      с встроенной валидацией, или чем нибуть ещё
+		 * HMM: maybe make a more full-fledged forms module
+		 *      with built-in validation, or something else
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement
@@ -859,13 +859,13 @@ Intl.newHelper=function(_='_') {
 
 	window[_].storage = class {
 		/* 
-		 * ИЗОЛЯТОР ХРАНИЛИЩ
+		 * STORAGE ISOLATOR
 		 * Author: MIOBOMB (2024-2026)
 		 * Last patch: 2.1.0
 		 *
-		 * Обычная обёртка поверх Storage экземпляра
-		 * Даёт простую но надёжную изоляцию хранилищ
-		 * Но нет она не даёт вам защиту от угона хранилища
+		 * A usual wrapper over a Storage instance
+		 * Gives simple but reliable isolation of storages
+		 * But no it doesn't give you protection from storage hijacking
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
@@ -890,14 +890,14 @@ Intl.newHelper=function(_='_') {
 
 	window[_].err = {
 		/* 
-		 * МОДУЛЬ ОШИБОК
+		 * ERRORS MODULE
 		 * Author: MIOBOMB (2024-2026)
 		 * Last patch: 2.1.9
 		 *
-		 * Мой самописный модуль ошибок
-		 * вообще он ялвяется наследием
-		 * но если вам лень писать .catch после .then
-		 * то почему бы и нет
+		 * My self-made errors module
+		 * actually it's a legacy
+		 * but if you're too lazy to write .catch after .then
+		 * then why not
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Window/error_event
@@ -933,24 +933,24 @@ Intl.newHelper=function(_='_') {
 
 	window[_].hotkeys = {
 		/*
-		 * ГОРЯЧИЕ КЛАВИШЫ
+		 * HOTKEYS
 		 * Author: MIOBOMB (2025-2026)
 		 * Last patch: 2.1.4
 		 * 
-		 * Реализует самый настоящий press/release интерфейс
-		 * Если верить минификатору, после сжатия весит всего 790 байт
+		 * Implements a real press/release interface
+		 * If you believe the minifier, after compression it weighs only 790 bytes
 		 * 
-		 * В Object Hub уже есть текстовый редактор горячих клавиш
-		 * На базе этого движка, конечно давать textarea с js кодом...
-		 * Не самая безопасная затея, но как факт кастомизация широчайшая
+		 * Object Hub already has a text hotkey editor
+		 * Based on this engine, of course giving a textarea with js code...
+		 * Not the safest idea, but as a fact customization is extremely wide
 		 * 
-		 * _holds работает не на массивах а на new Set()
-		 * Сеты работают намного быстрее при большом объёме данных
-		 * Вы же не хотите чтобы у вас тормозил поток с 100+ хоткеями
-		 * Из-за простого печатанья?
+		 * _holds works not on arrays but on new Set()
+		 * Sets work much faster with large volumes of data
+		 * You don't want your thread with 100+ hotkeys to lag
+		 * From simple typing, do you?
 		 *
-		 * FIXME: Рассмотреть альтернативы e.code из-за проблем
-		 *        с otg-клавиатурами на телефонах
+		 * FIXME: Consider alternatives to e.code because of problems
+		 *        with otg keyboards on phones
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
@@ -960,7 +960,7 @@ Intl.newHelper=function(_='_') {
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
-		 * - https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values (список клавиш)
+		 * - https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values (key list)
 		 */
 		keys: new Map(),
 		_holds: new Set(),
@@ -968,7 +968,7 @@ Intl.newHelper=function(_='_') {
 	
 		_parse: combo => combo.split('+').map(k=>k.trim()),
 		_match(keys) {
-			// Нужно сверять все клавишы, это же КОМБИНАЦИЯ а не отдельные куски
+			// Need to check all keys, it's a COMBINATION not separate pieces
 			for (let k of keys) if (!window[_].hotkeys._holds.has(k)) return false;
 			return true;
 		},
@@ -976,14 +976,14 @@ Intl.newHelper=function(_='_') {
 			if (window[_].hotkeys._)
 				return;
 			document.addEventListener('keydown', e=>{
-				window[_].hotkeys._holds.add(e.code);// key зависит от раскладки (на Qwerty 'KeyZ' — это 'z', на Йцукен — 'я')
-				// code даёт физическое положение клавиши, что важно для игр и хоткеев, и в целом универсальнее
+				window[_].hotkeys._holds.add(e.code);// key depends on layout (on Qwerty 'KeyZ' — is 'z', on Ytsuken — 'я')
+				// code gives the physical position of the key, which is important for games and hotkeys, and generally more universal
 	
 				for (let hotkey of window[_].hotkeys.keys.values()) {
 					if (!window[_].hotkeys._match(hotkey.keys))
 						continue;
 					if (hotkey.press && !hotkey.active) {
-						hotkey.active = true; // active защищает от множественных срабатываний
+						hotkey.active = true; // active protects from multiple firings
 						hotkey.press(e);
 					}
 				}
@@ -1000,8 +1000,8 @@ Intl.newHelper=function(_='_') {
 			});
 			window.addEventListener('blur', e=>{
 				/*
-				 * При переключении в другое окно автоматического keyup не будет
-				 * Поэтому сбрасываем всё принудительно, мало ли
+				 * When switching to another window there won't be an automatic keyup
+				 * So we reset everything forcibly, just in case
 				 */
 				for (let hotkey of window[_].hotkeys.keys.values()) {
 					if (hotkey.active) {
@@ -1019,7 +1019,7 @@ Intl.newHelper=function(_='_') {
 	
 			window[_].hotkeys.keys.set(combo, {
 				keys,
-				// press/releace по умолчанию пустышки для сокращения синаксиса
+				// press/releace default to stubs to shorten the syntax
 				press: press || (()=>{}),
 				release: release || (()=>{}),
 				active: false
@@ -1034,26 +1034,26 @@ Intl.newHelper=function(_='_') {
 	};
 
 	window[_].drag = {
-		/* МОДУЛЬ ДРАГГЕРА
+		/* DRAGGER MODULE
 		 * Author: MIOBOMB (2023-2026)
 		 * Last patch: 2.1.7
 		 *
-		 * Самый обычный драггер, разве что адаптированный под движок окон
-		 * Не буду врать, написал я его 2 года назад украв код с w3schools
-		 * Но я провёл настолько глубокий рефакторинг что единственное напоминание:
-		 * Алгоритм вычисления координат
+		 * The most usual dragger, except adapted for the window engine
+		 * I won't lie, I wrote it 2 years ago stealing code from w3schools
+		 * But I did such a deep refactoring that the only reminder is:
+		 * The coordinate calculation algorithm
 		 *
 		 * FIXME:
-		 * Мультитач чувствует себя плохо на телефонах
-		 * (возможно не только на них)
-		 * Первые элементы начинают дрожжать и прыгать по экрану
-		 * А последний взятый элемент сильно фризит
-		 * Я что зря делал проброс nginx'а на 192.168.0.*?
-		 * Непорядок
+		 * Multitouch feels bad on phones
+		 * (possibly not only on them)
+		 * First elements start to tremble and jump around the screen
+		 * And the last taken element freezes a lot
+		 * Did I set up nginx forwarding to 192.168.0.* for nothing?
+		 * Unacceptable
 		 * HMM:
-		 * оставить сломанный мультитач потому что
-		 * мне лень его чинить + наврядли кто то
-		 * всерьёз будет двигать много элементов за раз
+		 * leave the broken multitouch because
+		 * I'm too lazy to fix it + unlikely anyone
+		 * will seriously move many elements at once
 		 *
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/clientX
@@ -1061,8 +1061,8 @@ Intl.newHelper=function(_='_') {
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
-		 * - https://developer.mozilla.org/en-US/docs/Web/API/Element/touchmove_event (почему нам нужен preventDefault)
-		 * - https://www.w3schools.com/howto/howto_js_draggable.asp (основа для модуля)
+		 * - https://developer.mozilla.org/en-US/docs/Web/API/Element/touchmove_event (why we need preventDefault)
+		 * - https://www.w3schools.com/howto/howto_js_draggable.asp (basis for the module)
 		 */
 		_i: false,
 		active: new Map(),
@@ -1070,8 +1070,8 @@ Intl.newHelper=function(_='_') {
 		prevent: e=>e.target.closest('button,input'),
 		init(dragger, mover, onStart, onStop) {
 			let start=e=>{
-				// Проверяем куда нажали, если бы мы не проверяли,
-				// То драггер не дал бы нам нажать на кнопки или изменить имя окна
+				// We check where they clicked, if we didn't check,
+				// Then the dragger wouldn't let us click buttons or rename the window
 				if (window[_].drag.prevent(e)) return;
 	
 				e.preventDefault();
@@ -1092,8 +1092,8 @@ Intl.newHelper=function(_='_') {
 				window[_].drag._i = true;
 			}
 			dragger.onpointerdown=start;
-			// превентим touchmove событие чтобы не было проблем
-			// при скролле на телефонах
+			// we prevent the touchmove event so there are no problems
+			// when scrolling on phones
 			dragger.ontouchmove=e=>e.preventDefault();
 		},
 		move(e) {
@@ -1130,63 +1130,63 @@ Intl.newHelper=function(_='_') {
 
 	window[_].x10 = {
 		/*
-		 * МОДУЛЬ ОКОН (РЕАЛЬНЫЙ)
+		 * WINDOW MODULE (REAL)
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.8
 		 * 
-		 * Помните прошлый и уродливый win?
-		 * Я теперь понял что насрал говна и решил подсмотреть
-		 * архитектуру у гениев своего времени.
-		 * По итогу я создал это чудо юдо чтобы поверх него строить "оконные менеджеры"!
-		 * Прошлый модуль win все ещё останется рабочим и возможно
-		 * будет встроенным wm как это сделано в реальных иксах с toms window manager.
-		 * В отличии от реального x.org у меня будет реализована возможность
-		 * исполнять несколько оконных менеджеров в одной сессии,
-		 * нужно мне это чтобы модуль toast мог просто создавать для каждого
-		 * инстанса тостов свой очень тонкий wm.
+		 * Remember the old and ugly win?
+		 * I now realized I'd shat out some crap and decided to peek at
+		 * the architecture of the geniuses of their time.
+		 * As a result I created this chimera to build "window managers" on top of it!
+		 * The old win module will still remain working and possibly
+		 * will be a built-in wm as is done in real x's with tom's window manager.
+		 * Unlike real x.org I will have the ability
+		 * to run multiple window managers in one session,
+		 * I need this so that the toast module can simply create for each
+		 * toast instance its own very thin wm.
 		 *
-		 * СОСТОЯНИЯ ОКОН
-		 * Это вообще отдельная тема, которую мне стоит осветить особенно от x10.
-		 * Дело в том, что я вам дарую свободу обзывать и вешать в состояния окон
-		 * всё что вам вздумается! Только пожалуйста, давайте не будем творить что попало
-		 * и мы примим этот "контракт" о выдаче названий состояний окон:
+		 * WINDOW STATES
+		 * This is a whole separate topic that I should especially cover from x10.
+		 * The thing is, I'm granting you the freedom to name and hang on window states
+		 * whatever you like! Just please, let's not create whatever
+		 * and we'll accept this "contract" about issuing window state names:
 		 *
-		 * opened - окно открыто и видно
-		 * hidened - окно скрыто
-		 * opening - окно в анимации открытия
-		 * hiding - окно в анимации сворачивания
-		 * showing - окно в анимации разворачивания
-		 * moving - окно в анимации движения
-		 * closing - окно входит в анимацию закрытия и скоро умрёт
+		 * opened - window is open and visible
+		 * hidened - window is hidden
+		 * opening - window in opening animation
+		 * hiding - window in minimizing animation
+		 * showing - window in maximizing animation
+		 * moving - window in moving animation
+		 * closing - window enters closing animation and will die soon
 		 *
-		 * Да, я сам эти состояния пока не использую в win, но к какой нибуть 2.4
-		 * я начну над этим работать
-		 * FIXME: прописать newHelper win адекватную работу со всеми состояниями
-		 * FIXME: создать x10.iterate функцию
+		 * Yes, I myself don't use these states yet in win, but by some 2.4
+		 * I'll start working on this
+		 * FIXME: prescribe newHelper win adequate work with all states
+		 * FIXME: create x10.iterate function
 		 *
-		 * !!!: это x.org! Тупая софтина которая просто хранит окна и плюёт события!
-		 *      Управлять окнами и DOM'ом окон все ещё будет оконный менеджер!
+		 * !!!: this is x.org! A dumb piece of software that just stores windows and spits out events!
+		 *      Controlling windows and window DOM will still be the window manager's job!
 		 * 
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
-		 * - https://en.wikipedia.org/wiki/X_Window_System (будет полезно понимать)
+		 * - https://en.wikipedia.org/wiki/X_Window_System (it'll be useful to understand)
 		 */
 		busName: 'xws:',
 
 		generateId() {
 			let id;
-			// Создаём случайный 6 символьный айди, чтобы каждый раз не совпадало
-			// !!!: в теории можно задать любой айди
-			// HMM: проверить при скольки окнах генератор начинает тормозить
+			// Create a random 6-character id, so it doesn't match every time
+			// !!!: in theory you can set any id
+			// HMM: check at how many windows the generator starts to lag
 			do id=Math.random().toString(36).substring(2,8);
 			while (window[_].wins[id]);
 			//while (window[_].wins.has(id));
 			return id;
 		},
 
-		// метод spit() публичный, если вам нужны какие то
-		// специфичные события для вашего WM - пожалуйста
-		// HMM: дать ли ему нормальное название или нет
+		// the spit() method is public, if you need some
+		// specific events for your WM - please
+		// HMM: whether to give it a proper name or not
 		spit(evName, data) {
 			let event = new CustomEvent(window[_].x10.busName + evName, { detail: data })
 			document.dispatchEvent(event);
@@ -1201,7 +1201,7 @@ Intl.newHelper=function(_='_') {
 					wm: '',
 				};
 	
-			// оконные менеджеры могут вешать свои флаги в окна
+			// window managers can hang their own flags on windows
 			Object.assign(state, patcher);
 			window[_].wins[winId] = state;
 			window[_].x10.spit('created', window[_].wins[winId]);
@@ -1213,7 +1213,7 @@ Intl.newHelper=function(_='_') {
 			return window[_].wins[winId];
 		},
 
-		// vim ciw отсылка лол
+		// vim ciw reference lol
 		ciw(winId, attr, value, events = false) {
 			let winData = window[_].wins[winId];
 			winData[attr] = value;
@@ -1238,34 +1238,34 @@ Intl.newHelper=function(_='_') {
 
 	window[_].toast = class {
 		/* 
-		 * МОДУЛЬ УВЕДОМЛЕНИЙ
+		 * NOTIFICATIONS MODULE
 		 * Author: MIOBOMB (2026)
 		 * Last patch: 2.1.8
 		 * 
-		 * Является фабрикой оконных менеджеров, работает по такому принципу:
+		 * Is a factory of window managers, works on this principle:
 		 * errAlert = new window[_].toast('error', DOMelem)
 		 * okAlert = new window[_].toast('ok', DOMelem)
 		 * loadingAnim = new window[_].toast('loading', DOMelem, 0)
 		 *
-		 * Сам тонкий оконный менеджер крайне примитивный и простой,
-		 * но для тостов обычно большего и не надо.
+		 * The thinnest window manager itself is extremely primitive and simple,
+		 * but for toasts usually nothing more is needed.
 		 *
-		 * Если хотите сделать модалки то берите тосты, их api не обидется
-		 * на слушание событий x10:create и создание div class=darkbg с анимацией,
-		 * и делается это в считанные 10 строк, надеюсь у вас хватит сил
-		 * придумать как это работает и как создаётся
+		 * If you want to make modals then take toasts, their api won't be offended
+		 * by listening to x10:create events and creating a div class=darkbg with animation,
+		 * and it's done in a mere 10 lines, I hope you have enough strength
+		 * to figure out how it works and how it's created
 		 * 
-		 * Вы также можете переопределить метод generateDOM
-		 * под ваши нужны. В целом, это безопасно если иметь меру.
-		 * в Object hub это уже используется повсеместно.
+		 * You can also override the generateDOM method
+		 * for your needs. In general, it's safe if you have measure.
+		 * in Object hub this is already used everywhere.
 		 *
 		 * !!!:
-		 * если duration = 0 то тост будет закрыт только при вызове close()
+		 * if duration = 0 the toast will be closed only when close() is called
 		 * !!!:
-		 * не вешайте manager'ом document.body!
-		 * управление позицией окон отдано на откуп DOM и CSS,
-		 * вам придётся настроить элемент менеджера и классы или стили
-		 * тостов, чтобы они позиционировались адекватно
+		 * don't hang document.body as the manager!
+		 * position control of windows is given to the discretion of DOM and CSS,
+		 * you'll have to set up the manager element and classes or styles
+		 * of toasts so they position adequately
 		 */
 	
 		constructor(name, manager, duration = 3000, attrs = '', animOpen = '', animClose = '') {
@@ -1291,8 +1291,8 @@ Intl.newHelper=function(_='_') {
 			window[_].fade(html, this.animOpen);
 			this.manager.append(html);
 	
-			// сохраним ссылку на dom чтобы достать её в close()
-			// HMM: а может писать в this.elem
+			// let's save a reference to the dom so we can get it in close()
+			// HMM: or maybe write to this.elem
 			window[_].x10.ciw(wId, 'elem', document.getElementById(wId));
 	
 			if (this.duration > 0)
@@ -1312,40 +1312,40 @@ Intl.newHelper=function(_='_') {
 
 	window[_].win = {
 		/* 
-		 * МОДУЛЬ ОКОН
+		 * WINDOW MODULE
 		 * Author: MIOBOMB (2023-2026)
 		 * Last patch: 2.1.8
 		 *
-		 * если вы спросите почему ньюхелпер я отвечу
-		 * winBox.js это 35 килобайт, здесь же вы получаете в 65 килобайт
-		 * И более мощный движок окон и документацию уровня...
-		 * А у кого нибуть вообще есть такие подробные документации в вебе?
+		 * if you ask why newhelper I'll answer
+		 * winBox.js is 35 kilobytes, here you get 65 kilobytes
+		 * And a more powerful window engine and documentation of the level...
+		 * And does anyone even have such detailed documentation on the web?
 		 * 
-		 * Реализует ограниченно-гибкий движок окон, функционал:
-		 * - открытие, разворот на весь экран, закрытие
-		 * - сворачивание в таскбар и разворчаивание
-		 * - нативный css-ресайз (resize:both)
-		 * - возможность двигать окна (работает на телефонах, я проверял)
-		 * - сохранение и загрузка окон по вашему выбору
+		 * Implements a limited-flexible window engine, functionality:
+		 * - opening, fullscreen, closing
+		 * - minimizing to taskbar and restoring
+		 * - native css-resize (resize:both)
+		 * - ability to move windows (works on phones, I checked)
+		 * - saving and loading windows of your choice
 		 * 
-		 * теперь мне надо вспомнить я рефакторил этот код 4 раза или 7 раз
-		 * 25:06:2026 - Вспомнил! раз 6 точно, +x10 значит это уже 7 раз
+		 * now I need to remember did I refactor this code 4 times or 7 times
+		 * 25:06:2026 - Remembered! about 6 times for sure, +x10 so that's 7 times already
 		 *
-		 * !!!: _opn() и toggleFull() могут сломать ваши окна!
-		 *      Эти функции высчитывают координаты окна, и размер окна с учётом padding'а
-		 *      Ни за что не вешайте на ваши окна transform:translate()!
+		 * !!!: _opn() and toggleFull() can break your windows!
+		 *      These functions calculate window coordinates, and window size accounting for padding
+		 *      Never hang transform:translate() on your windows!
 		 * 
-		 * !!!: _opn() по умолчанию открывает окно по центру экрана
-		 *      Если не идёт восстановление через write()
+		 * !!!: _opn() by default opens the window centered on screen
+		 *      If not restoring via write()
 		 *
-		 * HMM: стоит ли открывать окно в центре, или лучше дать "дефолтную функцию" позиционирования
+		 * HMM: whether to open the window centered, or better give a "default function" of positioning
 		 *
-		 * FIXME: вынести lang.winTitle из переводов для устранения "связности" кода
+		 * FIXME: move lang.winTitle out of translations to remove "coupling" of code
 		 *
-		 * FIXME: придумать что делать с переездом window[_].wins на new Map
-		 * я уже пробовал перенос на мапу и результат...
-		 * у меня сломались все окна в object hub'е
-		 * по этому пусть пока хоть до 2.5 будет объект
+		 * FIXME: figure out what to do with migrating window[_].wins to new Map
+		 * I already tried migrating to a map and the result...
+		 * all windows in object hub broke for me
+		 * so for now at least until 2.5 let it be an object
 		 * 
 		 * See also:
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
@@ -1356,11 +1356,11 @@ Intl.newHelper=function(_='_') {
 		 * - https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 		 * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
-		 * - lang.winTitle функция
-		 * - html модуль
-		 * - drag модуль
-		 * - fade утилита
-		 * - x10 подсистема
+		 * - lang.winTitle function
+		 * - html module
+		 * - drag module
+		 * - fade utility
+		 * - x10 subsystem
 		 */
 		manager:false,
 		hider:false,
@@ -1407,8 +1407,8 @@ Intl.newHelper=function(_='_') {
 				langs:name,
 				full:false,
 				inRename:false,
-				// Если окно новое, координаты полностью нулевые, 
-				// Нужно чтобы проверять создаётся ли окно и если да то задавать координаты
+				// If the window is new, the coordinates are completely zero,
+				// Needed to check whether the window is being created and if so set coordinates
 				onUnfull:{top:0,left:0,width:0,height:0},
 				attrs:customAttrs,
 				elem:false,
@@ -1425,7 +1425,7 @@ Intl.newHelper=function(_='_') {
 			return window[_].win._opn(winData,content);
 		},
 		_opn(winState,content=''){
-			// эти проверки жрут драгоценные байты
+			// these checks eat precious bytes
 			// if (!window[_].win.manager || !window[_].win.hider) throw new Error('Window managers not inited');
 			let wId=winState.id,
 				html=
@@ -1462,10 +1462,10 @@ Intl.newHelper=function(_='_') {
 			winState.content = contentElem;
 	
 			if (winState.onUnfull.width === 0) {
-				// Здесь и задаются координаты...
-				// Мастера клин кода не выносите мне мозги прошу
-				// Оно же работает!!!
-				// 26:06:2026 - и вроде гзипается хорошо
+				// Here the coordinates are set...
+				// Masters of clean code don't blow my mind please
+				// It works!!!
+				// 26:06:2026 - and it seems to gzip well
 				if (!winState.attrs.includes('top')) {
 					win.style.top=win.offsetTop - (win.offsetHeight / 2) + 'px';
 					win.style.left=win.offsetLeft - (win.offsetWidth / 2) + 'px';
@@ -1601,20 +1601,20 @@ Intl.newHelper=function(_='_') {
 		},
 
 		/*
-		 * о да, ниже идёт самая крутая фишка которую я готовлю к 2.2
+		 * oh yes, below is the coolest feature I'm preparing for 2.2
 		 * 
-		 * СОХРАНЕНИЕ-ВОССТАНОВКА ОКОН
-		 * Помните автоформы? Здесь я поступил лучше
-		 * Вы можете полностью сохранить окна, как - решаете вы, но лучше
-		 * Вместо колбека я теперь просто делаю разовый читатель, так намного гибче
-		 * Плюсом я делаю разовый восстановитель который возвращает все окна
-		 * Так тоже в разы гибче, авось у вас в окнах были вебсокеты и их нужно восстановить
-		 * Проще записать результат а потом прогнать проверку по data-ws атрибутам
-		 * Или как вы ещё придумаете
+		 * SAVING-RESTORING WINDOWS
+		 * Remember autoforms? Here I did better
+		 * You can fully save windows, how - you decide, but better
+		 * Instead of a callback I now just do a one-shot reader, that's much more flexible
+		 * Plus I make a one-shot restorer that returns all windows
+		 * That's also much more flexible, maybe you had websockets in your windows and they need to be restored
+		 * Simpler to write the result and then run a check over data-ws attributes
+		 * Or however else you figure out
 		 * 
-		 * !!!: Оно работает настолько гибко что в теории можно сделать виртуальные рабочие столы
+		 * !!!: It works so flexibly that in theory you can make virtual desktops
 		 *
-		 * FIXME: добавить проверку принадлежности WM
+		 * FIXME: add WM ownership check
 		 */
 		read(){
 			let store = {};
@@ -1657,9 +1657,9 @@ Intl.newHelper=function(_='_') {
 	return window[_];
 };
 
-/* полифиллы к удалённым модулям
- * (сделаны в формате плагинов)
- * DOM хелпер ($), удалён в 2.1.X:
+/* polyfills for removed modules
+ * (made in plugin format)
+ * DOM helper ($), removed in 2.1.X:
 window[_].$ = {
 	D: document,
 	id: i=>					document.getElementById(i),
@@ -1669,11 +1669,11 @@ window[_].$ = {
 	on: (el,ev,fn,opts)=>	el.addEventListener(ev,fn,opts),
 	off: (el,ev,fn,opts)=>	el.removeEventListener(ev,fn,opts),
 
-	cliRect: e=>			e.getBoundingClientRect(), // сокращение чтобы не писать 25+ символов
+	cliRect: e=>			e.getBoundingClientRect(), // shorthand so as not to write 25+ characters
 }
- * Причины удаления:
- * 1. в процессе разработки 2.2 я понял что мне не нужен
- *    "сверхлегкий исходный код", а нужен крайне сжатый min+gzip
- * 2. в следствие пункта 1 я удалил весь синтаксический сахар
- *    потому что "document." гзипается заметно лучше
+ * Reasons for removal:
+ * 1. during 2.2 development I realized I don't need
+ *    "super-light source code", but need extremely compressed min+gzip
+ * 2. following point 1 I removed all the syntactic sugar
+ *    because "document." gzips noticeably better
  */
