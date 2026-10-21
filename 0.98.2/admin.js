@@ -127,6 +127,42 @@ adminPanel = (jId)=>{
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 };
 
+WIKI = {
+	type: -1,
+
+	_send(id, action, okText) {
+		Loading();
+		return _.http.req('GET', `${sData[2]}Aaction${php}?id=${id}&type=${WIKI.type}&action=${action}`)
+			.then(data => {
+				Loading(1);
+				let denied = data == 'Access denied', err = null;
+				try { err = JSON.parse(data).error } catch (e) {}
+				let st = document.getElementById('wikiStatus');
+				if (denied || err) {
+					if (st) st.textContent = 'Ошибка: ' + (err || data);
+					return false;
+				}
+				if (st) st.textContent = okText + ' (wiki ' + id + ')';
+				// синхронизируем ячейку "Checked" в списке админки, если она открыта
+				let cell = document.getElementById('Aw' + id);
+				if (cell && action == 'activate') cell.innerHTML = 1;
+				if (cell && action == 'ban') cell.innerHTML = -1;
+				if (action == 'delete') {
+					let row = document.getElementById('w' + id);
+					if (row) row.remove();
+				}
+				return true;
+			})
+			.catch(e => { Loading(1); console.error(e); _.err.handleRejection(e) });
+	},
+
+	ban:     id => WIKI._send(id, 'ban', 'забанена'),
+	unban:   id => WIKI._send(id, 'activate', 'разбанена'),
+	delete:  id => confirm('Удалить вики ' + id + '?') && WIKI._send(id, 'delete', 'удалена'),
+	setlgbt: id => WIKI._send(id, 'setlgbt', 'помечена LGBT'),
+	dellgbt: id => WIKI._send(id, 'dellgbt', 'LGBT снят'),
+};
+
 ageGuides = function(jId, wiki, backButton = '') {
 	// a trick to start loading a dependency asynchronously, DOM operations execute in 0.00 ms
 	_.lazy.load(scritpsUrl+'/publicWiki.js?ver='+scrLoadVer)
@@ -134,11 +170,11 @@ ageGuides = function(jId, wiki, backButton = '') {
 	let J = Jexec(jId);
 	let page =
 		`<div id=helperContent>`+
-			basicButton('>BAN<', '', `WIKI.ban(${wiki})`)+
-			basicButton('>UNBAN<', '', `WIKI.unban(${wiki})`)+
-			basicButton('>DELETE<', '', `WIKI.delete(${wiki})`)+
-			basicButton('>ISLGBT<', '', `WIKI.setlgbt(${wiki})`)+
-			basicButton('>ISNTLGBT<', '', `WIKI.dellgbt(${wiki})`)+
+			basicButton('>BAN<', `WIKI.ban(${wiki})`)+
+			basicButton('>UNBAN<', `WIKI.unban(${wiki})`)+
+			basicButton('>DELETE<', `WIKI.delete(${wiki})`)+
+			basicButton('>ISLGBT<', `WIKI.setlgbt(${wiki})`)+
+			basicButton('>ISNTLGBT<', `WIKI.dellgbt(${wiki})`)+
 			`<h1 align=center>`+
 				`<span id=wikiName></span>`+
 				` <span${getTrans('guides09')}/span>`+
@@ -152,7 +188,7 @@ ageGuides = function(jId, wiki, backButton = '') {
 		helperRequest(`${sData[2]}!newTakeAll${php}?wiki=${wiki}`)
 			.then(function(data) {
 				let parsedData = JSON.parse(data),
-					html = renderGuideMini(jId, parsedData);
+					html = renderGuideMini(jId, parsedData, 0, 1);
 				J.id('wikiInner'+wiki).innerHTML = html;
 				Loading(1);
 			})

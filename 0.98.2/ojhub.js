@@ -282,6 +282,7 @@ bottomNav = jId => {
 },
 
 basicButton = (text = '', func = '', style = '', id = '', Class = '')=>`<button ${id ? 'id="'+id+'"' :''}class="loginbtn ${Class}" style="${style}" onclick="${func}"${text}/button>`,
+basicButtonSquare = (text = '', func = '', style = '', id = '', Class = '')=>`<button ${id ? 'id="'+id+'"' :''}class="loginbtnGDPS ${Class}" style="${style}" onclick="${func}"${text}/button>`,
 windowButton = (text, func = '', style = '')=>`<button class=emptybtn style="padding:2px;color:var(--color-window);${style}" onclick="${func}">${text}</button>`,
 gdpsAvatar = (img, w=128, h=128, rszConf=2)=>`<img loading=lazy onerror="console.warn('broken link ${img}');this.src='${helperUrl}imgs/hubbig.png'" align="left" src="${decodeURIComponent(img)}" width=${w}px height=${h}px style="border-radius:calc(var(--def-border)*${rszConf})">`,
 // gdpsBan = (ban, w=360, h=150)=>

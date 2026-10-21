@@ -456,7 +456,7 @@ uploadPost = (jId, forumId) => {
 	, 'forumpost');
 };
 
-renderGuideMini = (jId, parsedData, page = 0) => {
+renderGuideMini = (jId, parsedData, page = 0, isAdmin = 0) => {
     let J = Jexec(jId);
     page++;
     let html = '',
@@ -474,7 +474,7 @@ renderGuideMini = (jId, parsedData, page = 0) => {
 			continue;
 		}
 		Count++;
-		if (Count == 9) {
+		if (!isAdmin && Count == 9) {
 			// as if I already have search, why would I insert a "more" button right inside the render
 			//innerGdpsPlace(jId, insertBtn(jId, `getGuides(${jId},${J.globalWiki},${page})`),-1);
 			return html;
@@ -489,7 +489,19 @@ renderGuideMini = (jId, parsedData, page = 0) => {
 			isLiked: guid[7]
 		};
 
-		preHtml = [J.globalWiki, '', '', 'width:300px;height:300px', -2, 7];
+		// adminBtnsZone
+		let adminBtns = '';
+		if (isAdmin) {
+			let gid = guid[0];
+			adminBtns =
+				`<span id=Ap${gid} style="margin-right:6px">${guid[5]}</span>`+
+				basicButtonSquare('>Activate<', `Aaction(${jId},${gid},-2,'activate')`, 'margin-top:-2px')+
+				basicButtonSquare('>Ban<', `Aaction(${jId},${gid},-2,'ban')`, 'margin-top:-2px')+
+				basicButtonSquare('>Delete<', `Aaction(${jId},${gid},-2,'delete')`, 'margin-top:-2px');
+		}
+
+
+		preHtml = [J.globalWiki, adminBtns, '', 'width:300px;height:300px', -2, 7];
 		html += contentRenderMinu(jId, gdpsData, preHtml, 0, 0, 0, 0);
 	}
     return html;
