@@ -738,7 +738,7 @@ function createJail(rootElement, routerLinkInstance) {
 			return;
 		let J = Jexec(jId);
 		let addr = J.link.compile()[0];
-		if (!addr.startsWith('find') && !addr.startsWith('Wikis') && !addr.startsWith('vacs') && !addr.startsWith('wiki'))
+		if (!addr.startsWith('find=') && !addr.startsWith('Wikis=') && !addr.startsWith('vacs=') && !addr.startsWith('wiki='))
 			return;
 		clearTimeout(J.TimeOut[0]);
 		J.TimeOut[0] = setTimeout(()=>{

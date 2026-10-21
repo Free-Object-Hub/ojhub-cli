@@ -741,6 +741,7 @@ setMethod = (jId, Method) => {
 	J.id('method'+J.helperFindData[0]).setAttribute('class','tagSel');
 	sendFinder(jId);
 },
+// PLEASE SEE "createJail" FUNCTION ITS VERY NICE CLUTCH
 sendFinder = (jId, page = 0, query = '') => {
 	let J = Jexec(jId);
 	if (J.id('nextGdps'))
