@@ -171,7 +171,7 @@ helperBuildNum = 139;
 urlBuildNum = 133;
 scritpsUrl = '/cli/'+helperStrVer;
 ignoreCap = false;
-renderBeta = false;
+renderBeta = true;
 helperTitleText = renderBeta ? 'ojhub-BUILD'+helperBuildNum : 'Object Hub';
 helperUrl = './', // 'https://objecthub.xyz/',//'https://gdpshelper.xyz/';
 doLangSetup = (data)=>{
