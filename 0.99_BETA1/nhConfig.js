@@ -165,9 +165,9 @@ langNames = {
   EL:  ['Ελληνικά',   'el'],
   CHN: ['简体中文',    'zh-Hans'], // simplified
 };
-helperStrVer = '0.99';
+helperStrVer = '0.99_BETA1';
 currentLangVer = 16;
-helperBuildNum = 138;
+helperBuildNum = 139;
 urlBuildNum = 133;
 scritpsUrl = '/cli/'+helperStrVer;
 ignoreCap = false;
