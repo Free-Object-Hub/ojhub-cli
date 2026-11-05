@@ -1404,8 +1404,8 @@ editNews = (jId, id, gdpsId) => {
 		.then(data=>{
 			Loading(1);
 			let parsedData = JSON.parse(data),
-					title = parsedData.gdps['n'+id].title,
-					text = parsedData.gdps['n'+id].text.replaceAll('<br>', '\n');
+					title = parsedData.gdps['n'+id][1],
+					text = parsedData.gdps['n'+id][2].replaceAll('<br>', '\n');
 			_.win.open('newsEdit',
 				`<input class=framelabel style=width:250px id=editNews1-N${id} value="${title}"><br>
 				<textarea class=framelabel style=width:250px id=editNews2-N${id}>${text}</textarea><br>
@@ -3589,7 +3589,7 @@ verifyWork = (jId, workId) => {
 				let el = J.id(`WO${workId}`);
 				if (el) {
 					if (checked === 0) el.textContent = '';
-					if (checked === 1) el.textContent = `<span${getTrans('workVerified')}/span>`;
+					if (checked === 1) el.innerHTML = `<span${getTrans('workVerified')}/span>`;
 					return;
 				}
 				throw 'Cant find work element!';
