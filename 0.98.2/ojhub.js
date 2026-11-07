@@ -1572,7 +1572,20 @@ pageMain = (jId, localIgnore = false) => {
 	if (!localIgnore)
 		J.link.set('');
 	let gdpses = '',
-		news = '';
+		news = '',
+		gradientEl = 
+			`<div style="position:absolute;right:-220px;top:-100px;transform:rotate(-3deg);width:1000px;height:1000px;pointer-events:none;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(68, 41, 106, 1)    0%,
+    rgba(68, 41, 106, .80) 12%,
+    rgba(68, 41, 106, .60) 25%,
+    rgba(68, 41, 106, .38) 40%,
+    rgba(68, 41, 106, .20) 55%,
+    rgba(68, 41, 106, .08) 72%,
+    rgba(68, 41, 106, .02) 88%,
+    rgba(68, 41, 106, 0)  100%
+  );"></div>`;
 	for (let g in mainPageCache.gdpses) {
 		let gdps = mainPageCache.gdpses[g];
 		gdpses += FINDrenderMini(jId, gdps.channel, [gdps]);
@@ -1599,7 +1612,7 @@ pageMain = (jId, localIgnore = false) => {
 					`<h2 style="width:650px;margin:8px;filter:drop-shadow(2px 2px 6px #000);font-size:calc(var(--def-font)*1.5)"${getTrans('hubMaster')}/h2>`+
 				`</div>`+
 				`<div style=position:relative;width:35cqw;height:370px;z-index:1>`+
-					`<img src="${helperUrl}imgs/grad.webp"  height=1000px style="position:absolute;right:-220px;top:-100px;transform:rotate(-3deg)">`+
+					gradientEl+
 
 					`<img src="${helperUrl}imgs/gem.webp"   loading=lazy height=322px style="filter:drop-shadow(2px 2px 8px #000);position:absolute;right:420px;top:100px">`+
 					`<img src="${helperUrl}imgs/gasi.webp"  loading=lazy height=348px style="filter:drop-shadow(2px 2px 8px #000);position:absolute;right:270px;top:50px;transform:rotate(-3deg)">`+
@@ -1608,7 +1621,7 @@ pageMain = (jId, localIgnore = false) => {
 			`</div>`+
 			`<div class=contentAdaptiveSmall align=center style=position:relative;overflow:hidden>`+
 				`<div class=textFly style=z-index:2>`+
-					`<img src="${helperUrl}imgs/grad.webp"  height=1000px style="position:absolute;right:-180px;top:-100px;transform:rotate(-3deg)">`+
+					gradientEl+
 					`<h3 style="filter:drop-shadow(2px 2px 6px #000);margin:12px;font-size:calc(var(--def-font)*2.5);color:#5E4877"${getTrans('T2-hi')}/h3>`+
 					`<h1 style="filter:drop-shadow(2px 2px 6px #000);margin:12px;font-size:calc(var(--def-font)*3);font-weight:bold">`+
 						`<span style=font-size:calc(var(--def-font)*3)${getTrans('ojhubname')}/span>`+
