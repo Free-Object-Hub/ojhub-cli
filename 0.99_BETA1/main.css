@@ -457,6 +457,32 @@ transform: translateY(2px);
 	margin:var(--def-text-indent) 0;
 }
 
+.pollBox{
+	margin-top:12px
+}
+.pollOpt{
+	display:block;
+	position:relative;
+	padding:4px 6px;
+	margin:3px 0;overflow:hidden
+}
+.pollBar{
+	position:absolute;
+	left:0;
+	top:0;
+	bottom:0;
+	background:currentColor;
+	opacity:.15;
+	z-index:-1
+}
+.pollNum{
+	float:right
+}
+.pollNote{
+	margin:6px 0 0;
+	opacity:.7
+}
+
 .frameguide {
 	position: relative;
 	text-decoration: none;

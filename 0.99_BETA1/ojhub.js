@@ -2447,6 +2447,24 @@ let fp = '',
 */
 LIKES = {
 	// each object key is a channel, each channel contains an array where a negative number is a like and a positive is a dislike
+	init() {
+		if (!token)
+			return false;
+		_.http.req('GET', `${sData[2]}likesT${php}`).then(data=>{
+			let parsedData = JSON.parse(data);
+			for (let i in parsedData)
+				if (i === 'polls') {
+					this.polls = parsedData[i] || {};
+					return;
+				}
+
+				if (i === 'subs')
+					SUBS.init(parsedData.subs)
+				else 
+					LIKES.push(i, parsedData[i]);
+			return this.data;
+		})
+	},
 	data: {
 		// some classes aren't here because they will be removed from oshub in the nearest update, for example forums, and wiki pages because they won't need it there (at most comments but that has nothing to do with the likes service)
 		"p": new Set(), // all projects (channel >= 0)
@@ -2457,6 +2475,7 @@ LIKES = {
 		"f": new Set(), // forums well I think so
 		"v": new Set(), // vacancies
 	},
+	polls: {},
 	chIdToStr: {
 		0:	'p',
 		1:	'c',
@@ -2536,19 +2555,6 @@ LIKES = {
 				set.add(id);
 		}
 	},
-	init() {
-		if (!token)
-			return false;
-		_.http.req('GET', `${sData[2]}likesT${php}`).then(data=>{
-			let parsedData = JSON.parse(data);
-			for (let i in parsedData)
-				if (i === 'subs')
-					SUBS.init(parsedData.subs)
-				else 
-					LIKES.push(i, parsedData[i]);
-			return this.data;
-		})
-	}
 },
 
 sendLike = (jId, id, channel, isComm = 0) => {
@@ -2622,6 +2628,38 @@ repaintLikeButton = (jId, id, isComm, liketype = 0) => {
 	if (dislElem.style.filter != '') {
 		dislElem.setAttribute('style', '');
 	}
+},
+
+pollStore = {},
+// две точки привязки к реестру LIKES: покажи его код, подправлю
+pollMine = id => (LIKES.polls && LIKES.polls['n'+id]) || 0,
+pollSetMine = (id, mask) => {
+	LIKES.polls = LIKES.polls || {};
+	if (mask) LIKES.polls['n'+id] = mask; else delete LIKES.polls['n'+id];
+},
+pollSubmitMulti = (jId, id) => {
+	let J = Jexec(jId), mask = 0;
+	J.id('Npoll'+id).querySelectorAll('input:checked').forEach(e => mask |= 1 << parseInt(e.value));
+	pollSubmit(jId, id, mask);
+},
+pollSubmit = (jId, id, mask) => {
+	let J = Jexec(jId);
+	Loading();
+	// BODY/HEADERS: скопируй вызов из sendLike, нужен urlencoded (на сервере ParseForm)
+	_.http.req('POST', `${sData[0]}polls/vote${php}`, `newsId=${id}&mask=${mask}`, urlEncoded)
+		.then(data => {
+			Loading(1);
+			let poll = pollStore[id], el = J.id('Npoll'+id);
+			if (data[0] === '-') {
+				if (data == '-3' && poll) poll[0].c = 1; // закрылся, пока смотрели
+				else { megaAlert(jId, 'pollError'); return; }
+			} else {
+				pollSetMine(id, mask);
+				if (data[0] === '[') poll[0].r = JSON.parse(data); // h=0: свежие счётчики
+			}
+			if (el) el.innerHTML = pollRender(jId, {ID: id, poll: poll});
+		})
+		.catch(e => {console.error(e); _.err.handleRejection(e)});
 },
 // #endregion
 // #region notifications!
@@ -2893,7 +2931,8 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 				likes: gData[8],
 				isLiked: gData[9],
 				hasFile: gData[10],
-				gdpsImg: gData[11]
+				gdpsImg: gData[11],
+				poll: gData[12]
 			};
 		else 
 			gdpsData = gData;
@@ -2948,6 +2987,7 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 			`<p>${timeAgo(gdpsData.date)}</p>`+
 			`<div id=Ntext${gdpsData.ID}>${text}</div>`+
 			`<div>${gdpsData.hasFile == '' ? '' : `<img loading=lazy class=newsImage src=${helperUrl}imgs/customnews/${gdpsData.ID}.${gdpsData.hasFile}>`}</div>`+
+			`<div id=Npoll${gdpsData.ID}>${isComm == 3 ? pollBadge(jId, gdpsData, backFunc, commBackFunc) : pollRender(jId, gdpsData)}</div>`+
 			`<div style="margin-top:15px">`+
 				`<div class="likezone">`+
 					`<span class=likeplace id="likesCount${gdpsData.ID}">${gdpsData.likes[0]}</span>`+
@@ -2976,6 +3016,57 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 		return `<h1 class=contentAdaptiveBig${getTrans('newsNoneReal')}/h1>`;
 	return html2;
 },
+pollBadge = (jId, n, backFunc, commBackFunc) => {
+	if (!Array.isArray(n.poll)) return '';
+	return `<button class=loginbtn onclick="getNewsWithComments(${jId},${n.ID},${n.gdpsId},'${backFunc}','${commBackFunc}')"${getTrans('pollBadge')}/button>`;
+},
+pollRender = (jId, n) => {
+	console.warn(n);
+	let poll = n.poll;
+	console.log(poll);
+	if (!Array.isArray(poll))
+		try {
+			poll = JSON.parse(poll);
+		} catch (e) {
+			return '';
+		}
+	pollStore[n.ID] = poll;
+	let p = poll[0],
+		opts = poll.slice(1),
+		mask = pollMine(n.ID),
+		closed = p.c === 1,
+		canVote = !closed && thisUser.isActive === 1,
+		// h=0: счётчики в payload есть всегда, но показываем после голоса или закрытия (косметика)
+		showRes = !!p.r && (mask !== 0 || closed),
+		total = showRes ? p.r.reduce((a, b) => a + b, 0) : 0,
+		html = `<div class=pollBox>`;
+	opts.forEach((opt, i) => {
+		let pct = showRes && total ? Math.round(p.r[i] * 100 / total) : 0,
+			mine = (mask >> i) & 1;
+		html += `<label class=pollOpt>`+
+			(canVote ?
+				`<input type=${p.m ? 'checkbox' : 'radio'} name=poll${n.ID} value=${i} ${mine ? 'checked' : ''}`+
+				(p.m ? '' : ` onclick="pollSubmit(${jId},${n.ID},${1 << i})"`)+`>`
+			: (mine ? '✓ ' : ''))+
+			`<span>${opt}</span>`+
+			(showRes ? `<span class=pollNum>${p.r[i]} (${pct}%)</span><div class=pollBar style="width:${pct}%"></div>` : '')+
+		`</label>`;
+	});
+	if (canVote && p.m)
+		html += `<button class=loginbtn onclick="pollSubmitMulti(${jId},${n.ID})"${getTrans('pollSend')}/button>`;
+	if (canVote && mask)
+		html += `<button class=loginbtn onclick="pollSubmit(${jId},${n.ID},0)"${getTrans('pollCancel')}/button>`;
+	if (closed)
+		html += `<p class=pollNote${getTrans('pollEnded')}/p>`;
+	else if (thisUser.isActive !== 1)
+		html += `<p class=pollNote${getTrans('pollLogin')}/p>`;
+	else if (!p.r && mask)
+		html += `<p class=pollNote${getTrans('pollHidden')}/p>`;
+	if (showRes)
+		html += `<p class=pollNote><span${getTrans('pollTotal')}/span>: ${total}</p>`;
+	return html + `</div>`;
+},
+
 renderVacancy = (jId, parsedData, isAdmin = thisUser.role, renderMethod = 'm') => {
 	let J = Jexec(jId);
 	let html = '',
