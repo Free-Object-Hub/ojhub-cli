@@ -1585,7 +1585,7 @@ pageMain = (jId, localIgnore = false) => {
     rgba(68, 41, 106, .08) 72%,
     rgba(68, 41, 106, .02) 88%,
     rgba(68, 41, 106, 0)  100%
-  );"></div>`
+  );"></div>`;
 	for (let g in mainPageCache.gdpses) {
 		let gdps = mainPageCache.gdpses[g];
 		gdpses += FINDrenderMini(jId, gdps.channel, [gdps]);
@@ -2530,9 +2530,11 @@ LIKES = {
 	},
 	push(channel, ids) {
 		let set = this.data[channel];
-		set.clear();
-		for (let id of ids)
-			set.add(id);
+		if (set) {
+			set.clear();
+			for (let id of ids)
+				set.add(id);
+		}
 	},
 	init() {
 		if (!token)
@@ -2542,7 +2544,7 @@ LIKES = {
 			for (let i in parsedData)
 				if (i === 'subs')
 					SUBS.init(parsedData.subs)
-				else
+				else 
 					LIKES.push(i, parsedData[i]);
 			return this.data;
 		})

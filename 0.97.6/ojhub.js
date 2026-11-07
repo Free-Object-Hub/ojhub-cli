@@ -2405,9 +2405,11 @@ LIKES = {
 	},
 	push(channel, ids) {
 		let set = this.data[channel];
-		set.clear();
-		for (let id of ids)
-			set.add(id);
+		if (set) {
+			set.clear();
+			for (let id of ids)
+				set.add(id);
+		}
 	},
 	init() {
 		if (!token)
