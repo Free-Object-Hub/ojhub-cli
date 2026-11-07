@@ -2455,10 +2455,8 @@ LIKES = {
 			for (let i in parsedData)
 				if (i === 'polls') {
 					this.polls = parsedData[i] || {};
-					return;
-				}
-
-				if (i === 'subs')
+					continue;
+				} else if (i === 'subs')
 					SUBS.init(parsedData.subs)
 				else 
 					LIKES.push(i, parsedData[i]);
@@ -3021,15 +3019,8 @@ pollBadge = (jId, n, backFunc, commBackFunc) => {
 	return `<button class=loginbtn onclick="getNewsWithComments(${jId},${n.ID},${n.gdpsId},'${backFunc}','${commBackFunc}')"${getTrans('pollBadge')}/button>`;
 },
 pollRender = (jId, n) => {
-	console.warn(n);
 	let poll = n.poll;
-	console.log(poll);
-	if (!Array.isArray(poll))
-		try {
-			poll = JSON.parse(poll);
-		} catch (e) {
-			return '';
-		}
+	if (!Array.isArray(poll)) return '';
 	pollStore[n.ID] = poll;
 	let p = poll[0],
 		opts = poll.slice(1),
