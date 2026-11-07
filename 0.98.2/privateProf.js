@@ -1785,17 +1785,24 @@ subsWindow = jId => {
 };
 GetSubs = (jId, page = 0) => {
     let J = Jexec(jId);
+	let nextGdps = J.id('nextGdps');
     J.link.set('profile/subs');
+	if (nextGdps)
+		nextGdps.remove();
     Loading();
     _.http.req('GET', `${sData[10]}subs${php}?page=${page}`)
 		.then(data=>{
 			Loading(1);
 			if (data == '[]') {
-				return J.id('gdps_list').innerHTML = `<span${getTrans('noSubscriptions')}/span>`;
+				innerGdpsPlace(jId, `<span${getTrans('noSubscriptions')}/span>`, 0);
 			}
 			let gdpsArray = JSON.parse(data),
 				html = FINDrenderInProfile(jId, gdpsArray, 21, ['unsub']);
-			J.id('gdps_list').innerHTML = html;
+			innerGdpsPlace(jId, html, page);
+			if (gdpsArray.length >= 20)
+				innerGdpsPlace(jId, 
+					insertBtn(jId,`GetSubs(${jId},${1+page})`)
+				, 1+page);
 		})
 		.catch(e=>{console.error(e);_.err.handleRejection(e)});
 };
