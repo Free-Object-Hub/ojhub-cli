@@ -2111,6 +2111,22 @@ newsWindow = (jId, contentId = 0, contentType = 'c') => {
 			`<progress max=1 value=0 id=newsFileProg style=display:none></progress><br>`+
 			`<input name=files id=newsFiles type=file multiple><br>`+
 			gdpses+
+			`<details>`+
+				`<summary${getTrans('pollAdd')}/summary>`+
+				`<div class=pollOpts oninput="pollFormCount(this)">${pollOptRow()}${pollOptRow()}</div>`+
+				`<p><span${getTrans('pollLeft')}/span>: <span class=pollLeft>${pollChars}</span></p>`+
+				`<button type=button class=loginbtn onclick="pollFormAdd(this)"${getTrans('pollOptAdd')}/button><br>`+
+				`<select name=pollM>`+
+					`<option value=0${getTrans('pollModeSingle')}/option>`+
+					`<option value=1${getTrans('pollModeMulti')}/option>`+
+				`</select>`+
+				`<select name=pollH>`+
+					`<option value=0${getTrans('pollHide0')}/option>`+
+					`<option value=1${getTrans('pollHide1')}/option>`+
+					`<option value=2${getTrans('pollHide2')}/option>`+
+				`</select>`+
+				`<input type=number name=pollDays min=1 max=365 value=7>`+
+			`</details>`+
 			`<input type=submit class="loginbtn"${getTrans('publishNews', 'inputValue')}`+
 		`</form>`+
 	`</div>`;
@@ -2659,6 +2675,26 @@ pollSubmit = (jId, id, mask) => {
 		})
 		.catch(e => {console.error(e); _.err.handleRejection(e)});
 },
+pollChars = 1500, // зеркало PollCharBudget на сервере
+pollOptRow = () => `<div class=pollRow><input class=framelabel name="pollOpt[]"${getTrans('pollOptPh', 'input')}<button type=button class=emptybtn onclick="pollFormCount(this,1)">✕</button></div>`,
+pollFormCount = (el, del) => {
+	let box = el.closest('details'),
+		left = pollChars;
+	if (del) {
+		if (box.querySelectorAll('.pollRow').length <= 2) return; // минимум 2 варианта
+		el.closest('.pollRow').remove();
+	}
+	box.querySelectorAll('input[name="pollOpt[]"]').forEach(e => left -= [...e.value.trim()].length);
+	let out = box.querySelector('.pollLeft');
+	out.textContent = left;
+	out.style.color = left < 0 ? 'red' : '';
+},
+pollFormAdd = btn => {
+	let opts = btn.closest('details').querySelector('.pollOpts');
+	if (opts.children.length < 31)
+		opts.insertAdjacentHTML('beforeend', pollOptRow());
+},
+
 // #endregion
 // #region notifications!
 /*
@@ -3521,6 +3557,21 @@ enterFormData = (jId, form, sendPlace) => {
 				[ch, gdps] = [gdpsId[0], gdpsId.slice(1)];
 			FORMDATA.set('ch', ch);
 			FORMDATA.set('gdps', parseInt(gdps));
+			let pollBox = document.querySelector('form details');
+			if (pollBox && pollBox.open) {
+				let opts = FORMDATA.getAll('pollOpt[]').map(s => s.trim()).filter(s => s);
+				if (opts.length < 2) {
+					megaAlert(jId, 'pollNeed2');
+					return false;
+				}
+				if (opts.reduce((a, s) => a + [...s].length, 0) > pollChars) {
+					megaAlert(jId, 'pollTooLong');
+					return false;
+				}
+				FORMDATA.delete('pollOpt[]');
+				opts.forEach(o => FORMDATA.append('pollOpt[]', o));
+			} else
+				['pollOpt[]', 'pollM', 'pollH', 'pollDays'].forEach(k => FORMDATA.delete(k));
 			break;
 	}
 

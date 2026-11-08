@@ -43,6 +43,10 @@ p, a, input, textarea, select, option, button, span, label, td, div {
 	word-wrap: break-word;
 }
 
+select, input, option {
+	background:var(--color-black);
+}
+
 code {
 	tab-size: 4;
 }
@@ -481,6 +485,14 @@ transform: translateY(2px);
 .pollNote{
 	margin:6px 0 0;
 	opacity:.7
+}
+.pollRow{
+	display:flex;
+	gap:4px;
+	align-items:center
+}
+.pollRow input{
+	flex:1
 }
 
 .frameguide {
