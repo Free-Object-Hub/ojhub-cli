@@ -103,6 +103,8 @@ helperInitData = (jId, data)=>{
 		lastNews = initData[3],
 		htmlGdpses = '',
 		htmlNews = '';
+	mainPageCache.gdpses = lastGdpses;
+	mainPageCache.news = lastNews;
 	if (Object.keys(lastGdpses).length > 0)
 		for (let g in lastGdpses) {
 			let gdps = lastGdpses[g];
@@ -112,7 +114,6 @@ helperInitData = (jId, data)=>{
 		`<h1${getTrans('T2-wantmore')}/h1>`+
 		basicButton(getTrans('projects'), `pageFind(${jId},Jexec(${jId}).helperFindData[3])`)+
 	`</div>`;
-	mainPageCache.gdpses = lastGdpses;
 	if (Object.keys(lastNews).length > 0)
 		for (let n in lastNews) {
 			let news = lastNews[n];
@@ -122,7 +123,6 @@ helperInitData = (jId, data)=>{
 		`<h1${getTrans('T2-wantmore')}/h1>`+
 		basicButton(getTrans('news'), `globalNews(${jId})`)+
 	`</div>`;
-	mainPageCache.news = lastNews;
 	if (locationMain == '' || locationMain == '?') {
 		innerGdpsPlace(jId, htmlGdpses);
 		innerComments(jId, htmlNews);
@@ -427,7 +427,9 @@ contentRenderMinu = function(
 ) {
 	let J = Jexec(jId);
 	let imgClass = ['', ''],
-	contentId = data.ID;
+	contentId = data.ID,
+	// FIX FOR MEMORY LEAK
+	internalText = '';
 	if (renderImage == 1) {
 		imgClass = ['FGDPSimg', 'FGDPSdemo']
 	}
@@ -466,9 +468,9 @@ contentRenderMinu = function(
 
 	// LANGS module
 	if (preHtml[4] > -1) {
-		data.text = GdpsesShortLangs.text(""+data.ID)
+		internalText = GdpsesShortLangs.text(""+data.ID)
 	} else {
-		data.text = `>${data.text}<`
+		internalText = `>${internalText}<`
 	}
 
 	let 
@@ -503,7 +505,7 @@ contentRenderMinu = function(
 				`<a class=loginbtnGDPS href="${btnFuncs[3]}${data.ID}${preHtml[0] ? `.${preHtml[0]}` : ''}" style=margin-top:-2px;border-bottom-right-radius:calc(var(--def-border)*1.5) onclick="${btnFuncs[0]}(${jId},${contentId}${preHtml[0] ? `,'${preHtml[0]}'` : ''});event.preventDefault()"${getTrans('moreInfo')}/a>`+
 			`</div>`+
 		`</div>`+
-		(renderDesc ? `<p ${renderImage ? 'class="FGDPStext absolute"' : ''} ${renderImage ? 'style="margin:0"' : ''}${data.text}/p>` : '')+
+		(renderDesc ? `<p ${renderImage ? 'class="FGDPStext absolute"' : ''} ${renderImage ? 'style="margin:0" ' : ''}${internalText}/p>` : '')+
 		(renderTags ? `<div class="flex-row FGDPStags absolute">${preHtml[2]}</div>` : '')+
 	`</div>`;
 	return html;
@@ -1590,10 +1592,11 @@ pageMain = (jId, localIgnore = false) => {
 		let gdps = mainPageCache.gdpses[g];
 		gdpses += FINDrenderMini(jId, gdps.channel, [gdps]);
 	}
-	if (Object.keys(mainPageCache.news).length > 0)
+	if (mainPageCache.news.length > 0)
 		for (let n in mainPageCache.news) {
-			let news = mainPageCache.news[n];
-			news += RenderNews(jId, [news],3);
+			let Lnews = mainPageCache.news[n];
+			news += RenderNews(jId, [Lnews],3);
+			console.log(mainPageCache.news[n], news);
 		}
 	news += `<div class=framegdps style=display:block;width:300px;height:350px;align-content:center;text-align:center>`+
 		`<h1${getTrans('T2-wantmore')}/h1>`+
@@ -2928,7 +2931,6 @@ FINDrender = (jId, channel, parsedData, joinData = '') => {
 },
 RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') => {
 	let J = Jexec(jId);
-	console.warn('renderNews Comm => '+isComm);
 	if (commBackFunc == '')
 		commBackFunc = backFunc;
 	let html = '',
@@ -3169,7 +3171,7 @@ renderVacancy = (jId, parsedData, isAdmin = thisUser.role, renderMethod = 'm') =
 					`<span class=likeplace id="dislsCount${id}">${gdpsData.likes[1]}</span>`+
 					`<button ${gdpsData.isLiked == 1 ? `style="${likeStyle.disl}"` : ''} onclick="sendDislike(${jId},${id},11)" class=dislike id="dislike${id}"></button>`+
 					(typeof gdpsData.likes[2] === 'undefined' ? '' : `<span class=likeplace id="commsCount${id}">${gdpsData.likes[2]}</span>`+
-					`<img width=30px height=30px style=margin:0 src=${helperUrl}imgs/comm.svg>`)+
+						`<img width=30px height=30px style=margin:0 src=${helperUrl}imgs/comm.svg>`)+
 				`</div>`
 				)+
 				(renderMethod != 'm' ?
