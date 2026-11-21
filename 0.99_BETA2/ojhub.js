@@ -2114,7 +2114,7 @@ newsWindow = (jId, contentId = 0, contentType = 'c') => {
 			`<progress max=1 value=0 id=newsFileProg style=display:none></progress><br>`+
 			`<input name=files id=newsFiles type=file multiple><br>`+
 			gdpses+
-			`<details>`+
+			`<details style="padding: 16px 0 16px 0">`+
 				`<summary${getTrans('pollAdd')}/summary>`+
 				`<div class=pollOpts oninput="pollFormCount(this)">${pollOptRow()}${pollOptRow()}</div>`+
 				`<p><span${getTrans('pollLeft')}/span>: <span class=pollLeft>${pollChars}</span></p>`+
@@ -2931,6 +2931,7 @@ FINDrender = (jId, channel, parsedData, joinData = '') => {
 	html += contentRender(jId, gdpsData, 0, 0, 0, tagsOs, 1, gdpsData.wiki, gdpsData.ID, joinData);
 	return html;
 },
+
 RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') => {
 	let J = Jexec(jId);
 	if (commBackFunc == '')
@@ -3068,7 +3069,6 @@ pollBadge = (jId, n, backFunc, commBackFunc) => {
 	if (!Array.isArray(n.poll)) return '';
 	return `<button class=loginbtn onclick="getNewsWithComments(${jId},${n.ID},${n.gdpsId},'${backFunc}','${commBackFunc}')"${getTrans('pollBadge')}/button>`;
 },
-
 pollRender = (jId, n) => {
 	let poll = n.poll;
 	if (!Array.isArray(poll)) return '';
