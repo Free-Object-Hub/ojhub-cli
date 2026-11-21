@@ -530,7 +530,7 @@
 	"pollResults": "Results",
 	"pollSend": "Vote",
 	"pollStop": "Stop",
-	"pollStopSure": "Stop the poll now? This cannot be undone: votes will be deleted and only the totals will remain.",
+	"pollStopSure": "Stop the poll now?",
 	"pollTotal": "Total votes",
 
   "WINDOW-close":"Close",

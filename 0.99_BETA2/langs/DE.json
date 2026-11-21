@@ -533,7 +533,7 @@
 	"pollResults": "Ergebnisse",
 	"pollSend": "Abstimmen",
 	"pollStop": "Beenden",
-	"pollStopSure": "Umfrage jetzt beenden? Das lässt sich nicht rückgängig machen: Die Stimmen werden gelöscht, nur die Summen bleiben.",
+	"pollStopSure": "Umfrage jetzt beenden?",
 	"pollTotal": "Stimmen insgesamt",
 
   "WINDOW-close":"Schließen",

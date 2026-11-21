@@ -533,7 +533,7 @@
 	"pollResults": "Resultados",
 	"pollSend": "Votar",
 	"pollStop": "Detener",
-	"pollStopSure": "¿Detener la encuesta ahora? No se puede deshacer: se borrarán los votos y solo quedarán los totales.",
+	"pollStopSure": "¿Detener la encuesta ahora?",
 	"pollTotal": "Votos en total",
 
   "WINDOW-close":"Cerrar",

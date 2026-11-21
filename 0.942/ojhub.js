@@ -5047,8 +5047,8 @@ colorGenerator = function() {
   return [Colors, Sizes, Radios];
 };
 
-if (Slocal.get('ColorVer') < 4 || !Slocal.get('ColorVer')) {
-  Slocal.set('ColorVer',     4);
+if (Slocal.get('ColorVer') != 4 || !Slocal.get('ColorVer')) {
+  Slocal.set('ColorVer',	  4);
   dropColorScheme();
 };
 colorGenerator();

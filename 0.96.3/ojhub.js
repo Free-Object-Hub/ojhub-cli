@@ -49,7 +49,7 @@ ignoreCap = false,
 renderBeta = false,
 logAll = false,
 captchaLoad = false,
-techName = 'oschub096',
+techName = 'oschub',
 helperUrl = './',//'https://objecthub.xyz/',//'https://gdpshelper.xyz/',
 Slocal = {
   get: (name)=>       {return localStorage.getItem(techName+name)},
@@ -5900,8 +5900,8 @@ colorGenerator = ()=>{
   return [Colors, Sizes, Radios];
 };
 
-if (Slocal.get('ColorVer') < 5 || !Slocal.get('ColorVer')) {
-  Slocal.set('ColorVer',     5);
+if (Slocal.get('ColorVer') != 5 || !Slocal.get('ColorVer')) {
+  Slocal.set('ColorVer',      5);
   dropColorScheme();
 };
 colorGenerator();

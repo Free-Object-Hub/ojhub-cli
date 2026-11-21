@@ -534,7 +534,7 @@
 	"pollResults": "结果",
 	"pollSend": "投票",
 	"pollStop": "停止",
-	"pollStopSure": "确定提前结束投票？此操作不可撤销：投票记录将被删除，只保留统计总数。",
+	"pollStopSure": "提前结束投票吗？",
 	"pollTotal": "总票数",
 
     "WINDOW-close":"关闭",
