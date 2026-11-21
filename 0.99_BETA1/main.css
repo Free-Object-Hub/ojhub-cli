@@ -1,13 +1,13 @@
 :root {
-	--color-bg: #090609;
-	--color-bg-alpha: #09060999;
-	--color-main: #612a9d;
-	--color-light: #8200ff;
-	--color-window: #3f1f5e;
-	--color-profile: #1d151f;
-	--color-profile-alpha: #1d151f99;
-	--color-black: #120f13;
-	--color-white: #DFD3EB;
+	--color-bg: #060906;
+	--color-bg-alpha: #06090699;
+	--color-main: #2a9d4f;
+	--color-light: #16b84a;
+	--color-window: #1f5e34;
+	--color-profile: #151f17;
+	--color-profile-alpha: #151f1799;
+	--color-black: #0f1311;
+	--color-white: #D3EBD9;
 }
 
 body {
