@@ -4732,18 +4732,21 @@ enterFormData = (form, sendPlace)=>{
         if (data == '-1')
           return megaAlert('wrongPass')
         let serverResp = JSON.parse(data);
-        thisUser = serverResp[0];
-        myGdpses = [{},{},{}];
-        Object.keys(serverResp[1][0]).forEach(gdps=>{
-          GDPSgetChannel(gdps[0])[gdps.slice(1)] = serverResp[1][0][gdps];
-        })
-        myguides = [];
-        myguides.push(serverResp[1][1]);
-        yourWikies = serverResp[1][1];
-        wikiesMini = [];
-        Object.keys(yourWikies).forEach(el=>{
-          wikiesMini.push(yourWikies[el][0].toString());
-        });
+        if (Slocal.get('User')) {
+          thisUser = serverResp[0];
+          myGdpses = [{},{},{}];
+          Object.keys(serverResp[1][0]).forEach(gdps=>{
+            GDPSgetChannel(gdps[0])[gdps.slice(1)] = serverResp[1][0][gdps];
+          })
+          myguides = [];
+          myguides.push(serverResp[1][1]);
+          yourWikies = serverResp[1][1];
+          wikiesMini = [];
+          Object.keys(yourWikies).forEach(el=>{
+            //wikiesMini.push(yourWikies[el][0].toString());
+            wikiesMini.push(el.slice(1));
+          });
+        }
         innerMain(profilePage());
     };
     return false;
