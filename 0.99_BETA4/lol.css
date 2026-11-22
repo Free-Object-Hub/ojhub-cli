@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Huninn&display=swap');
+
+/*=======other=======*/
+:root{
+    --color-profile: #fff;
+    --color-bg: #fff;
+}
+body{
+    background: #fff !important;
+    margin-top: 74px;
+}
+html{
+    scrollbar-width: auto !important; 
+    scrollbar-color: #8d6cab #dbcee3;
+}
+/*===Header styles===*/
+.header{
+    background: #dbcee3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    gap: 20px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+#switchHtmlLang .loginbtn{
+    display: none;
+}
+img[src*="./imgs/globe.svg"] {
+    content: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/language/default/24px.svg");
+    transform: scale(0.55);
+    transition: all 0.2s;
+    margin-bottom: 0px !important;
+}
+.emptybtn:hover {
+    transform: scale(1.2);
+    background-repeat: no-repeat;
+    background-position: center;
+    background: #8d6cab;
+}
+.emptybtn{
+    display: flex;
+    width: 40px;
+    height: 40px;
+    opacity: 0.5; 
+    transition: 0.2s all;
+    border-radius: var(--def-font);
+}
+.contentAdaptiveBig{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.headbtn:first-of-type{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/home/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+.headbtn:nth-of-type(2) {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/work/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    opacity: 0.5; 
+    transition: all 0.2s ease;
+}
+.headbtn:nth-of-type(3) {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/newspaper/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    opacity: 0.5; 
+    transition: all 0.2s ease;
+}
+.headbtn:nth-of-type(4) {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/people_size_increase/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    opacity: 0.5; 
+    transition: all 0.2s ease;
+}
+.headbtn:nth-of-type(5) {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/chat_info/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    opacity: 0.5; 
+    transition: all 0.2s ease;
+}
+.headbtn:nth-of-type(6) {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/help/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    opacity: 0.5; 
+    transition: all 0.2s ease;
+}
+.headbtn:first-of-type:hover{
+    transform: scale(1.2);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/home/default/24px.svg"), #8d6cab;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.headbtn:nth-of-type(2):hover{
+    transform: scale(1.2);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/work/default/24px.svg"), #8d6cab;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.headbtn:nth-of-type(3):hover{
+    transform: scale(1.2);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/newspaper/default/24px.svg"), #8d6cab;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.headbtn:nth-of-type(4):hover{
+    transform: scale(1.2);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/people_size_increase/default/24px.svg"), #8d6cab;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.headbtn:nth-of-type(5):hover{
+    transform: scale(1.2);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/chat_info/default/24px.svg"), #8d6cab;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.headbtn:nth-of-type(6):hover{
+    transform: scale(1.2);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/help/default/24px.svg"), #8d6cab;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#btnLogin span{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    color: rgba(0,0,0,0);
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/account_circle/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1);
+    transition: all 0.2s ease;
+    position: relative !important;
+    display: flex;
+}
+.contentAdaptiveBig div{
+    position: relative !important;
+    top: 0 !important;
+    margin-left: 20px;
+}
+
+/*===Welcome styles===*/
+.contentAdaptiveFlexSmall{
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080' preserveAspectRatio='xMidYMid slice'%3E%3Crect width='1920' height='1080' fill='%23ffffff'/%3E%3Cg fill='%23dbcee3'%3E%3Cpath transform='translate(150, 100) scale(8) rotate(15 12 12)' fill-rule='evenodd' clip-rule='evenodd' d='M2.1212 15.5355C0.168583 13.5829 0.168583 10.4171 2.1212 8.46444L8.46438 2.12127C10.417 0.168644 13.5828 0.168644 15.5354 2.12127L21.8786 8.46444C23.8312 10.4171 23.8312 13.5829 21.8786 15.5355L15.5354 21.8787C13.5828 23.8313 10.417 23.8313 8.46438 21.8787L2.1212 15.5355ZM3.53542 9.87865C2.36384 11.0502 2.36385 12.9497 3.53542 14.1213L9.87859 20.4645C11.0502 21.636 12.9497 21.636 14.1212 20.4645L20.4644 14.1213C21.636 12.9497 21.636 11.0502 20.4644 9.87865L14.1212 3.53548C12.9497 2.36391 11.0502 2.36391 9.87859 3.53548L3.53542 9.87865Z'/%3E%3Cpath transform='translate(1500, 100) scale(10) rotate(-20 12 12)' d='M14.1735 2.22902C13.2063 0.590325 10.7938 0.590326 9.82664 2.22902L0.340215 18.3024C-0.657696 19.9933 0.63634 22 2.51362 22H21.4865C23.3638 22 24.6578 19.9933 23.6599 18.3024L14.1735 2.22902Z'/%3E%3Cpath transform='translate(120, 800) scale(6) rotate(45 12 12)' d='M4.5 2C3.11929 2 2 3.11929 2 4.5V19.5C2 20.8807 3.11929 22 4.5 22H19.5C20.8807 22 22 20.8807 22 19.5V4.5C22 3.11929 20.8807 2 19.5 2H4.5Z'/%3E%3Cpath transform='translate(1600, 800) scale(9) rotate(10 12 12)' d='M2.1212 8.46444C0.168583 10.4171 0.168583 13.5829 2.1212 15.5355L8.46438 21.8787C10.417 23.8313 13.5828 23.8313 15.5354 21.8787L21.8786 15.5355C23.8312 13.5829 23.8312 10.4171 21.8786 8.46444L15.5354 2.12127C13.5828 0.168644 10.417 0.168644 8.46438 2.12127L2.1212 8.46444Z'/%3E%3Cpath transform='translate(850, 850) scale(5) rotate(180 12 12)' fill-rule='evenodd' clip-rule='evenodd' d='M9.82664 2.22902C10.7938 0.590326 13.2063 0.590325 14.1735 2.22902L23.6599 18.3024C24.6578 19.9933 23.3638 22 21.4865 22H2.51362C0.63634 22 -0.657696 19.9933 0.340215 18.3024L9.82664 2.22902ZM12.4511 3.24557C12.2578 2.91814 11.7423 2.91814 11.549 3.24557L2.06261 19.319C1.90904 19.5792 2.07002 20 2.51362 20H21.4865C21.9301 20 22.0911 19.5792 21.9375 19.319L12.4511 3.24557Z'/%3E%3Cpath transform='translate(900, 150) scale(4) rotate(15 12 12)' fill-rule='evenodd' clip-rule='evenodd' d='M2 4.5C2 3.11929 3.11929 2 4.5 2H19.5C20.8807 2 22 3.11929 22 4.5V19.5C22 20.8807 20.8807 22 19.5 22H4.5C3.11929 22 2 20.8807 2 19.5V4.5ZM4.5 4C4.22386 4 4 4.22386 4 4.5V19.5C4 19.7761 4.22386 20 4.5 20H19.5C19.7761 20 20 19.7761 20 19.5V4.5C20 4.22386 19.7761 4 19.5 4H4.5Z'/%3E%3Cpath transform='translate(400, 700) scale(3) rotate(-30 12 12)' d='M2.1212 8.46444C0.168583 10.4171 0.168583 13.5829 2.1212 15.5355L8.46438 21.8787C10.417 23.8313 13.5828 23.8313 15.5354 21.8787L21.8786 15.5355C23.8312 13.5829 23.8312 10.4171 21.8786 8.46444L15.5354 2.12127C13.5828 0.168644 10.417 0.168644 8.46438 2.12127L2.1212 8.46444Z'/%3E%3Cpath transform='translate(1300, 450) scale(3.5) rotate(45 12 12)' fill-rule='evenodd' clip-rule='evenodd' d='M9.82664 2.22902C10.7938 0.590326 13.2063 0.590325 14.1735 2.22902L23.6599 18.3024C24.6578 19.9933 23.3638 22 21.4865 22H2.51362C0.63634 22 -0.657696 19.9933 0.340215 18.3024L9.82664 2.22902ZM12.4511 3.24557C12.2578 2.91814 11.7423 2.91814 11.549 3.24557L2.06261 19.319C1.90904 19.5792 2.07002 20 2.51362 20H21.4865C21.9301 20 22.0911 19.5792 21.9375 19.319L12.4511 3.24557Z'/%3E%3Cpath transform='translate(250, 500) scale(2) rotate(90 12 12)' d='M4.5 2C3.11929 2 2 3.11929 2 4.5V19.5C2 20.8807 3.11929 22 4.5 22H19.5C20.8807 22 22 20.8807 22 19.5V4.5C22 3.11929 20.8807 2 19.5 2H4.5Z'/%3E%3Cpath transform='translate(1500, 500) scale(2.5) rotate(-15 12 12)' fill-rule='evenodd' clip-rule='evenodd' d='M2.1212 15.5355C0.168583 13.5829 0.168583 10.4171 2.1212 8.46444L8.46438 2.12127C10.417 0.168644 13.5828 0.168644 15.5354 2.12127L21.8786 8.46444C23.8312 10.4171 23.8312 13.5829 21.8786 15.5355L15.5354 21.8787C13.5828 23.8313 10.417 23.8313 8.46438 21.8787L2.1212 15.5355ZM3.53542 9.87865C2.36384 11.0502 2.36385 12.9497 3.53542 14.1213L9.87859 20.4645C11.0502 21.636 12.9497 21.636 14.1212 20.4645L20.4644 14.1213C21.636 12.9497 21.636 11.0502 20.4644 9.87865L14.1212 3.53548C12.9497 2.36391 11.0502 2.36391 9.87859 3.53548L3.53542 9.87865Z'/%3E%3Cpath transform='translate(600, 200) scale(2) rotate(60 12 12)' d='M14.1735 2.22902C13.2063 0.590325 10.7938 0.590326 9.82664 2.22902L0.340215 18.3024C-0.657696 19.9933 0.63634 22 2.51362 22H21.4865C23.3638 22 24.6578 19.9933 23.6599 18.3024L14.1735 2.22902Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: var(--def-font);
+    height: 80vh;
+}
+.contentAdaptiveFlexSmall .loginbtn{
+    border-radius: 1000px;
+    filter: drop-shadow(0px 0px 0px rgba(255,255,255,0)) !important;
+    font-size: 20px !important;
+    background: #bba5cc;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: "Google Sans", sans-serif !important;
+    font-weight: 900;
+    color: rgba(0,0,0,0.5);
+    display: flex;
+    position: relative !important;
+    top: 100px !important;
+}
+.contentAdaptiveFlexSmall div:nth-of-type(2){
+    display: none;
+}
+.contentAdaptiveFlexSmall h3,h2,h1{
+    filter: drop-shadow(0px 0px 0px rgba(255,255,255,0)) !important;
+    font-family: "Google Sans", sans-serif !important;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5E4877;
+}
+.contentAdaptiveFlexSmall h1 span{
+    font-family: "Google Sans", sans-serif !important;
+    font-weight: 900;
+    color: #5E4877;
+}
+.contentAdaptiveFlexSmall h2{
+    display: none;
+}
+.textFly{
+    background: #fff;
+    animation: none;
+    transform: translateX(-95px);
+}
+
+/*====Cars styles====*/
+.mainPlate{
+    border-radius: var(--def-font);
+    gap: 20px;
+    padding: 20px;
+    background: #dbcee3;
+    height: 250px !important;
+}
+.mainPlate h2{
+    color: rgba(0,0,0,0.5);
+    
+}
+.mainPlate p{
+    color: rgba(0,0,0,0.3);
+    font-family: "Google Sans", sans-serif !important;
+    font-weight: 500;
+}
+.absolute img{
+    display: none;
+}
+.absolute{
+    bottom: 0px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.absolute .loginbtn{
+    border-radius: 1000px;
+    font-size: 20px !important;
+    font-family: "Google Sans", sans-serif !important;
+    background: #bba5cc;
+    color: rgba(0,0,0,0.5);
+    font-weight: 900;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    display: flex;
+    font-size: 15px !important;
+}
+
+/*==Projects styles==*/
+
+#GDPSesPlace{
+    background: #dbcee3;
+    padding: 20px;
+    min-width: 1470px !important;
+    border-radius: var(--def-font);
+}
+.framegdps{
+    background: #bba5cc;
+    border-radius: var(--def-font);
+    display: flex;
+    height: 350px !important;
+}
+.loh{
+    position: absolute;
+    bottom: 80px;
+    
+}
+.loh h2{
+    color: rgba(0,0,0,0.5);
+    text-align: center;
+}
+p{
+    color: rgba(0,0,0,0.5) !important;
+    font-family: "Google Sans", sans-serif !important;
+}
+p span{
+    color: rgba(0,0,0,0.5) !important;
+    font-family: "Google Sans", sans-serif !important;
+}
+p button{
+    color: rgba(0,0,0,0.5) !important;
+    font-weight: 900;
+    font-family: "Google Sans", sans-serif !important;
+    background: #8d6cab !important;
+    border-radius: 1000px;
+    margin-left: 5px;
+    padding: 5px;
+}
+.loh img{
+    border-radius: var(--def-font) !important;
+    position: absolute;
+    top: 0;
+    margin-top: -140px;
+    margin-left: 75px;
+}
+.FGDPSimg{
+    border-radius: var(--def-font) !important;
+}
+.gdpsalpha{
+    display: none;
+    
+}
+.likeplace{
+    color: rgba(0,0,0,0.5);
+    font-weight: 500;
+    font-family: "Google Sans", sans-serif !important;
+}
+.like{
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/thumb_up/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5;
+}
+.dislike{
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/thumb_down/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5;
+}
+.likezone{
+    background: #8d6cab;
+    border-radius: 1000px;
+    transform: translateY(-5px) translatex(5px);
+    display: flex;
+    width: max-content;
+    padding-left: 2px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.likezone img{
+    content: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/mode_comment/default/24px.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5;
+    width: 24px;
+    height: 24px;
+    transform: translateY(4px);
+}
+.loginbtnGDPS{
+    font-family: "Google Sans", sans-serif !important;
+    font-weight: 500;
+    border-radius: 1000px !important;
+    color: rgba(0,0,0,0);
+    width: 13px;
+    display: flex;
+    background: #8d6cab !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    cursor: pointer
+}
+.loginbtnGDPS::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/info/default/24px.svg") center / 24px 24px no-repeat;
+    opacity: 0.5;
+    pointer-events: none;
+    margin-top: -7px;
+}
+.loginbtnGDPS:hover{
+    color: rgba(0,0,0,0);
+}
+.btnszoneSearch{
+    bottom: 11px !important;
+    right: 25px !important;
+}
+.tag{
+    display: none;
+}
+.framegdps .absolute{
+    display: none;
+}

@@ -294,7 +294,7 @@ JITlink = (container, jId) => {
 			news: ()=>                  {globalNews(${jId})},
 			'news/': {
 				'': ()=>                {globalNews(${jId})},
-				comms: (postId)=>       {let d = postId.split('|');getNewsWithComments(${jId},d[0], d[1], d[2])},
+				comms: (postId)=>       {let d = postId.split('|');console.log(d);getNewsWithComments(${jId},d[0], d[1], d[2])},
 				list: (gdpsId)=>        {let d = gdpsId.split('|');helperNews(${jId},d[0], d[1])},
 			},
 			vacs: ()=>                  {globalVacs(${jId})},
