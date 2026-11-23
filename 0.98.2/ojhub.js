@@ -78,6 +78,8 @@ if (token)
 	_.http.defaultHeaders['user-token'] = token;
 
 helperInitData = (jId, data)=>{
+	if (typeof data !== 'string' || data[0] !== '[')
+		throw new Error('bad init data: ' + String(data).slice(0, 300));
 	let J = Jexec(jId);
 	let initData = JSON.parse(data);
 	if (Slocal.get('User')) {
