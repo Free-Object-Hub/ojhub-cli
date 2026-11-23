@@ -441,7 +441,7 @@ helperRequest = (url, data, headers = {}, fileUploadProgressElement = false)=>{
 	});
 }
 
-scrLoadVer = 32;
+scrLoadVer = 31;
 
 _.lazy.register(scritpsUrl + '/privateProf.js?ver='+scrLoadVer,[
 	'addFind',
