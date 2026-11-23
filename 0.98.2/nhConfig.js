@@ -200,34 +200,32 @@ _.lang.vars = {
 GdpsesShortLangs = _.langs('gdpss', 'RU');
 GdpsesFullLangs = _.langs('gdpsf', 'RU');
 
-// bringing back the error parser from GDPS Helper 1.9, because it was better
+
 _.err.handleGlobal = event => {
-    let {message, filename, lineno, colno, error} = event,
-        file = filename.split('?')[0].split('/').pop();
-    console.error(message, filename+':'+lineno+':'+colno, error);
-    _.err.log(message + `\n IN ${file} ON LINE ${lineno} IN COLUMN ${colno}`);
+    try {
+        const { message, filename, lineno, colno, error } = event;
+        console.error(message, `${filename}:${lineno}:${colno}`, error);
+        _.err.log(
+            `GLOBAL ERROR\n` +
+            `${message}\n` +
+            `${(error && error.stack) || `${filename}:${lineno}:${colno}`}`
+        );
+    } catch (inner) {
+        console.error('handleGlobal failed', inner, event);
+    }
 };
 _.err.handleRejection = e => {
-    const err = e.reason || e;
-    console.error(err);
-    const errorStack = err.stack || '';
-    // Ищем первое вхождение "что-то:строка:колонка" в стеке.
-    // Работает и для Firefox ("fn@url:10:5"), и для V8 ("at fn (url:10:5)").
-    const posMatch = errorStack.match(/(\S+?):(\d+):(\d+)/);
-    let file = '?', line = '?', col = '?';
-    if (posMatch) {
-        const url = posMatch[1];
-        line = posMatch[2];
-        col  = posMatch[3];
-        file = url.split('?')[0].split('/').pop() || '?';
+    try {
+        const err = (e && e.reason !== undefined) ? e.reason : e;
+        console.error(err);
+        _.err.log(
+            `PROMISE ERROR\n` +
+            `${(err && err.message) || String(err)}\n` +
+            `${(err && typeof err.stack === 'string') ? err.stack : '(no stack)'}`
+        );
+    } catch (inner) {
+        console.error('handleRejection failed', inner, e);
     }
-    console.info(errorStack, { file, line, col });
-
-    _.err.log(
-        `PROMISE ERROR\n` +
-        `${err.message || err}` +
-        `\nIN ${file} ON LINE ${line} IN COLUMN ${col}`
-    );
 };
 
 windowBtns = [
@@ -256,7 +254,7 @@ _.err.print = (errID, errText, addr = '')=>{
 		html
 	, `iserror style=width:300px;height:350px`);
 
-	_.$.id('debugMega'+errID).textContent = `LOCATION: ${location}\n`+errText+`\n`+
+	_.$.id('debugMega'+errID).textContent = `LOCATION: ${location}\n`+errText+`\nVER:${helperStrVer}\n`+
 	(addr === '' ? '' : `\n${addr}`);
 	_.$.id('windows'+errID).innerHTML = buttons;
 };
