@@ -293,7 +293,7 @@ JITlink = (container, jId) => {
 					':g/':{
 						'news':d=>      {helperNews(${jId},d[1],d[0])},
 						'news/': {
-							':n':d=>    {getNewsWithComments(${jId},d[3],d[2],d[1])},
+							':n':d=>    {getNewsWithComments(${jId},d[2],d[1],d[0])},
 						}
 					}
 				}
