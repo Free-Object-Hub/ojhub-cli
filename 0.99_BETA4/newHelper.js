@@ -1,5 +1,5 @@
 /*
- * Before you is the code of newHelper.js version 2.1.9,
+ * Before you is the code of newHelper.js version 2.1.10,
  * A frontend library of super-light and powerful utilities.
  * The library is built on the basis of a factory
  * That begins with Intl.newHelper=function(namespace){...};
@@ -92,7 +92,7 @@ Intl.newHelper=function(_='_') {
 		/*
 		 * LINKS MODULE
 		 * Author: MIOBOMB (2023-2026)
-		 * Last patch: 2.1.7
+		 * Last patch: 2.1.10
 		 * 
 		 * Works on the principle of [link, commands...]
 		 * Example: ?home&debug&lang=ru
@@ -266,7 +266,7 @@ Intl.newHelper=function(_='_') {
 					 * or at least an intro with interactive
 					 */
 					let dynamic = [];
-					for (let point of route){
+					for (let [i, point] of route.entries()){
 						let isDyn = Object.keys(dir).find(e=>e.startsWith(':'));
 						if (isDyn) {
 							dynamic.push(point);
@@ -275,7 +275,7 @@ Intl.newHelper=function(_='_') {
 								point = point.slice(0,-1);
 						}
 						let kDir = dir[point+'/'];
-						if (kDir)
+						if (kDir && !(i === route.length-1 && typeof dir[point] === 'function'))
 							dir = kDir;
 						else {
 							if (dynamic.length)

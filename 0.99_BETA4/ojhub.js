@@ -395,7 +395,7 @@ contentRender = function(
 				(typeof preHtml.likes[2] === 'undefined' ? '' : `<span class=likeplace id="commsCount${preHtml.ID}">${preHtml.likes[2]}</span>`+
 				`<img width=30px height=30px style=margin:0 src=${helperUrl}imgs/comm.svg>`)+
 				(isComm == 0 ?
-				`<button class=loginbtn onclick=getNewsWithComments(${jId},${preHtml.ID},${preHtml.gdpsId},'${joinData}')${getTrans('comms')}/button>`
+				`<button class=loginbtn onclick=getNewsWithComments(${jId},${preHtml.ID},${preHtml.gdpsId},${preHtml.channel})${getTrans('comms')}/button>`
 				: '')+
 			`</div>`+
 		`</div>`+
@@ -895,6 +895,7 @@ getFind = (jId, channel, id, joinData = 0) => {
 			}
 			let serverResp = JSON.parse(data);
 			J.link.set(smallString+'='+id, serverResp.gdps.title);
+			J.link.set(`gdps/${channel}/${id}`);
 			let dataForNextButton = `${id},0,1`,
 				isOwner = checkOwn(id, serverResp.gdps.author, channel),
 				html = '';
@@ -907,7 +908,7 @@ getFind = (jId, channel, id, joinData = 0) => {
 			innerComments(jId, renderComms(jId, serverResp.comments, 0, dataForNextButton), 0);
 			J.id('imageBG').src = decodeURIComponent(serverResp.gdps.ban);
 
-			J.id('news').innerHTML = basicButton(getTrans('newsList'), `helperNews(${jId},'${id}${newsChannel}',${isOwner})`)+
+			J.id('news').innerHTML = basicButton(getTrans('newsList'), `helperNews(${jId},${id},${channel},${isOwner})`)+
 				RenderNews(jId, serverResp.news,2,'getCamp');
 			if (Object.keys(serverResp.news).length > 10)
 				J.id('news').insertAdjacentHTML('beforeend',insertBtn(jId, `loadMoreNews(${jId},${id},'get${bigString}',1,2)`));
@@ -993,22 +994,22 @@ gdpsNewsPage = (jId, renderNazad = false, gdpsId = 0, backFunc = '') => {
 	return html;
 },
 getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFunc = '') => {
+	console.log(jId, newsId, contentId, backFuncPre, commBackFunc)
 	let J = Jexec(jId);
 	let backFunc = '';
 	if (backFuncPre.length === 1) {
-		switch (backFuncPre) {
-			case '.':
+		switch (Number(backFuncPre)) {
+			case 0:
 				backFunc = 'getCamp';
 				break;
-			case ',':
+			case 1:
 				backFunc = 'getShow';
 				break;
-			case '/':
+			case 2:
 				backFunc = 'getPere';
 				break;
-			//FIXME:getTele about the patch plzplz UwU
-			case ';':
-				backFunc = 'globalNews';
+			case 3:
+				backFunc = 'getTele';
 				break;
 		}
 	} else {
@@ -1031,7 +1032,7 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 	if (commBackFunc == '')
 		commBackFunc = backFunc;
 
-	J.lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+")";
+	J.lastUsedProfile = `getNewsWithComments(${jId},`+newsId+","+contentId+","+backFuncPre+")";
 	contentPreload(jId, `${newsId},3,5`, `${commBackFunc}(${jId},${contentId})`, 0, 0);
 
 	Loading();
@@ -1044,7 +1045,7 @@ getNewsWithComments = (jId, newsId, contentId = 0, backFuncPre = '', commBackFun
 				return;
 			}
 			let serverResp = JSON.parse(data);
-			J.link.set('news/comms='+newsId+'|'+contentId+'|'+backFuncPre, serverResp.gdps['n'+newsId].title);
+			J.link.set(`gdps/${backFuncPre}/${contentId}/news/${newsId}`, serverResp.gdps['n'+newsId].title);
 			let dataForNextButton = `${newsId},3,1`,
 				html = '';
 				
@@ -1979,13 +1980,13 @@ helperAbout = (jId) => {
 		`</div>`+
 	`</div>`;
 },
-helperNews = (jId, gdpsId, renderOwnButton = 0) => {
+helperNews = (jId, gdpsId, channel, renderOwnButton = 0) => {
 	let J = Jexec(jId);
 	let backFunc = '',
 			lastFunc = '',
 			gdpsInt = parseInt(gdpsId),
 			renderNazad = true;
-	switch (gdpsId[gdpsId.length-1]) {
+	/*switch (gdpsId[gdpsId.length-1]) {
 		case '.':
 			backFunc = 'getCamp';
 			lastFunc = '.';
@@ -1999,12 +2000,13 @@ helperNews = (jId, gdpsId, renderOwnButton = 0) => {
 			lastFunc = '/';
 			// renderNazad = false;
 			break;
-	}
+	}*/
 	innerMain(jId, gdpsNewsPage(jId, renderNazad, gdpsId, backFunc));
 	Loading();
 	_.http.req('GET', `${sData[0]}news${php}?id=${gdpsInt}`)
 		.then(data=>{
-			J.link.set('news/list='+gdpsId+'|'+renderOwnButton);
+			//J.link.set('news/list='+gdpsId+'|'+renderOwnButton);
+			J.link.set(`gdps/${channel}/${gdpsId}/news`);
 			Loading(1);
 			if (data == '{}') {
 				innerGdpsPlace(jId, `<h1${getTrans('newsNone')}/h1>`, 1);
@@ -2956,6 +2958,7 @@ FINDrender = (jId, channel, parsedData, joinData = '') => {
 		os = JSON.parse(gdpsData.os),
 		tagsOs = '';
 
+	gdpsData.channel = channel;
 	switch (channel) {
 		case 0:
 			gdpsData.GDPSdata = ['camp','getCamp'];
@@ -3109,7 +3112,7 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 					`<span class=likeplace id="commsCount${gdpsData.ID}">${gdpsData.likes[2]}</span>`+
 					`<img width=30px height=30px style=margin:0 src=${helperUrl}imgs/comm.svg>`+
 					(isComm != 1 ?
-					`<button class=loginbtn onclick=getNewsWithComments(${jId},${gdpsData.ID},${gdpsData.gdpsId},'${backFunc}','${commBackFunc}')${getTrans('comms')}/button>`
+					`<button class=loginbtn onclick=getNewsWithComments(${jId},${gdpsData.ID},${gdpsData.gdpsId},${gdpsChannel},'${commBackFunc}')${getTrans('comms')}/button>`
 					: '')+
 				`</div>`+
 			`</div>`+
@@ -3130,7 +3133,7 @@ RenderNews = (jId, data, isComm = 0, backFunc = 'getCamp', commBackFunc = '') =>
 },
 pollBadge = (jId, n, backFunc, commBackFunc) => {
 	if (!Array.isArray(n.poll)) return '';
-	return `<button class=loginbtn onclick="getNewsWithComments(${jId},${n.ID},${n.gdpsId},'${backFunc}','${commBackFunc}')"${getTrans('pollBadge')}/button>`;
+	return `<button class=loginbtn onclick="getNewsWithComments(${jId},${n.ID},${n.gdpsId},${backFunc},'${commBackFunc}')"${getTrans('pollBadge')}/button>`;
 },
 pollRender = (jId, n) => {
 	let poll = n.poll;
@@ -4148,7 +4151,7 @@ otherProfileMini = (jId, userId) => {
 	_.http.req('GET', `${sData[0]}getUser${php}?id=${userId}`)
 	.then(data=>{
 		let userData = JSON.parse(data);
-		J.link.set('profiles='+userId, userData.username);
+		J.link.set('user/'+userId, userData.username);
 		let accStatus = userData.isActive ? getTrans('isActive') : getTrans('isNotact'),
 			html = 
 		`<div id=helperContentProfile>`+
@@ -4175,13 +4178,13 @@ openPortfolio = (jId, userId, itsMyWorks = false) => {
 			userData = serverResp[0],
 			addButton = '';
 		if (itsMyWorks) {
-			J.link.set('profile/portfolio');
+			J.link.set(`me/portfolio`);
 			// no its "all admin buttons" maybe
 			addButton = basicButton(getTrans('edit'), `editResumePre(${jId})`)+
 				`<div style=position:relative id=newResume></div>`+`<br><br>`+
 				defWorkAdd(jId);
 		} else
-			J.link.set('profiles/portfolio='+userId, userData.username);
+			J.link.set(`user/${userId}/portfolio`, userData.username);
 		let works = renderWork(jId, serverResp, itsMyWorks),
 			html = 
 		`<div id=helperContentProfile>`+
@@ -4202,7 +4205,7 @@ openPortfolio = (jId, userId, itsMyWorks = false) => {
 otherFindsWindow = (jId, channel, userId) => {
 	let J = Jexec(jId);
 	let [smallString, bigString] = GDPSswitchChannel(channel);
-	J.link.set('profiles/'+smallString+'s='+userId);
+	J.link.set(`user/${userId}/${smallString}s`);
 	Loading();
 	_.http.req('GET', `${sData[0]}getAdded${bigString}s${php}?id=${userId}&type=${channel}`)
 	.then(data=>{
@@ -4239,7 +4242,7 @@ otherPeresWindow = (jId, userId) => {
 },
 otherWikisWindow = (jId, userId) => {
 	let J = Jexec(jId);
-	J.link.set('profiles/wikis='+userId);
+	J.link.set(`user/${userId}/wikis`);
 	Loading();
 	_.http.req('GET', `${sData[0]}getUserGuides${php}?id=${userId}`)
 	.then(data=>{

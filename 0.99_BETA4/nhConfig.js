@@ -288,8 +288,54 @@ JITlink = (container, jId) => {
 			wordle: (lang)=>            {wordleGame(${jId},lang)},
 
 			'gdps/':{
-				':ch/': {
-					':g': d=>           {getFind(${jId},Number(d[0]), d[1])}
+				':ch/':{
+					':g':d=>            {getFind(${jId},Number(d[0]), d[1])},
+					':g/':{
+						'news':d=>      {helperNews(${jId},d[1],d[0])},
+						'news/': {
+							':n':d=>    {getNewsWithComments(${jId},d[3],d[2],d[1])},
+						}
+					}
+				}
+			},
+
+			'user/': {
+				':u':  d=>              {otherProfile(${jId},d[0],'pageFind(${jId},0)')},
+				':u/': {
+					portfolio: d=>      {otherProfile(${jId},d[0],'pageFind(${jId},0)',openPortfolio)},
+					camps: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},0)',otherCampsWindow)},
+					shows: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},1)',otherShowsWindow)},
+					peres: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},2)',otherPeresWindow)},
+					wikis: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},0)',otherWikisWindow)},
+				}
+			},
+
+			me: ()=>                    {profilePage(${jId})},
+			'me/': {
+				'': ()=>                {profilePage(${jId})},
+				subs: ()=>              {profilePage(${jId},'');subsWindow(${jId});GetSubs(${jId})},
+				portfolio: ()=>         {profilePage(${jId},'');openPortfolio(${jId},thisUser.ID,true)},
+				devices: ()=>           {profilePage(${jId},'');profileDevices(${jId})},
+				alarms: ()=>            {profilePage(${jId},'');alarmsWindow(${jId});GetAlarms(${jId})},
+				color: ()=>             {profilePage(${jId},'');clrEditPage(${jId})},
+				hotkeys: ()=>           {profilePage(${jId},'');keyBindsCfg2(${jId})},
+				wikis: ()=>             {profilePage(${jId},'');wikisWindow(${jId})},
+				'gdps/': {
+					':ch': d=>          {profilePage(${jId},'');findsWindow(${jId},Number(d[0]))}
+				},
+				new: ()=>               {profilePage(${jId})},
+				'new/': {
+					wiki: ()=>          {createWiki(${jId},1)},
+					'gdps/': {
+						':ch': d=>      {profilePage(${jId},'');addFind(${jId},Number(d[0]))}
+					}
+				},
+				'edit/': {
+					'gdps/': {
+						':ch/': {
+							':g': d=>   {profilePage(${jId},'');editFind(${jId},Number(d[0]),d[1])}
+						}
+					}
 				}
 			},
 
@@ -305,6 +351,7 @@ JITlink = (container, jId) => {
 				comms: (postId)=>       {let d = postId.split('|');getNewsWithComments(${jId},d[0], d[1], d[2])},
 				list: (gdpsId)=>        {let d = gdpsId.split('|');helperNews(${jId},d[0], d[1])},
 			},
+
 			vacs: ()=>                  {globalVacs(${jId})},
 			'VacsC/': {
 				':p': (...pId)=>        {getVacsWithComments(${jId},pId)},
@@ -312,6 +359,7 @@ JITlink = (container, jId) => {
 			special: ()=>               {innerMain(${jId},uvazuha(${jId}))},
 			about: ()=>                 {innerMain(${jId},helperAbout(${jId}))},
 
+			// same deprecated
 			profiles: (userId)=>        {otherProfile(${jId},userId,'pageFind(${jId},0)')},
 			'profiles/': {
 				'': (userId)=>          {otherProfile(${jId},userId,'pageFind(${jId},0)')},
@@ -324,6 +372,7 @@ JITlink = (container, jId) => {
 
 			drop: ()=>                  {innerMain(${jId},dropWindow(${jId}))},
 			verify: ()=>                {innerMain(${jId},verifyWindow(${jId}))},
+			// also same deprecated
 			profile: ()=>               {profilePage(${jId})},
 			'profile/':{
 				'': ()=>                {profilePage(${jId})},
@@ -947,7 +996,7 @@ function createVirtualLink(root) {
 					main(fisrtValue);
 				} else {
 					let dynamic = [];
-					for (let point of route) {
+					for (let [i, point] of route.entries()) {
 						let isDyn = Object.keys(dir).find(e => e.startsWith(':'));
 						if (isDyn) {
 							dynamic.push(point);
@@ -955,7 +1004,8 @@ function createVirtualLink(root) {
 							if (point.endsWith('/')) point = point.slice(0, -1);
 						}
 						let kDir = dir[point + '/'];
-						if (kDir) dir = kDir;
+						if (kDir && !(i === route.length-1 && typeof dir[point] === 'function'))
+							dir = kDir;
 						else {
 							if (dynamic.length) fisrtValue = dynamic;
 							dir[point](fisrtValue);

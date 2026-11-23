@@ -7,7 +7,7 @@ let gProfileMini = jId => {
 	}
     buttons += basicButton(getTrans('addVacs'), `addVacsPre(${jId})`, 'font-size:calc(var(--def-font)*1.5)');
     buttons += basicButton(getTrans('addWIki'), `createWiki(${jId},1)`, 'font-size:calc(var(--def-font)*1.5)');
-    J.link.set('profile');
+    J.link.set('me');
     let accStatus = thisUser.isActive ? getTrans('isActive') : getTrans('isNotact'),
 		html = 
 	`<div id=helperContentProfile>`+
@@ -975,7 +975,7 @@ profileDevices = jId => {
 };
 clrEditPage = jId => {
     let J = Jexec(jId);
-    J.link.set('color');
+    J.link.set('me/color');
     cssRoot = document.body.style;
     let [Sizes, Radios] = colorGenerator(),
 		sizeScheme = Sizes.split(','),
@@ -1070,7 +1070,7 @@ clrEditPage = jId => {
 };
 keyBindsCfg2 = jId => {
     let J = Jexec(jId);
-    J.link.set('hotkeys');
+    J.link.set('me/hotkeys');
     let html2 = `<textarea id=hetkeysCfg class=framelabel style="width:calc(100% - 40px);height:400px">${Slocal.get('Hotkeys')}</textarea>`;
     let html = 
 	`<div id=helperContentProfile>`+
@@ -1171,7 +1171,7 @@ addFind = (jId, channel) => {
 		//langs += `<option value="${lang}"${getTrans('gdpsLang'+lang)}/option>`;
 	});
 
-    J.link.set('add'+bigString);
+    J.link.set('me/new/gdps/'+channel);
     let html = 
 	`<div id=helperContentProfile>`+
 		`<h1${getTrans('add'+bigString)}/h1>`+ // ${smallString}Add${php}
@@ -1274,7 +1274,7 @@ editFind = (jId, channel, gdpsId) => {
     }
     helperRequest(`${sData[1]}${smallString}Edit${php}?id=${gdpsId}`)
 	.then (data=>{
-		J.link.set('edit'+bigString+'='+gdpsId);
+		J.link.set(`me/edit/gdps/${channel}/${gdpsId}`);
 		let parsedData = JSON.parse(data),
 			title = parsedData[0],
 			description = parsedData[1],
@@ -1605,7 +1605,7 @@ createWiki = (jId, backpage = 0) => {
     let J = Jexec(jId);
     if (thisUser.isActive == 0)
 		return accountIsntActiveAlert();
-    J.link.set('wikiNew');
+    J.link.set('me/new/wiki');
     let langs = '';
     langList.forEach(lang=>{
 		langs += `<option value="${lang}"${getTrans('gdpsLang'+lang)}/option>`;
@@ -1762,7 +1762,7 @@ alarmsWindow = jId => {
 };
 GetAlarms = (jId, page = 0) => {
     let J = Jexec(jId);
-    J.link.set('alarms');
+    J.link.set('me/alarms');
     Loading();
     _.http.req('GET', `${sData[0]}getAlarms${php}?page=${page}`)
 	.then(data=>{
@@ -1801,7 +1801,7 @@ subsWindow = jId => {
 GetSubs = (jId, page = 0) => {
     let J = Jexec(jId);
 	let nextGdps = J.id('nextGdps');
-    J.link.set('profile/subs');
+    J.link.set('me/subs');
 	if (nextGdps)
 		nextGdps.remove();
     Loading();
@@ -1842,7 +1842,7 @@ findsWindow = (jId, channel) => {
     let J = Jexec(jId);
     J.ProjectsChannel = channel;
     let [smallString, bigString, tinyStr, cacheArr] = GDPSswitchChannel(channel);
-    J.link.set('added'+bigString+'s');
+    J.link.set('me/gdps/'+channel);
     let gdpses = "";
     for (let gdps in cacheArr) {
 		gdpses+=FINDrenderInProfileFull(jId, channel, [cacheArr[gdps]]);
@@ -1864,7 +1864,7 @@ findsWindow = (jId, channel) => {
 };
 wikisWindow = jId => {
     let J = Jexec(jId);
-    J.link.set('addedWikis');
+    J.link.set('me/wikis');
     let gdpses = "";
     Object.keys(yourWikies).forEach(gdps=>{
 		gdpses+=WIKIrenderInProfileFull(jId, [yourWikies[gdps]]);
