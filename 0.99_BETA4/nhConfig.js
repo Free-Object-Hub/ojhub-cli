@@ -165,7 +165,7 @@ langNames = {
   EL:  ['Ελληνικά',   'el'],
   CHN: ['简体中文',    'zh-Hans'], // simplified
 };
-helperStrVer = '0.99_BETA3';
+helperStrVer = '0.99_BETA4';
 currentLangVer = 17;
 helperBuildNum = 140;
 urlBuildNum = 133;
@@ -210,22 +210,26 @@ _.err.handleGlobal = event => {
 _.err.handleRejection = e => {
     const err = e.reason || e;
     console.error(err);
-    let errorStack = err.stack || '',
-        firstLine = errorStack.split('\n')[0],
-        file = firstLine.split('?ver=')[0].split('@').pop().split('(').pop().split('/').pop(),
-        errorPos = firstLine
-          .split('?ver=')[1]
-          .split(':'),
-        line = errorPos[errorPos.length - 2],
-        col  = errorPos[errorPos.length - 1];
-	console.info(errorStack, errorPos)
+    const errorStack = err.stack || '';
+    // Ищем первое вхождение "что-то:строка:колонка" в стеке.
+    // Работает и для Firefox ("fn@url:10:5"), и для V8 ("at fn (url:10:5)").
+    const posMatch = errorStack.match(/(\S+?):(\d+):(\d+)/);
+    let file = '?', line = '?', col = '?';
+    if (posMatch) {
+        const url = posMatch[1];
+        line = posMatch[2];
+        col  = posMatch[3];
+        file = url.split('?')[0].split('/').pop() || '?';
+    }
+    console.info(errorStack, { file, line, col });
 
     _.err.log(
-        `PROMISE ERROR\n`+
-        `${err.message || err}`+
+        `PROMISE ERROR\n` +
+        `${err.message || err}` +
         `\nIN ${file} ON LINE ${line} IN COLUMN ${col}`
     );
 };
+
 
 windowBtns = [
 	['COPY ERROR',   `navigator.clipboard.writeText(_.$.id('errText{errID}').innerText)`],
@@ -293,6 +297,7 @@ JITlink = (container, jId) => {
 				}
 			},
 
+			// deprecated
 			camp: (campId)=>            {getCamp(${jId},campId)},
 			show: (showId)=>            {getShow(${jId},showId)},
 			pere: (pereId)=>            {getPere(${jId},pereId)},
