@@ -299,6 +299,47 @@ JITlink = (container, jId) => {
 				}
 			},
 
+			'user/': {
+				':u':  d=>              {otherProfile(${jId},d[0],'pageFind(${jId},0)')},
+				':u/': {
+					portfolio: d=>      {otherProfile(${jId},d[0],'pageFind(${jId},0)',openPortfolio)},
+					camps: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},0)',otherCampsWindow)},
+					shows: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},1)',otherShowsWindow)},
+					peres: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},2)',otherPeresWindow)},
+					wikis: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},0)',otherWikisWindow)},
+				}
+			},
+
+			me: ()=>                    {profilePage(${jId})},
+			'me/': {
+				'': ()=>                {profilePage(${jId})},
+				subs: ()=>              {profilePage(${jId},'');subsWindow(${jId});GetSubs(${jId})},
+				portfolio: ()=>         {profilePage(${jId},'');openPortfolio(${jId},thisUser.ID,true)},
+				devices: ()=>           {profilePage(${jId},'');profileDevices(${jId})},
+				alarms: ()=>            {profilePage(${jId},'');alarmsWindow(${jId});GetAlarms(${jId})},
+				color: ()=>             {profilePage(${jId},'');clrEditPage(${jId})},
+				hotkeys: ()=>           {profilePage(${jId},'');keyBindsCfg2(${jId})},
+				wikis: ()=>             {profilePage(${jId},'');wikisWindow(${jId})},
+				'gdps/': {
+					':ch': d=>          {profilePage(${jId},'');findsWindow(${jId},Number(d[0]))}
+				},
+				new: ()=>               {profilePage(${jId})},
+				'new/': {
+					wiki: ()=>          {createWiki(${jId},1)},
+					'gdps/': {
+						':ch': d=>      {profilePage(${jId},'');addFind(${jId},Number(d[0]))}
+					}
+				},
+				'edit/': {
+					'gdps/': {
+						':ch/': {
+							':g': d=>   {profilePage(${jId},'');editFind(${jId},Number(d[0]),d[1])}
+						}
+					}
+				}
+			},
+
+
 			// deprecated
 			camp: (campId)=>            {getCamp(${jId},campId)},
 			show: (showId)=>            {getShow(${jId},showId)},
