@@ -302,7 +302,7 @@ JITlink = (container, jId) => {
 			'user/': {
 				':u':  d=>              {otherProfile(${jId},d[0],'pageFind(${jId},0)')},
 				':u/': {
-					portfolio: d=>      {otherProfile(${jId},d[0],'pageFind(${jId},0)',openPortfolio)},
+					portfolio: d=>      {otherProfile(${jId},d[0],'pageFind(${jId},0)','');portfolioWindow(${jId},d[0]);GetPortfolio(${jId},d[0])},
 					camps: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},0)',otherCampsWindow)},
 					shows: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},1)',otherShowsWindow)},
 					peres: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},2)',otherPeresWindow)},
@@ -314,7 +314,7 @@ JITlink = (container, jId) => {
 			'me/': {
 				'': ()=>                {profilePage(${jId})},
 				subs: ()=>              {profilePage(${jId},'');subsWindow(${jId});GetSubs(${jId})},
-				portfolio: ()=>         {profilePage(${jId},'');openPortfolio(${jId},thisUser.ID,true)},
+				portfolio: ()=>         {profilePage(${jId},'');portfolioWindow(${jId},thisUser.ID,true);GetPortfolio(${jId},thisUser.ID,true)},
 				devices: ()=>           {profilePage(${jId},'');profileDevices(${jId})},
 				alarms: ()=>            {profilePage(${jId},'');alarmsWindow(${jId});GetAlarms(${jId})},
 				color: ()=>             {profilePage(${jId},'');clrEditPage(${jId})},

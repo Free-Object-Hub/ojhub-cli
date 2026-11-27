@@ -2065,7 +2065,7 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 			`</button>`+
 			`<div id="phoneSelector" class=contentAdaptiveBig style="position:absolute;top:15px;width:235px" align="left">`+
 				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId})"${getTrans('profile')}/button><br>`+
-				`<button class=loginbtn onclick="openPortfolio(${jId},${userId})"${getTrans('portfolio')}/button><br>`+
+				`<button class=loginbtn onclick="portfolioWindow(${jId},${userId});GetPortfolio(${jId},${userId})"${getTrans('portfolio')}/button><br>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId})"${getTrans('searchCamps')}/button><br>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId})"${getTrans('searchShows')}/button><br>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId})"${getTrans('searchPeres')}/button><br>`+
@@ -2074,7 +2074,7 @@ otherProfile = (jId, userId, backButton, innerHtnl = otherProfileMini) => {
 			`</div>`+
 			`<div id="phoneSelectorSmall" class=contentAdaptiveSmall style=display:none>`+
 				`<button class=loginbtn onclick="otherProfileMini(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('profile')}/button>`+
-				`<button class=loginbtn onclick="openPortfolio(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('portfolio')}/button>`+
+				`<button class=loginbtn onclick="portfolioWindow(${jId},${userId});GetPortfolio(${jId},${userId});profileSwitcherPhone(${jId})"${getTrans('portfolio')}/button>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},0,${userId});profileSwitcherPhone(${jId})"${getTrans('searchCamps')}/button>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},1,${userId});profileSwitcherPhone(${jId})"${getTrans('searchShows')}/button>`+
 				`<button class=loginbtn onclick="otherFindsWindow(${jId},2,${userId});profileSwitcherPhone(${jId})"${getTrans('searchPeres')}/button>`+
@@ -4169,39 +4169,61 @@ otherProfileMini = (jId, userId) => {
 	})
 	.catch(e=>{console.error(e);_.err.handleRejection(e)});
 },
-openPortfolio = (jId, userId, itsMyWorks = false) => {
+
+portfolioWindow = (jId, itsMyWorks = false) => {
+	let J = Jexec(jId),
+		addButton = '';
+	if (itsMyWorks) {
+		addButton =
+			basicButton(getTrans('edit'), `editResumePre(${jId})`)+
+			`<div style=position:relative id=newResume></div><br><br>`+
+			defWorkAdd(jId);
+	}
+	let html =
+	`<div id=helperContentProfile>`+
+		`<h1 id=portfolioTitle><span${getTrans('portfolio')}/span></h1>`+
+		`<p id=resumeLabel><span${getTrans('profResume')}/span>: `+
+		`</p>`+
+		addButton+
+		profileContentDiv(jId)+
+	`</div>`;
+	if (J.id('profileWindow'))
+		innerProfile(jId, html);
+	else return html;
+},
+GetPortfolio = (jId, userId, itsMyWorks = false) => {
 	let J = Jexec(jId);
+	if (itsMyWorks)
+		J.link.set('me/portfolio');
 	Loading();
 	_.http.req('GET', `${sData[5]}works${php}?id=${userId}`)
-	.then(data=>{
+	.then(data => {
 		let serverResp = JSON.parse(data),
 			userData = serverResp[0],
-			addButton = '';
-		if (itsMyWorks) {
-			J.link.set(`me/portfolio`);
-			// no its "all admin buttons" maybe
-			addButton = basicButton(getTrans('edit'), `editResumePre(${jId})`)+
-				`<div style=position:relative id=newResume></div>`+`<br><br>`+
-				defWorkAdd(jId);
-		} else
+			works = renderWork(jId, serverResp, itsMyWorks);
+		if (!itsMyWorks) {
 			J.link.set(`user/${userId}/portfolio`, userData.username);
-		let works = renderWork(jId, serverResp, itsMyWorks),
-			html = 
-		`<div id=helperContentProfile>`+
-			`<h1><span${getTrans('portfolio')}/span> ${userData.username}</h1>`+
-			`<p><span${getTrans('profResume')}/span>: `+
-			(userData.resume === '' ? '' : `<p id=oldResume class=framegdpsOld style="display:block;width:calc(100% - 14px)">${userData.resume.replaceAll('\\n', '<br>')}</p>`)+
-			
-			addButton+
-			profileContentDiv(jId)+
-				works+
-			`</div>`+
-		`</div>`;
-		innerProfile(jId, html);
+			let title = J.id('portfolioTitle');
+			if (title)
+				title.innerHTML = `<span${getTrans('portfolio')}/span> ${userData.username}`;
+			let resumeLabel = J.id('resumeLabel');
+			if (resumeLabel) {
+				resumeLabel.innerHTML =
+					`<span${getTrans('profResume')}/span>: `+
+					(userData.resume === '' ? '' :
+						`<p id=oldResume class=framegdpsOld style="display:block;width:calc(100% - 14px)">${userData.resume.replaceAll('\\n', '<br>')}</p>`);
+			}
+		}
+		innerGdpsPlace(jId, works);
 		Loading(1);
 	})
-	.catch(e=>{console.error(e);_.err.handleRejection(e)});
+	.catch(e => {
+		console.error(e);
+		_.err.handleRejection(e);
+		Loading(1);
+	});
 },
+
 otherFindsWindow = (jId, channel, userId) => {
 	let J = Jexec(jId);
 	let [smallString, bigString] = GDPSswitchChannel(channel);
