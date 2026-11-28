@@ -302,7 +302,7 @@ JITlink = (container, jId) => {
 			'user/': {
 				':u':  d=>              {otherProfile(${jId},d[0],'pageFind(${jId},0)')},
 				':u/': {
-					portfolio: d=>      {otherProfile(${jId},d[0],'pageFind(${jId},0)','');portfolioWindow(${jId},d[0]);GetPortfolio(${jId},d[0])},
+					portfolio: d=>      {otherProfile(${jId},d[0],'pageFind(${jId},0)',()=>{});portfolioWindow(${jId},d[0]);GetPortfolio(${jId},d[0])},
 					camps: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},0)',otherCampsWindow)},
 					shows: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},1)',otherShowsWindow)},
 					peres: d=>          {otherProfile(${jId},d[0],'pageFind(${jId},2)',otherPeresWindow)},
