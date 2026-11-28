@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "acorn": "^8.19.0",
+    "terser": "^5.51.4"
+  }
+}
